@@ -1,5 +1,7 @@
 package gui;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -10,7 +12,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.TextField;
-import utils.Goto;
+import main.Main;
+
+import java.io.IOException;
 
 public class LoginPane extends GridPane {
     private static LoginPane instance;
@@ -48,18 +52,29 @@ public class LoginPane extends GridPane {
             joinBtn.setVisible(!newValue.isEmpty());
         });
 
+        // Change Scene to MapPane
+        joinBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    setPlayername(playername.getText());
+                    Main.getInstance().changeSceneJava(MapPane.getInstance());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
         // Set playername variable
         setPlayername(playername.getText());
 
         getChildren().addAll(imageView, playername, joinBtn);
-        /////////////////
-        Goto.setLoginPane(this);
     }
 
     public void setImage() {
-        String img_path = ClassLoader.getSystemResource("BG_login.jpg").toString();
+        String img_path = ClassLoader.getSystemResource("BG_forest.gif").toString();
         Image img = new Image(img_path);
-        BackgroundImage bg_img = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        BackgroundImage bg_img = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(1152,648,false,false,false,false));
         setBackground(new Background(bg_img));
     }
 
