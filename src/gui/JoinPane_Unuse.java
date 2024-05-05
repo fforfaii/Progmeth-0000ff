@@ -1,19 +1,10 @@
 package gui;
 
-import javafx.animation.Animation;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.layout.HBox;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.TilePane;
-import javafx.util.Duration;
 
-public class JoinPane extends HBox {
-    private static JoinPane instance;
-    public JoinPane() {
+public class JoinPane_Unuse extends HBox {
+    private static JoinPane_Unuse instance;
+    public JoinPane_Unuse() {
 //        StackPane stackPane = new StackPane();
 //        stackPane.setMinSize(288,162);
 
@@ -33,12 +24,12 @@ public class JoinPane extends HBox {
 
 //        stackPane.getChildren().add(imageView);
 
-        this.getChildren().add(WelcomePane.getInstance());
+        this.getChildren().add(WelcomePane_Unuse.getInstance());
     }
 
-    public static JoinPane getInstance() {
+    public static JoinPane_Unuse getInstance() {
         if (instance == null) {
-            instance = new JoinPane();
+            instance = new JoinPane_Unuse();
         }
         return instance;
     }
