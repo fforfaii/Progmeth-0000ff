@@ -3,9 +3,11 @@ package main;
 import gui.CaveMapPane;
 import gui.LoginPane;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,25 +20,18 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         this.stage = stage;
         instance = this;
-        this.root = CaveMapPane.getInstance();
+        this.root = LoginPane.getInstance();
         Scene scene = new Scene(root,1152,648);
         stage.setScene(scene);
         stage.setTitle("Ready Set RUN!");
         stage.setResizable(false);
         stage.show();
+
     }
 
     public void changeSceneJava(Parent parent) throws IOException {
         stage.getScene().setRoot(parent);
-    }
-
-    public void changeSceneFXML(String fxml) throws IOException {
-        try {
-            Parent pane = FXMLLoader.load(getClass().getResource(fxml));
-            stage.getScene().setRoot(pane);
-        } catch (Exception e) {
-
-        }
+        parent.requestFocus(); // very important if not include KeyEvent will not be listened !!!!
     }
 
     public static Main getInstance() {

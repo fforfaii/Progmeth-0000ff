@@ -7,6 +7,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.util.Duration;
 
 public class SpriteAnimation extends Transition {
+    private static SpriteAnimation instance;
     private ImageView imageView;
     private int count;
     private int columns;
@@ -35,6 +36,22 @@ public class SpriteAnimation extends Transition {
         setInterpolator(Interpolator.LINEAR);
     }
 
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setColumns(int columns) {
+        this.columns = columns;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
     @Override
     protected void interpolate(double k) {
         final int index = Math.min((int) Math.floor(k * count), count - 1);
@@ -44,5 +61,12 @@ public class SpriteAnimation extends Transition {
             imageView.setViewport(new Rectangle2D(x, y, width, height));
             lastIndex = index;
         }
+    }
+
+    public static SpriteAnimation getInstance() {
+        if (instance == null) {
+            instance = new SpriteAnimation(null,Duration.millis(1000),4,4,0,0,48,48);
+        }
+        return instance;
     }
 }

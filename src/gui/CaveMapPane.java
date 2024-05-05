@@ -1,9 +1,13 @@
 package gui;
 
 import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
@@ -11,6 +15,13 @@ import logic.Punk;
 
 public class CaveMapPane extends AnchorPane {
     private static CaveMapPane instance;
+    private ImageView mainChar;
+    private ImageView Boom;
+    private Animation mainAni;
+    private Image Gun;
+    private Image runLeft;
+    private Image runRight;
+    private Image Idle;
     Punk punk;
     public CaveMapPane() {
         setBGImage();
@@ -22,53 +33,89 @@ public class CaveMapPane extends AnchorPane {
 
         this.getChildren().add(groundImageView);
 
+        //Preload Run Animation
+        Gun = new Image(ClassLoader.getSystemResource("Punk_Gun_Resize.png").toString());
+        runLeft = new Image(ClassLoader.getSystemResource("Punk_runleft.png").toString());
+        runRight = new Image(ClassLoader.getSystemResource("Punk_runright.png").toString());
+        Idle = new Image(ClassLoader.getSystemResource("Punk_idle.png").toString());
+
         // Set Main Character
         punk = Punk.getInstance();
-        setMainChar("Punk_idle.png",4,4,48,48);
+        mainChar = new ImageView(new Image(ClassLoader.getSystemResource("Punk_idle.png").toString()));
+        mainAni = new SpriteAnimation(mainChar,Duration.millis(1000),4,4,0,0,48,48);
+        mainAni.setCycleCount(Animation.INDEFINITE);
+        mainChar.setFitWidth(100);
+        mainChar.setFitHeight(100);
+        mainAni.play();
+        setTopAnchor(mainChar,453.0);
+
+        // Set GunBoom
+        Boom = new ImageView(new Image(ClassLoader.getSystemResource("gun1.png").toString()));
+        Boom.setFitWidth(12);
+        Boom.setFitHeight(72);
+        Boom.setVisible(false);
+
+        getChildren().addAll(mainChar, Boom);
 
         // Keyboard Input
-        setOnKeyPressed(new EventHandler<KeyEvent>() {
+        this.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
                 switch (keyEvent.getCode()) {
                     case A:
                         // go left
                         System.out.println("A");
-                        setMainChar("Punk_runleft.png",6,6,48,48);
-                        punk.setxPos(punk.getxPos()-1);
+                        if (mainChar.getLayoutX() >= 5.0) mainChar.setLayoutX(mainChar.getLayoutX()-5);
+                        setMainChar(runLeft,6,6,48,48);
                         break;
                     case D:
                         // go right
                         System.out.println("D");
-                        setMainChar("Punk_runright.png",6,6,48,48);
-                        punk.setxPos(punk.getxPos()+1);
+                        if (mainChar.getLayoutX() <= 1100) mainChar.setLayoutX(mainChar.getLayoutX()+5);
+                        setMainChar(runRight,6,6,48,48);
                         break;
-                    case TAB:
+                    case SPACE:
                         // release power
+                        System.out.println("Boom!");
+                        Shoot(Gun);
                         break;
                 }
+                punk.setxPos(mainChar.getLayoutX());
+                System.out.println(punk.getxPos());
             }
         });
-        setOnKeyReleased(new EventHandler<KeyEvent>() {
+        this.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
                 // idle
-                setMainChar("Punk_idle.png",4,4,48,48);
+                setMainChar(Idle,4,4,48,48);
             }
         });
+
     }
 
-    public void setMainChar(String sprite, int count, int column, int width, int height) {
-        ImageView mainChar = new ImageView(new Image(ClassLoader.getSystemResource(sprite).toString()));
-        Animation mainAni = new SpriteAnimation(mainChar,Duration.millis(1000),count,column,0,0,width,height);
+    public void Shoot(Image image) {
+        mainChar.setImage(image);
+        mainChar.setViewport(new javafx.geometry.Rectangle2D(96, 0, 48, 48));
+//        Boom.setVisible(true);
+//        Boom.setLayoutY(0);
+//        TranslateTransition boomTransition = new TranslateTransition(Duration.seconds(1), Boom);
+//        boomTransition.setByY(-300); // Move the Boom image upward by 100 pixels
+//        boomTransition.play(); // Start the animation
+//        Boom.setLayoutY(0);
+    }
+
+    public void setMainChar(Image Image, int count, int column, int width, int height) {
+        mainChar.setImage(Image);
+        SpriteAnimation.getInstance().setCount(count);
+        SpriteAnimation.getInstance().setColumns(column);
+        SpriteAnimation.getInstance().setWidth(width);
+        SpriteAnimation.getInstance().setHeight(height);
         mainAni.setCycleCount(Animation.INDEFINITE);
         mainChar.setFitWidth(100);
         mainChar.setFitHeight(100);
         mainAni.play();
         setTopAnchor(mainChar,453.0);
-        getChildren().add(mainChar);
-
-        punk.setxPos(mainChar.getX());
     }
 
     public void setBGImage() {
