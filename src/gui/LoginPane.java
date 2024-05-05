@@ -21,7 +21,7 @@ public class LoginPane extends GridPane {
     public static String playername = "";
 
     private LoginPane() {
-        setImage();
+        setBGImage();
         setAlignment(Pos.CENTER);
         setVgap(10);
 
@@ -71,7 +71,7 @@ public class LoginPane extends GridPane {
         getChildren().addAll(imageView, playername, joinBtn);
     }
 
-    public void setImage() {
+    public void setBGImage() {
         String img_path = ClassLoader.getSystemResource("BG_forest.gif").toString();
         Image img = new Image(img_path);
         BackgroundImage bg_img = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(1152,648,false,false,false,false));

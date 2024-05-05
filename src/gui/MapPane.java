@@ -14,7 +14,7 @@ public class MapPane extends VBox {
     Text welcome;
     private static MapPane instance;
     public MapPane() {
-        setImage();
+        setBGImage();
         setAlignment(Pos.CENTER);
         setSpacing(25);
 
@@ -53,7 +53,7 @@ public class MapPane extends VBox {
         return vBox;
     }
 
-    public void setImage() {
+    public void setBGImage() {
         String img_path = ClassLoader.getSystemResource("BG_forest.gif").toString();
         Image img = new Image(img_path);
         BackgroundImage bg_img = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(1152,648,false,false,false,false));
