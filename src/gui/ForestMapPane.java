@@ -10,10 +10,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import logic.character.Punk;
-import logic.character.SlowGhost;
 
-public class CaveMapPane extends AnchorPane {
-    private static CaveMapPane instance;
+public class ForestMapPane extends AnchorPane {
+    private static ForestMapPane instance;
     private ImageView mainChar;
     private ImageView Boom;
     private Animation mainAni;
@@ -23,7 +22,8 @@ public class CaveMapPane extends AnchorPane {
     private Image Idle;
     private boolean canShoot;
     Punk punk;
-    public CaveMapPane() {
+
+    public ForestMapPane(){
         setBGImage();
 
         // Set Ground
@@ -42,7 +42,7 @@ public class CaveMapPane extends AnchorPane {
         // Set Main Character
         punk = Punk.getInstance();
         mainChar = new ImageView(new Image(ClassLoader.getSystemResource("Punk_idle.png").toString()));
-        mainAni = new SpriteAnimation(mainChar,Duration.millis(1000),4,4,0,0,48,48);
+        mainAni = new SpriteAnimation(mainChar, Duration.millis(1000),4,4,0,0,48,48);
         mainAni.setCycleCount(Animation.INDEFINITE);
         mainChar.setFitWidth(100);
         mainChar.setFitHeight(100);
@@ -58,7 +58,6 @@ public class CaveMapPane extends AnchorPane {
 
         getChildren().addAll(mainChar, Boom);
 
-        // Keyboard Input
         this.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
@@ -66,15 +65,15 @@ public class CaveMapPane extends AnchorPane {
                     case A:
                         // go left
                         System.out.println("A");
+                        System.out.println(mainChar.getLayoutX());
                         if (mainChar.getLayoutX() >= 5.0) mainChar.setLayoutX(mainChar.getLayoutX()-punk.getSpeed());
                         setMainChar(runLeft,6,6,48,48);
                         break;
                     case D:
                         // go right
                         System.out.println("D");
-                        if (mainChar.getLayoutX() <= 1080) {
-                            mainChar.setLayoutX(mainChar.getLayoutX()+punk.getSpeed());
-                        }
+                        System.out.println(mainChar.getLayoutX());
+                        if (mainChar.getLayoutX() <= 1080) mainChar.setLayoutX(mainChar.getLayoutX()+punk.getSpeed());
                         setMainChar(runRight,6,6,48,48);
                         break;
                     case SPACE:
@@ -82,11 +81,11 @@ public class CaveMapPane extends AnchorPane {
                         if (!canShoot){
                             return;
                         }
+                        System.out.println("Boom!");
+                        Shoot(Gun);
                         canShoot = false;
                         Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(5), event -> canShoot = true));
                         cooldownTimer.play();
-                        System.out.println("Boom!");
-                        Shoot(Gun);
                         break;
                 }
                 punk.setxPos(mainChar.getLayoutX());
@@ -100,9 +99,7 @@ public class CaveMapPane extends AnchorPane {
                 setMainChar(Idle,4,4,48,48);
             }
         });
-
     }
-
     public void Shoot(Image image) {
         mainChar.setImage(image);
         mainChar.setViewport(new javafx.geometry.Rectangle2D(96, 0, 48, 48));
@@ -113,7 +110,6 @@ public class CaveMapPane extends AnchorPane {
 //        boomTransition.play(); // Start the animation
 //        Boom.setLayoutY(0);
     }
-
     public void setMainChar(Image Image, int count, int column, int width, int height) {
         mainChar.setImage(Image);
         SpriteAnimation.getInstance().setCount(count);
@@ -128,15 +124,15 @@ public class CaveMapPane extends AnchorPane {
     }
 
     public void setBGImage() {
-        String img_path = ClassLoader.getSystemResource("BG_Cave.jpg").toString();
+        String img_path = ClassLoader.getSystemResource("BG_forest1.jpg").toString();
         Image img = new Image(img_path);
         BackgroundImage bg_img = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(1152,648,false,false,false,false));
         setBackground(new Background(bg_img));
     }
 
-    public static CaveMapPane getInstance() {
+    public static ForestMapPane getInstance() {
         if (instance == null) {
-            instance = new CaveMapPane();
+            instance = new ForestMapPane();
         }
         return instance;
     }

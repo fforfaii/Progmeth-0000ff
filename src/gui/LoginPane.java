@@ -20,7 +20,7 @@ import java.io.IOException;
 
 public class LoginPane extends GridPane {
     private static LoginPane instance;
-    public static String playername = "";
+    public static String playerName = "";
 
     private LoginPane() {
         setBGImage();
@@ -35,10 +35,11 @@ public class LoginPane extends GridPane {
         GridPane.setConstraints(imageView, 0, 0);
 
         // Set Text Field
-        TextField playername = new TextField();
-        playername.setPromptText("Enter your name");
-        playername.setFont(Font.font("Monospace",FontWeight.BOLD,16));
-        GridPane.setConstraints(playername, 0, 1);
+        TextField nameField = new TextField();
+        nameField.setPromptText("Enter your name");
+        nameField.setFont(Font.font("Monospace",FontWeight.BOLD,16));
+        nameField.setFocusTraversable(false);
+        GridPane.setConstraints(nameField, 0, 1);
 
         // Set Join Button
         Button joinBtn = new Button("JOIN GAME");
@@ -50,7 +51,7 @@ public class LoginPane extends GridPane {
         joinBtn.setVisible(false);
 
         // Start Button will appear when User input player's name
-        playername.textProperty().addListener((observable, oldValue, newValue) -> {
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
             joinBtn.setVisible(!newValue.isEmpty());
         });
 
@@ -59,7 +60,7 @@ public class LoginPane extends GridPane {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    setPlayername(playername.getText());
+                    setPlayerName(nameField.getText());
                     Main.getInstance().changeSceneJava(MapPane.getInstance());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -67,10 +68,9 @@ public class LoginPane extends GridPane {
             }
         });
 
-        // Set playername variable
-        setPlayername(playername.getText());
-
-        getChildren().addAll(imageView, playername, joinBtn);
+        // Set playerName variable
+        setPlayerName(nameField.getText());
+        getChildren().addAll(imageView, nameField, joinBtn);
     }
 
     public void setBGImage() {
@@ -80,12 +80,12 @@ public class LoginPane extends GridPane {
         setBackground(new Background(bg_img));
     }
 
-    public static String getPlayername() {
-        return playername;
+    public static String getPlayerName() {
+        return playerName;
     }
 
-    public static void setPlayername(String playername) {
-        LoginPane.playername = playername;
+    public static void setPlayerName(String playerName) {
+        LoginPane.playerName = playerName;
     }
 
     public static LoginPane getInstance() {

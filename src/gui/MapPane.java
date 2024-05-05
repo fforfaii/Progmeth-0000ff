@@ -28,7 +28,7 @@ public class MapPane extends VBox {
         setSpacing(25);
 
         // Set welcome text (head)
-        welcome = new Text("Welcome " + LoginPane.getPlayername() + " !");
+        welcome = new Text("Welcome " + LoginPane.getPlayerName() + " !");
         welcome.setFont(Font.font("Monospace", FontWeight.BOLD,35));
         welcome.setFill(Color.WHITE);
 
@@ -52,11 +52,20 @@ public class MapPane extends VBox {
                 }
             }
         });
-
+        MapBTN2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    Main.getInstance().changeSceneJava(ForestMapPane.getInstance());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
         getChildren().addAll(welcome,hBox);
     }
 
-    public  VBox setMap(String mapImage,String mapName) {
+    public VBox setMap(String mapImage,String mapName) {
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
         vBox.setPrefSize(150,200);
