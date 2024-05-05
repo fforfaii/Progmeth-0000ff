@@ -46,6 +46,7 @@ public class MapPane extends VBox {
         imageView.setFitWidth(150);
         Button mapText = new Button(mapName);
         mapText.setFont(Font.font("Monospace", FontWeight.BOLD,20));
+        mapText.setTextFill(Color.rgb(0,51,102));
         mapText.setPrefWidth(150);
         vBox.getChildren().addAll(imageView,mapText);
 
