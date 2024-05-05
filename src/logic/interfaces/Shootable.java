@@ -1,4 +1,4 @@
-package interfaces;
+package logic.interfaces;
 
 public interface Shootable {
 }
