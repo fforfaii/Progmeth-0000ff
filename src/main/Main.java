@@ -1,5 +1,6 @@
 package main;
 
+import gui.CaveMapPane;
 import gui.LoginPane;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +18,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         this.stage = stage;
         instance = this;
-        this.root = LoginPane.getInstance();
+        this.root = CaveMapPane.getInstance();
         Scene scene = new Scene(root,1152,648);
         stage.setScene(scene);
         stage.setTitle("Ready Set RUN!");
