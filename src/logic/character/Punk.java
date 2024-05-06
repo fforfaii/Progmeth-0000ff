@@ -2,14 +2,16 @@ package logic.character;
 
 public class Punk {
     double xPos;
+    double yPos;
     private static Punk instance;
     private int hp;
     private int score;
     private int atk;
     private int speed;
     public Punk() {
-        // always start at (0,0)
-        setxPos(0);
+        // always start at (0.0,453.0)
+        setxPos(0); // ระยะห่างจากขอบซ้ายของ window
+        setyPos(453.0); // ระยะห่างจากขอบบนของ window
         this.atk = 1;
         setScore(0);
         setHp(3);
@@ -29,6 +31,14 @@ public class Punk {
 
     public void setxPos(double xPos) {
         this.xPos = xPos;
+    }
+
+    public double getyPos() {
+        return yPos;
+    }
+
+    public void setyPos(double yPos) {
+        this.yPos = yPos;
     }
 
     public int getHp() {
