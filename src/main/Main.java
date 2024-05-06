@@ -1,13 +1,9 @@
 package main;
 
-import gui.CaveMapPane;
 import gui.LoginPane;
 import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -26,7 +22,6 @@ public class Main extends Application {
         stage.setTitle("Ready Set RUN!");
         stage.setResizable(false);
         stage.show();
-
     }
 
     public void changeSceneJava(Parent parent) throws IOException {
