@@ -95,9 +95,7 @@ public class CaveMapPane extends AnchorPane {
                     case D:
                         // go right
                         System.out.println("D");
-                        if (mainChar.getLayoutX() <= 1080) {
-                            mainChar.setLayoutX(mainChar.getLayoutX()+punk.getSpeed());
-                        }
+                        if (mainChar.getLayoutX() <= 1080) mainChar.setLayoutX(mainChar.getLayoutX()+punk.getSpeed());
                         setMainChar(runRight,6,6,48,48);
                         break;
                     case SPACE:
@@ -107,7 +105,6 @@ public class CaveMapPane extends AnchorPane {
                         }
                         canShoot = false;
                         Shoot(Gun);
-                        // Duration = 5
                         Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), event -> canShoot = true));
                         cooldownTimer.play();
                         System.out.println("Boom!");
@@ -125,7 +122,6 @@ public class CaveMapPane extends AnchorPane {
                 setMainChar(Idle,4,4,48,48);
             }
         });
-
     }
 
     public void RunGhostAnimation() {
@@ -280,23 +276,19 @@ public class CaveMapPane extends AnchorPane {
 
         // Set Boom when Shoot
         Boom.setVisible(true);
+        Boom.setFitWidth(24);
+        Boom.setFitHeight(120);
         Boom.setLayoutX(mainChar.getLayoutX() + 22);
         System.out.println("start: " + Boom.getLayoutY());
 
         // Animate Boom moving upwards
-        TranslateTransition transition = new TranslateTransition(Duration.seconds(1), Boom);
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5), Boom);
         transition.setByY(-453); // Move the Boom from its initial position (453) to 0
         transition.setOnFinished(event -> {
             // Hide Boom and reset its position after the animation finishes
             Boom.setVisible(false);
             Boom.setLayoutY(mainChar.getLayoutY());
 
-            TranslateTransition reverseTransition = new TranslateTransition(Duration.seconds(0), Boom); // No actual animation, just resetting the position
-//            reverseTransition.setToY(0); // Set Y position to 0 (initial position)
-//            reverseTransition.play();
-//            if (Boom.getLayoutY() - Minion.getLayoutY() <= 100 && Boom.getLayoutX() - Minion.getLayoutX() <= 100){
-//                Minion.setVisible(false);
-//            }
             System.out.println(Boom.getLayoutX()+", "+ Boom.getLayoutY());
             Boom.setTranslateY(0);
         });

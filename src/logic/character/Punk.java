@@ -17,7 +17,7 @@ public class Punk {
         setScore(0);
         setHp(3);
         setSpeed(15);
-        setDelayShoot(1);
+        setDelayShoot(2);
     }
 
     public static Punk getInstance() {
