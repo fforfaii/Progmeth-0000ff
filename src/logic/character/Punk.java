@@ -8,6 +8,7 @@ public class Punk {
     private int score;
     private int atk;
     private int speed;
+    private int delayShoot;
     public Punk() {
         // always start at (0.0,453.0)
         setxPos(0); // ระยะห่างจากขอบซ้ายของ window
@@ -16,6 +17,7 @@ public class Punk {
         setScore(0);
         setHp(3);
         setSpeed(15);
+        setDelayShoot(1);
     }
 
     public static Punk getInstance() {
@@ -46,7 +48,13 @@ public class Punk {
     }
 
     public void setHp(int hp) {
-        this.hp = Math.max(0, hp);
+        if (hp >= 3){
+            this.hp = 3;
+        } else if (this.hp <= 0){
+            this.hp = 0;
+        } else {
+            this.hp = hp;
+        }
     }
 
     public int getScore() {
@@ -71,5 +79,12 @@ public class Punk {
 
     public void setSpeed(int speed) {
         this.speed = Math.max(0, speed);
+    }
+    public int getDelayShoot() {
+        return delayShoot;
+    }
+
+    public void setDelayShoot(int delayShoot) {
+        this.delayShoot = delayShoot;
     }
 }
