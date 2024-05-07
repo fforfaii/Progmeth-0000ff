@@ -63,8 +63,8 @@ public class CaveMapPane extends AnchorPane {
         // Set GunBoom
         canShoot = true;
         Boom = new ImageView(new Image(ClassLoader.getSystemResource("gun1.png").toString()));
-        Boom.setFitWidth(12);
-        Boom.setFitHeight(72);
+        Boom.setFitWidth(60); //12
+        Boom.setFitHeight(360); //72
         Boom.setLayoutY(punk.getyPos());
         Boom.setVisible(false);
 
@@ -104,11 +104,11 @@ public class CaveMapPane extends AnchorPane {
                             return;
                         }
                         canShoot = false;
+                        Shoot(Gun);
                         // Duration = 5
-                        Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(1), event -> canShoot = true));
+                        Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), event -> canShoot = true));
                         cooldownTimer.play();
                         System.out.println("Boom!");
-                        Shoot(Gun);
                         break;
                 }
                 punk.setxPos(mainChar.getLayoutX());
@@ -276,24 +276,29 @@ public class CaveMapPane extends AnchorPane {
         mainChar.setViewport(new javafx.geometry.Rectangle2D(96, 0, 48, 48));
 
         // Set Boom when Shoot
-//        Boom.setVisible(true);
-//        Boom.setLayoutX(mainChar.getLayoutX() + 48);
-//        System.out.println("start: " + Boom.getLayoutY());
-//
-//        // Animate Boom moving upwards
-//        TranslateTransition transition = new TranslateTransition(Duration.seconds(1), Boom);
-//        transition.setByY(-453); // Move the Boom from its initial position (453) to 0
-//        transition.setOnFinished(event -> {
-//            // Hide Boom and reset its position after the animation finishes
-//            Boom.setVisible(false);
-//            Boom.setLayoutY(mainChar.getLayoutY());
-//
-//            TranslateTransition reverseTransition = new TranslateTransition(Duration.seconds(0), Boom); // No actual animation, just resetting the position
+        Boom.setVisible(true);
+        Boom.setLayoutX(mainChar.getLayoutX() + 22);
+        System.out.println("start: " + Boom.getLayoutY());
+
+        // Animate Boom moving upwards
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(1), Boom);
+        transition.setByY(-453); // Move the Boom from its initial position (453) to 0
+        transition.setOnFinished(event -> {
+            // Hide Boom and reset its position after the animation finishes
+            Boom.setVisible(false);
+            Boom.setLayoutY(mainChar.getLayoutY());
+
+            TranslateTransition reverseTransition = new TranslateTransition(Duration.seconds(0), Boom); // No actual animation, just resetting the position
 //            reverseTransition.setToY(0); // Set Y position to 0 (initial position)
 //            reverseTransition.play();
-//        });
-//        transition.play();
-//        System.out.println("finish: " + Boom.getLayoutY());
+//            if (Boom.getLayoutY() - Minion.getLayoutY() <= 100 && Boom.getLayoutX() - Minion.getLayoutX() <= 100){
+//                Minion.setVisible(false);
+//            }
+            System.out.println(Boom.getLayoutX()+", "+ Boom.getLayoutY());
+            Boom.setTranslateY(0);
+        });
+        transition.play();
+        System.out.println("finish: " + Boom.getLayoutY());
     }
 
     public void setMainChar(Image Image, int count, int column, int width, int height) {
