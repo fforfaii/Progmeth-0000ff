@@ -9,6 +9,8 @@ public class Punk {
     private int atk;
     private int speed;
     private int delayShoot;
+    private double BoomxPos;
+    private double BoomyPos;
     public Punk() {
         // always start at (0.0,453.0)
         setxPos(0); // ระยะห่างจากขอบซ้ายของ window
@@ -86,5 +88,21 @@ public class Punk {
 
     public void setDelayShoot(int delayShoot) {
         this.delayShoot = delayShoot;
+    }
+
+    public double getBoomxPos() {
+        return BoomxPos;
+    }
+
+    public void setBoomxPos(double boomxPos) {
+        BoomxPos = boomxPos;
+    }
+
+    public double getBoomyPos() {
+        return BoomyPos;
+    }
+
+    public void setBoomyPos(double boomyPos) {
+        BoomyPos = boomyPos;
     }
 }
