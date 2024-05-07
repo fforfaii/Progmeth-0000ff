@@ -95,9 +95,7 @@ public class CaveMapPane extends AnchorPane {
                     case D:
                         // go right
                         System.out.println("D");
-                        if (mainChar.getLayoutX() <= 1080) {
-                            mainChar.setLayoutX(mainChar.getLayoutX()+punk.getSpeed());
-                        }
+                        if (mainChar.getLayoutX() <= 1080) mainChar.setLayoutX(mainChar.getLayoutX()+punk.getSpeed());
                         setMainChar(runRight,6,6,48,48);
                         break;
                     case SPACE:
@@ -125,7 +123,6 @@ public class CaveMapPane extends AnchorPane {
                 setMainChar(Idle,4,4,48,48);
             }
         });
-
     }
 
     public void RunGhostAnimation() {
