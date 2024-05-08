@@ -1,6 +1,5 @@
 package gui;
 
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -14,13 +13,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+
 import logic.GameLogic;
 import logic.character.Punk;
 import main.Main;
 
 
 import java.io.IOException;
-
 
 public class GameOverPane extends StackPane {
     private static GameOverPane instance;
@@ -29,16 +28,16 @@ public class GameOverPane extends StackPane {
     public GameOverPane() {
         player = Punk.getInstance();
         setBackground(new Background(GameLogic.getBGImage("BG_end.gif")));
-
+        
         allElements = new VBox();
         allElements.setAlignment(Pos.TOP_CENTER);
         allElements.setSpacing(12.0);
 
-        ImageView gameOver = new ImageView(ClassLoader.getSystemResource("gameover.gif").toString());
-        gameOver.setFitWidth(400);
-        gameOver.setFitHeight(400);
-        gameOver.setViewport(new Rectangle2D(0, 50, gameOver.getFitWidth(), gameOver.getFitHeight()-100));
-        VBox.setMargin(gameOver, new Insets(0, 70, 0, 0));
+        ImageView gameover = new ImageView(ClassLoader.getSystemResource("gameover.gif").toString());
+        gameover.setFitWidth(400);
+        gameover.setFitHeight(400);
+        gameover.setViewport(new Rectangle2D(0, 50, gameover.getFitWidth(), gameover.getFitHeight()-100));
+        VBox.setMargin(gameover, new Insets(0, 70, 0, 0));
 
         Text scoreText = new Text("Your Score is " + player.getScore() + " !");
         scoreText.setFont(Font.font("Monospace", FontWeight.EXTRA_BOLD, 40));
@@ -58,7 +57,9 @@ public class GameOverPane extends StackPane {
             }
         });
 
-        allElements.getChildren().addAll(gameOver,scoreText,menu);
+
+        allElements.getChildren().addAll(gameover,scoreText,menu);
+
         getChildren().add(allElements);
     }
 

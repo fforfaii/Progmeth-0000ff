@@ -1,5 +1,6 @@
 package main;
 
+import gui.GameOverPane;
 import gui.LoginPane;
 import gui.GameOverPane;
 import javafx.application.Application;

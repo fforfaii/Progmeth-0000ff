@@ -253,6 +253,19 @@ public class CaveMapPane extends AnchorPane {
         System.out.println(punk.getHp());
         if (punk.isDead()){
             return;
+        if (punk.getHp() == 0) {
+            punk.setDead(true);
+            FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), this);
+            fadeOut.setFromValue(1.0);
+            fadeOut.setToValue(0.0);
+            fadeOut.setOnFinished(event -> {
+                try {
+                    Main.getInstance().changeSceneJava(GameOverPane.getInstance());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            fadeOut.play();
         }
         if (punk.getHp() == 0) {
             punk.setDead(true);
@@ -369,7 +382,44 @@ public class CaveMapPane extends AnchorPane {
             public void handle(long currentTime) {
                 // Slide X axis
                 if (currentTime - lastUpdate >= 6_000_000_000L){
+                    SlideXPos(AttackGhost,3);
+                    lastUpdate = currentTime;
+                }
+                // Get Position & Set to Minions class
+                attackGhost.setxPos(getXPos(AttackGhost));
+                attackGhost.setyPos(getYPos(AttackGhost));
+                // Release Power
+                double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
+                if (elapsedTimeSeconds >= durations.get(randomIndex)) {
+                    FireBall.setLayoutX(attackGhost.getxPos() + 30);
+                    FireBall.setTranslateY(50.0);
+                    FireBall.setFitWidth(40);
+                    FireBall.setFitHeight(40);
+                    SlideYPos(FireBall,1);
+                    lastUpdate = currentTime;
+                    randomIndex = randomIndex();
+                }
+
+                if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
+                    // Check fireball hit
+                    CheckFireballHit(FireBall);
+                }
+            }
+        };
+        GhostAnimationTimer.start();
+    }
+
+    public void RunMinionAnimation() {
+        AnimationTimer GhostAnimationTimer = new AnimationTimer() {
+            private long startTime = System.nanoTime();
+            private long lastUpdate = 0;
+            @Override
+            public void handle(long currentTime) {
+                // Slide X axis
+                if (currentTime - lastUpdate >= 6_000_000_000L){
                     SlideXPos(attackGhostImageView,3);
+                if (currentTime - lastUpdate >= 10_000_000_000L){
+                    SlideXPos(Minion,5);
                     lastUpdate = currentTime;
                 }
                 // Get Position & Set to Minions class
