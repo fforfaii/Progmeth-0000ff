@@ -34,7 +34,7 @@ public class Minions extends Enemy { //can do nothing but player needs to avoid
     }
 
     public void setxPos(double xPos) {
-        this.xPos = xPos;
+        this.xPos = xPos + 10;
     }
 
     public double getyPos() {

@@ -11,11 +11,13 @@ public class Punk {
     private int delayShoot;
     private double BoomxPos;
     private double BoomyPos;
+    private boolean isDead;
     public Punk() {
         // always start at (0.0,453.0)
         setxPos(0); // ระยะห่างจากขอบซ้ายของ window
         setyPos(453.0); // ระยะห่างจากขอบบนของ window
         this.atk = 1;
+        setDead(false);
         setScore(0);
         setHp(3);
         setSpeed(15);
@@ -104,5 +106,13 @@ public class Punk {
 
     public void setBoomyPos(double boomyPos) {
         BoomyPos = boomyPos;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
     }
 }
