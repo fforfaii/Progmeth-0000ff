@@ -1,62 +1,67 @@
 package gui;
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.event.EventHandler;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
+import logic.GameLogic;
 import logic.character.Punk;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class ForestMapPane extends AnchorPane {
     private static ForestMapPane instance;
-    private ImageView mainChar;
-    private ImageView Boom;
-    private Animation mainAni;
-    private Image Gun;
-    private Image runLeft;
-    private Image runRight;
-    private Image Idle;
+    private ImageView coin;
+    private HpBoard hpBoard;
+    private ScoreBoard scoreBoard;
+    int randomIndex;
+    ArrayList<Integer> xPos_Down = new ArrayList<Integer>(); // for collect rand x position for ghost to go down
     private boolean canShoot;
     Punk punk;
-
     public ForestMapPane(){
-        setBGImage();
-
-        // Set Ground
-        Image groundImage = new Image(ClassLoader.getSystemResource("rock_ground_long.png").toString());
-        ImageView groundImageView = new ImageView(groundImage);
+        //Set Background and Ground
+        setBackground(new Background(GameLogic.getBGImage("BG_forest1.jpg")));
+        ImageView groundImageView = GameLogic.getGroundImage("rock_ground_long.png");
         setTopAnchor(groundImageView,530.0);
-
         this.getChildren().add(groundImageView);
-
-        //Preload Run Animation
-        Gun = new Image(ClassLoader.getSystemResource("Punk_Gun_Resize.png").toString());
-        runLeft = new Image(ClassLoader.getSystemResource("Punk_runleft.png").toString());
-        runRight = new Image(ClassLoader.getSystemResource("Punk_runright.png").toString());
-        Idle = new Image(ClassLoader.getSystemResource("Punk_idle.png").toString());
 
         // Set Main Character
         punk = Punk.getInstance();
-        mainChar = new ImageView(new Image(ClassLoader.getSystemResource("Punk_idle.png").toString()));
-        mainAni = new SpriteAnimation(mainChar, Duration.millis(1000),4,4,0,0,48,48);
-        mainAni.setCycleCount(Animation.INDEFINITE);
-        mainChar.setFitWidth(100);
-        mainChar.setFitHeight(100);
-        mainAni.play();
-        setTopAnchor(mainChar,453.0);
-
-        // Set GunBoom
+        punk.initPunkAnimation();
+        setTopAnchor(punk.getPunkImageView(),453.0);
         canShoot = true;
-        Boom = new ImageView(new Image(ClassLoader.getSystemResource("gun1.png").toString()));
-        Boom.setFitWidth(12);
-        Boom.setFitHeight(72);
-        Boom.setVisible(false);
+        getChildren().addAll(punk.getPunkImageView(), punk.getPunkShot());
 
-        getChildren().addAll(mainChar, Boom);
+        // Set Coin
+        coin = new ImageView(new Image(ClassLoader.getSystemResource("coin.png").toString()));
+        coin.setVisible(false);
+        getChildren().add(coin);
+        coinFall();
+
+        // Set heart
+        hpBoard = HpBoard.getInstance();
+        hpBoard.setAlignment(Pos.CENTER_LEFT);
+        setTopAnchor(hpBoard,10.0);
+        setLeftAnchor(hpBoard,15.0);
+        getChildren().add(hpBoard);
+
+        // Set ScoreBoard ( must stay after set punk )
+        scoreBoard = ScoreBoard.getInstance();
+        setRightAnchor(scoreBoard,20.0);
+        setTopAnchor(scoreBoard,8.0);
+        getChildren().add(scoreBoard);
 
         this.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -65,71 +70,105 @@ public class ForestMapPane extends AnchorPane {
                     case A:
                         // go left
                         System.out.println("A");
-                        System.out.println(mainChar.getLayoutX());
-                        if (mainChar.getLayoutX() >= 5.0) mainChar.setLayoutX(mainChar.getLayoutX()-punk.getSpeed());
-                        setMainChar(runLeft,6,6,48,48);
+                        System.out.println(punk.getPunkImageView().getLayoutX());
+                        punk.runLeft();
                         break;
                     case D:
                         // go right
                         System.out.println("D");
-                        System.out.println(mainChar.getLayoutX());
-                        if (mainChar.getLayoutX() <= 1080) mainChar.setLayoutX(mainChar.getLayoutX()+punk.getSpeed());
-                        setMainChar(runRight,6,6,48,48);
+                        System.out.println(punk.getPunkImageView().getLayoutX());
+                        punk.runRight();
                         break;
                     case SPACE:
                         // release power
                         if (!canShoot){
                             return;
                         }
+                        punk.shoot();
                         System.out.println("Boom!");
-                        Shoot(Gun);
                         canShoot = false;
-                        Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(5), event -> canShoot = true));
-                        cooldownTimer.play();
+                        Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(3), event -> canShoot = true));
+                        delayShoot.play();
                         break;
                 }
-                punk.setxPos(mainChar.getLayoutX());
-                System.out.println(punk.getxPos());
+                punk.setXPos(punk.getPunkImageView().getLayoutX());
+                System.out.println(punk.getXPos());
             }
         });
         this.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
-            public void handle(KeyEvent keyEvent) {
-                // idle
-                setMainChar(Idle,4,4,48,48);
+            public void handle(KeyEvent keyEvent) { //Idle
+                punk.setPunkAnimation(punk.getPunkIdle(),4,4,48,48);
             }
         });
     }
-    public void Shoot(Image image) {
-        mainChar.setImage(image);
-        mainChar.setViewport(new javafx.geometry.Rectangle2D(96, 0, 48, 48));
-//        Boom.setVisible(true);
-//        Boom.setLayoutY(0);
-//        TranslateTransition boomTransition = new TranslateTransition(Duration.seconds(1), Boom);
-//        boomTransition.setByY(-300); // Move the Boom image upward by 100 pixels
-//        boomTransition.play(); // Start the animation
-//        Boom.setLayoutY(0);
+    public void deleteHeart() {
+        int size = hpBoard.getChildren().size();
+        System.out.println("Size before deletion: " + size);
+        hpBoard.getChildren().remove(size-1);
+        if (punk.getHp() == 0){
+            punk.setDead(true);
+            //ย้ายหน้า gameover
+            return;
+        }
     }
-    public void setMainChar(Image Image, int count, int column, int width, int height) {
-        mainChar.setImage(Image);
-        SpriteAnimation.getInstance().setCount(count);
-        SpriteAnimation.getInstance().setColumns(column);
-        SpriteAnimation.getInstance().setWidth(width);
-        SpriteAnimation.getInstance().setHeight(height);
-        mainAni.setCycleCount(Animation.INDEFINITE);
-        mainChar.setFitWidth(100);
-        mainChar.setFitHeight(100);
-        mainAni.play();
-        setTopAnchor(mainChar,453.0);
+    public void addHeart() {
+        if (hpBoard.getChildren().size() <= 3){
+            ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
+            hp.setFitHeight(20);
+            hp.setFitWidth(25);
+            hpBoard.getChildren().add(hp);
+        }
     }
+    public int randomIndexForCoinFall() {
+        Random random = new Random();
+        return random.nextInt(6);
+    }
+    public void coinFall() {
+        Random random = new Random();
+        ArrayList<Double> durations = new ArrayList<>();
+        durations.add(3.0);
+        durations.add(3.5);
+        durations.add(4.0);
+        durations.add(4.5);
+        durations.add(2.0);
+        durations.add(2.5);
+        randomIndex = randomIndexForCoinFall();
+        AnimationTimer FallDown = new AnimationTimer() {
+            private long lastUpdate = 0;
+            @Override
+            public void handle(long currentTime) {
+                double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
+//                System.out.println(randomIndexforCoinFall());
+                System.out.println("playerScore = " + punk.getScore() + " fall : " + coin.getTranslateY());
+                if (elapsedTimeSeconds >= durations.get(randomIndex)) {
+                    coin.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
+                    coin.setTranslateY(0.0);
+                    coin.setFitWidth(30);
+                    coin.setFitHeight(30);
+                    slideCoin(coin);
+                    lastUpdate = currentTime;
+                    randomIndex = randomIndexForCoinFall();
+                }
+                GameLogic.checkCoinHit(coin);
+            }
+        };
+        FallDown.start();
+    }
+    public void slideCoin(ImageView coinImage) {
+        coinImage.setVisible(true);
+        TranslateTransition fallTransition = new TranslateTransition(Duration.seconds(1.5), coin);
+        fallTransition.setFromY(0);
+        fallTransition.setToY(545);
+        fallTransition.setCycleCount(1);
+        // ต้องมี check mainChar can get coin ?
 
-    public void setBGImage() {
-        String img_path = ClassLoader.getSystemResource("BG_forest1.jpg").toString();
-        Image img = new Image(img_path);
-        BackgroundImage bg_img = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(1152,648,false,false,false,false));
-        setBackground(new Background(bg_img));
+        fallTransition.setOnFinished(event -> {
+            coinImage.setTranslateY(0.0);
+            coinImage.setVisible(false);
+        });
+        fallTransition.play();
     }
-
     public static ForestMapPane getInstance() {
         if (instance == null) {
             instance = new ForestMapPane();

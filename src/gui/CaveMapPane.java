@@ -78,7 +78,7 @@ public class CaveMapPane extends AnchorPane {
         Boom = new ImageView(new Image(ClassLoader.getSystemResource("gun1.png").toString()));
         Boom.setFitWidth(60); //12
         Boom.setFitHeight(360); //72
-        Boom.setLayoutY(punk.getyPos());
+        Boom.setLayoutY(punk.getYPos());
         Boom.setVisible(false);
 
         // Set Coin
@@ -160,9 +160,9 @@ public class CaveMapPane extends AnchorPane {
                         System.out.println("Boom!");
                         break;
                 }
-                punk.setxPos(mainChar.getLayoutX());
-                System.out.println("Punk X : " + punk.getxPos());
-                System.out.println("Punk Y : " + punk.getyPos());
+                punk.setXPos(mainChar.getLayoutX());
+                System.out.println("Punk X : " + punk.getXPos());
+                System.out.println("Punk Y : " + punk.getYPos());
             }
         });
         this.setOnKeyReleased(new EventHandler<KeyEvent>() {
@@ -200,7 +200,7 @@ public class CaveMapPane extends AnchorPane {
             System.out.println("Ghost hit detected");
             System.out.println("hp : " + punk.getHp());
             System.out.println("GhostBound : " + minions.getxPos() + " , " + minions.getyPos());
-            System.out.println("PunkBound : " + punk.getxPos() + " , " + punk.getyPos());
+            System.out.println("PunkBound : " + punk.getXPos() + " , " + punk.getYPos());
             punk.setHp(punk.getHp() - 1);
             deleteHeart();
             canHit = false;
@@ -245,7 +245,7 @@ public class CaveMapPane extends AnchorPane {
                 20,
                 mainChar.getBoundsInParent().getHeight() / 2
         );
-        if (CoinBounds.intersects(mainCharBounds) && coin.isVisible() && coin.getTranslateY() >= punk.getyPos()){
+        if (CoinBounds.intersects(mainCharBounds) && coin.isVisible() && coin.getTranslateY() >= punk.getYPos()){
             punk.setScore(punk.getScore() + 1);
             coin.setTranslateY(0.0);
             coin.setVisible(false);
@@ -430,9 +430,9 @@ public class CaveMapPane extends AnchorPane {
         Boom.setVisible(true);
         Boom.setFitWidth(24);
         Boom.setFitHeight(120);
-        Boom.setLayoutX(punk.getxPos() + 22);
-        punk.setBoomxPos(Boom.getLayoutX());
-        punk.setBoomyPos(Boom.getLayoutY());
+        Boom.setLayoutX(punk.getXPos() + 22);
+        punk.setPunkShotXPos(Boom.getLayoutX());
+        punk.setPunkShotYPos(Boom.getLayoutY());
 //        System.out.println("Boom start: " + "(" + punk.getBoomxPos() + "," + punk.getBoomyPos() + ")");
 
         // Animate Boom moving upwards
@@ -443,14 +443,14 @@ public class CaveMapPane extends AnchorPane {
             Boom.setVisible(false);
             Boom.setLayoutY(mainChar.getLayoutY());
 
-            punk.setBoomxPos(Boom.getLayoutX());
-            punk.setBoomyPos(Boom.getLayoutY());
+            punk.setPunkShotXPos(Boom.getLayoutX());
+            punk.setPunkShotYPos(Boom.getLayoutY());
 //            System.out.println("Boom reset: "+ "(" + punk.getBoomxPos() + "," + punk.getBoomyPos() + ")");
             Boom.setTranslateY(0);
         });
         transition.play();
-        punk.setBoomxPos(Boom.getLayoutX());
-        punk.setBoomyPos(Boom.getTranslateY());
+        punk.setPunkShotXPos(Boom.getLayoutX());
+        punk.setPunkShotYPos(Boom.getTranslateY());
 //        System.out.println("Boom finish: " + "(" + punk.getBoomxPos() + "," + punk.getBoomyPos() + ")");
     }
 
