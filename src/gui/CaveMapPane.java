@@ -1,7 +1,6 @@
 package gui;
 
 import javafx.animation.*;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
 import javafx.scene.image.Image;
@@ -9,15 +8,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import logic.GameLogic;
 import logic.character.AttackGhost;
-import logic.character.Minions;
+import logic.character.Minion;
 import logic.character.Punk;
-import logic.character.SlowGhost;
 import main.Main;
 
 import java.io.IOException;
@@ -32,8 +30,8 @@ public class CaveMapPane extends AnchorPane {
     private ImageView Boom;
     private ImageView Coin;
     private ImageView FireBall;
-    private ImageView Minion;
-    private ImageView AttackGhost;
+    private ImageView minionImageView;
+    private ImageView attackGhostImageView;
     private Animation mainAni;
     private Animation minionsAni;
     private Animation attackghostAni;
@@ -41,8 +39,8 @@ public class CaveMapPane extends AnchorPane {
     private Image runLeft;
     private Image runRight;
     private Image Idle;
-    private Image minion;
-    private Image attackghost;
+    private Image minionImage;
+    private Image attackGhostImage;
     private HBox hpBoard;
     private HBox ScoreBoard;
     private boolean canShoot;
@@ -52,26 +50,26 @@ public class CaveMapPane extends AnchorPane {
     int randomIndex; // for CoinFall
     ArrayList<Integer> xPos_Down = new ArrayList<Integer>(); // for collect rand x position for ghost to go down
     Punk punk;
-    Minions minions;
+    Minion minion;
     AttackGhost attackGhost;
     public CaveMapPane() {
-        setBGImage();
 
         // Set Ground
-        Image groundImage = new Image(ClassLoader.getSystemResource("rock_ground_long.png").toString());
-        ImageView groundImageView = new ImageView(groundImage);
+        setBackground(new Background(GameLogic.getBGImage("BG_Cave.jpg")));
+        ImageView groundImageView = GameLogic.getGroundImage("rock_ground_long.png");
         setTopAnchor(groundImageView,530.0);
+        this.getChildren().add(groundImageView);
 
         // Preload Run Animation
         Gun = new Image(ClassLoader.getSystemResource("Punk_Gun_Resize.png").toString());
         runLeft = new Image(ClassLoader.getSystemResource("Punk_runleft.png").toString());
         runRight = new Image(ClassLoader.getSystemResource("Punk_runright.png").toString());
         Idle = new Image(ClassLoader.getSystemResource("Punk_idle.png").toString());
-        minion = new Image(ClassLoader.getSystemResource("ghost1.png").toString());
-        attackghost = new Image(ClassLoader.getSystemResource("ghost2.png").toString());
+        minionImage = new Image(ClassLoader.getSystemResource("ghost1.png").toString());
+        attackGhostImage = new Image(ClassLoader.getSystemResource("ghost2.png").toString());
 
         // Set Main Character
-        punk = Punk.getInstance();
+        punk = new Punk();
         mainChar = new ImageView(new Image(ClassLoader.getSystemResource("Punk_idle.png").toString()));
         mainAni = new SpriteAnimation(mainChar,Duration.millis(1000),4,4,0,0,48,48);
         mainAni.setCycleCount(Animation.INDEFINITE);
@@ -85,7 +83,7 @@ public class CaveMapPane extends AnchorPane {
         Boom = new ImageView(new Image(ClassLoader.getSystemResource("gun1.png").toString()));
         Boom.setFitWidth(60); //12
         Boom.setFitHeight(360); //72
-        Boom.setLayoutY(punk.getyPos());
+        Boom.setLayoutY(punk.getYPos());
         Boom.setVisible(false);
 
         // Set Coin
@@ -123,25 +121,25 @@ public class CaveMapPane extends AnchorPane {
         setTopAnchor(ScoreBoard,5.0);
 
         // Set Ghost1 --> Minion
-        minions = Minions.getInstance();
-        Minion = new ImageView(minion);
-        minionsAni = new SpriteAnimation(Minion,Duration.millis(1000),6,6,0,0,48,48);
+        minion = logic.character.Minion.getInstance();
+        minionImageView = new ImageView(minionImage);
+        minionsAni = new SpriteAnimation(minionImageView,Duration.millis(1000),6,6,0,0,48,48);
         minionsAni.setCycleCount(Animation.INDEFINITE);
-        Minion.setFitHeight(80);
-        Minion.setFitWidth(80);
+        minionImageView.setFitHeight(80);
+        minionImageView.setFitWidth(80);
         minionsAni.play();
-        setTopAnchor(Minion, 50.0);
+        setTopAnchor(minionImageView, 50.0);
         RunMinionAnimation();
 
         // Set Ghost2 --> AttackGhost
         attackGhost = logic.character.AttackGhost.getInstance();
-        AttackGhost = new ImageView(attackghost);
-        attackghostAni = new SpriteAnimation(AttackGhost,Duration.millis(1000),6,6,0,0,48,48);
+        attackGhostImageView = new ImageView(attackGhostImage);
+        attackghostAni = new SpriteAnimation(attackGhostImageView,Duration.millis(1000),6,6,0,0,48,48);
         attackghostAni.setCycleCount(Animation.INDEFINITE);
-        AttackGhost.setFitWidth(80);
-        AttackGhost.setFitHeight(80);
+        attackGhostImageView.setFitWidth(80);
+        attackGhostImageView.setFitHeight(80);
         attackghostAni.play();
-        setTopAnchor(AttackGhost,50.0);
+        setTopAnchor(attackGhostImageView,50.0);
         RunAttackGhostAnimation();
 
         // Set FireBall
@@ -150,7 +148,7 @@ public class CaveMapPane extends AnchorPane {
         FireBall.setLayoutY(50.0);
         FireBall.setVisible(false);
 
-        getChildren().addAll(groundImageView, mainChar, Boom, Coin, hpBoard, ScoreBoard, Minion, FireBall, AttackGhost);
+        getChildren().addAll(groundImageView, mainChar, Boom, Coin, hpBoard, ScoreBoard, minionImageView, FireBall, attackGhostImageView);
 
         // Keyboard Input
         this.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -181,9 +179,9 @@ public class CaveMapPane extends AnchorPane {
                         System.out.println("Boom!");
                         break;
                 }
-                punk.setxPos(mainChar.getLayoutX());
-                System.out.println("Punk X : " + punk.getxPos());
-                System.out.println("Punk Y : " + punk.getyPos());
+                punk.setXPos(mainChar.getLayoutX());
+                System.out.println("Punk X : " + punk.getXPos());
+                System.out.println("Punk Y : " + punk.getYPos());
             }
         });
         this.setOnKeyReleased(new EventHandler<KeyEvent>() {
@@ -195,8 +193,8 @@ public class CaveMapPane extends AnchorPane {
         });
 
         // Run AnimationTimer to Check Boom Hit
-        CheckBoomHit(Minion);
-        CheckBoomHit(AttackGhost);
+        CheckBoomHit(minionImageView);
+        CheckBoomHit(attackGhostImageView);
 
         // Set CoinFall
         CoinFall();
@@ -252,6 +250,9 @@ public class CaveMapPane extends AnchorPane {
         int size = hpBoard.getChildren().size();
         System.out.println("Size before deletion: " + size);
         if (size!=0) hpBoard.getChildren().remove(size-1);
+        System.out.println(punk.getHp());
+        if (punk.isDead()){
+            return;
         if (punk.getHp() == 0) {
             punk.setDead(true);
             FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), this);
@@ -259,6 +260,21 @@ public class CaveMapPane extends AnchorPane {
             fadeOut.setToValue(0.0);
             fadeOut.setOnFinished(event -> {
                 try {
+                    Main.getInstance().changeSceneJava(GameOverPane.getInstance());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            fadeOut.play();
+        }
+        if (punk.getHp() == 0) {
+            punk.setDead(true);
+            FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), this);
+            fadeOut.setFromValue(1.0);
+            fadeOut.setToValue(0.0);
+            fadeOut.setOnFinished(event -> {
+                try {
+                    System.out.println("Game Over !");
                     Main.getInstance().changeSceneJava(GameOverPane.getInstance());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -293,7 +309,7 @@ public class CaveMapPane extends AnchorPane {
                 20,
                 mainChar.getBoundsInParent().getHeight() / 2
         );
-        if (CoinBounds.intersects(mainCharBounds) && coin.isVisible() && coin.getTranslateY() >= punk.getyPos()){
+        if (CoinBounds.intersects(mainCharBounds) && coin.isVisible() && coin.getTranslateY() >= punk.getYPos()){
             punk.setScore(punk.getScore() + 1);
             coin.setTranslateY(0.0);
             coin.setVisible(false);
@@ -400,34 +416,71 @@ public class CaveMapPane extends AnchorPane {
             @Override
             public void handle(long currentTime) {
                 // Slide X axis
+                if (currentTime - lastUpdate >= 6_000_000_000L){
+                    SlideXPos(attackGhostImageView,3);
                 if (currentTime - lastUpdate >= 10_000_000_000L){
                     SlideXPos(Minion,5);
                     lastUpdate = currentTime;
                 }
                 // Get Position & Set to Minions class
-                minions.setxPos(getXPos(Minion));
-                minions.setyPos(getYPos(Minion));
+                attackGhost.setXPos(getXPos(attackGhostImageView));
+                attackGhost.setYPos(getYPos(attackGhostImageView));
+                // Release Power
+                double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
+                if (elapsedTimeSeconds >= durations.get(randomIndex)) {
+                    FireBall.setLayoutX(attackGhost.getXPos() + 30);
+                    FireBall.setTranslateY(50.0);
+                    FireBall.setFitWidth(40);
+                    FireBall.setFitHeight(40);
+                    SlideYPos(FireBall,1);
+                    lastUpdate = currentTime;
+                    randomIndex = randomIndex();
+                }
+
+                if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
+                    // Check fireball hit
+                    CheckFireballHit(FireBall);
+                }
+            }
+        };
+        GhostAnimationTimer.start();
+    }
+
+    public void RunMinionAnimation() {
+        AnimationTimer GhostAnimationTimer = new AnimationTimer() {
+            private long startTime = System.nanoTime();
+            private long lastUpdate = 0;
+            @Override
+            public void handle(long currentTime) {
+                // Slide X axis
+                if (currentTime - lastUpdate >= 10_000_000_000L){
+                    SlideXPos(minionImageView,5);
+                    lastUpdate = currentTime;
+                }
+                // Get Position & Set to Minions class
+                minion.setXPos(getXPos(minionImageView));
+                minion.setYPos(getYPos(minionImageView));
 
                 // get random XPos
                 if (xPos_Down.size() < 20){
                     xPos_Down.add(xPos_Down.size(),randXPos());
                 }
                 // Check xPos to goDown
-                int stay = (int) Minion.getTranslateX();
+                int stay = (int) minionImageView.getTranslateX();
                 if (xPos_Down.contains(stay)){
                     // remove used xPos
                     xPos_Down.remove(xPos_Down.indexOf(stay));
                     System.out.println("stay = " + stay + " go down !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
                     if (currentTime - lastUpdate >= 4_000_000_000L){
-                        goDown(Minion);
+                        goDown(minionImageView);
                         lastUpdate = currentTime;
                     }
                 }
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check ghost hit
-                    CheckGhostHit(Minion);
+                    CheckGhostHit(minionImageView);
                 }
             }
         };
@@ -498,15 +551,15 @@ public class CaveMapPane extends AnchorPane {
     public void Shoot(Image image) {
         // Set mainChar when Shoot
         mainChar.setImage(image);
-        mainChar.setViewport(new javafx.geometry.Rectangle2D(96, 0, 48, 48));
+        mainChar.setViewport(new Rectangle2D(96, 0, 48, 48));
 
         // Set Boom when start Shooting
         Boom.setVisible(true);
         Boom.setFitWidth(24);
         Boom.setFitHeight(120);
-        Boom.setLayoutX(punk.getxPos() + 22);
-        punk.setBoomxPos(Boom.getLayoutX());
-        punk.setBoomyPos(Boom.getLayoutY());
+        Boom.setLayoutX(punk.getXPos() + 22);
+        punk.setPunkShotXPos(Boom.getLayoutX());
+        punk.setPunkShotYPos(Boom.getLayoutY());
 
         // Animate Boom moving upwards
         TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5), Boom);
@@ -516,13 +569,13 @@ public class CaveMapPane extends AnchorPane {
             Boom.setVisible(false);
             Boom.setLayoutY(mainChar.getLayoutY());
 
-            punk.setBoomxPos(Boom.getLayoutX());
-            punk.setBoomyPos(Boom.getLayoutY());
+            punk.setPunkShotXPos(Boom.getLayoutX());
+            punk.setPunkShotYPos(Boom.getLayoutY());
             Boom.setTranslateY(0);
         });
         transition.play();
-        punk.setBoomxPos(Boom.getLayoutX());
-        punk.setBoomyPos(Boom.getTranslateY());
+        punk.setPunkShotXPos(Boom.getLayoutX());
+        punk.setPunkShotYPos(Boom.getTranslateY());
     }
 
     public void setMainChar(Image Image, int count, int column, int width, int height) {
@@ -536,13 +589,6 @@ public class CaveMapPane extends AnchorPane {
         mainChar.setFitHeight(100);
         mainAni.play();
         setTopAnchor(mainChar,453.0);
-    }
-
-    public void setBGImage() {
-        String img_path = ClassLoader.getSystemResource("BG_Cave.jpg").toString();
-        Image img = new Image(img_path);
-        BackgroundImage bg_img = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(1152,648,false,false,false,false));
-        setBackground(new Background(bg_img));
     }
 
     public static CaveMapPane getInstance() {

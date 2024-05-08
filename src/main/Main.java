@@ -2,6 +2,7 @@ package main;
 
 import gui.GameOverPane;
 import gui.LoginPane;
+import gui.GameOverPane;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

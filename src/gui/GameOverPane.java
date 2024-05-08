@@ -13,8 +13,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+
+import logic.GameLogic;
 import logic.character.Punk;
 import main.Main;
+
 
 import java.io.IOException;
 
@@ -24,12 +27,8 @@ public class GameOverPane extends StackPane {
     VBox allElements;
     public GameOverPane() {
         player = Punk.getInstance();
-
-        String img_path = ClassLoader.getSystemResource("BG_end.gif").toString();
-        Image img = new Image(img_path);
-        BackgroundImage bg_img = new BackgroundImage(img, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.CENTER, new BackgroundSize(1152,648,false,false,false,false));
-        setBackground(new Background(bg_img));
-
+        setBackground(new Background(GameLogic.getBGImage("BG_end.gif")));
+        
         allElements = new VBox();
         allElements.setAlignment(Pos.TOP_CENTER);
         allElements.setSpacing(12.0);
@@ -58,7 +57,9 @@ public class GameOverPane extends StackPane {
             }
         });
 
+
         allElements.getChildren().addAll(gameover,scoreText,menu);
+
         getChildren().add(allElements);
     }
 

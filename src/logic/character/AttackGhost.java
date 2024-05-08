@@ -7,25 +7,24 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
     public AttackGhost(){
         setHp(1);
     }
-    //need to check if hit or not in the GameLogic.update()
     public void hitDamage(){
         Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
     }
     public void effect(){}
 
-    public double getxPos() {
+    public double getXPos() {
         return xPos;
     }
 
-    public void setxPos(double xPos) {
+    public void setXPos(double xPos) {
         this.xPos = xPos;
     }
 
-    public double getyPos() {
+    public double getYPos() {
         return yPos;
     }
 
-    public void setyPos(double yPos) {
+    public void setYPos(double yPos) {
         this.yPos = yPos;
     }
 
