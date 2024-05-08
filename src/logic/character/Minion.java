@@ -6,17 +6,17 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-public class Minions extends Enemy { //can do nothing but player needs to avoid
-    private static Minions instance;
+public class Minion extends Enemy { //can do nothing but player needs to avoid
+    private static Minion instance;
     private double xPos;
     private double yPos;
     private ImageView MinionsimageView;
     private Animation MinionsAni;
 
-    public Minions(double x, double y){
+    public Minion(double x, double y){
         setHp(1);
-        setxPos(x);
-        setyPos(y);
+        setXPos(x);
+        setYPos(y);
         MinionsimageView = new ImageView(new Image(ClassLoader.getSystemResource("ghost1.png").toString()));
         MinionsAni = new SpriteAnimation(MinionsimageView,Duration.millis(1000),6,6,0,0,48,48);
         MinionsAni.setCycleCount(Animation.INDEFINITE);
@@ -29,25 +29,25 @@ public class Minions extends Enemy { //can do nothing but player needs to avoid
         return MinionsimageView;
     }
 
-    public double getxPos() {
+    public double getXPos() {
         return xPos;
     }
 
-    public void setxPos(double xPos) {
+    public void setXPos(double xPos) {
         this.xPos = xPos + 10;
     }
 
-    public double getyPos() {
+    public double getYPos() {
         return yPos;
     }
 
-    public void setyPos(double yPos) {
+    public void setYPos(double yPos) {
         this.yPos = yPos;
     }
 
-    public static Minions getInstance() {
+    public static Minion getInstance() {
         if (instance == null) {
-            instance = new Minions(10.0,0.0);
+            instance = new Minion(10.0,0.0);
         }
         return instance;
     }

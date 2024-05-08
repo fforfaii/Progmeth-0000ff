@@ -48,6 +48,7 @@ public class Punk {
         punkShot.setFitWidth(12);
         punkShot.setFitHeight(72);
         punkShot.setVisible(false);
+        instance = this;
     }
     public void initPunkAnimation(){
         punkAnimation.setCycleCount(Animation.INDEFINITE);

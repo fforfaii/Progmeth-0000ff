@@ -41,12 +41,12 @@ public class MapPane extends VBox {
         VBox vBox4 = setMap("BG_forest2.jpg", "Map 4");
         hBox.getChildren().addAll(vBox1, vBox2, vBox3, vBox4);
 
-        // Change Scene to 'Each'MapPane
+        // Change Scene to 'Each' MapPane
         MapBTN1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    Main.getInstance().changeSceneJava(CaveMapPane.getInstance());
+                    Main.getInstance().changeSceneJava(new CaveMapPane());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

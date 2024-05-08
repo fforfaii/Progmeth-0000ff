@@ -6,6 +6,7 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -17,7 +18,9 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import logic.GameLogic;
 import logic.character.Punk;
+import main.Main;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -101,25 +104,41 @@ public class ForestMapPane extends AnchorPane {
                 punk.setPunkAnimation(punk.getPunkIdle(),4,4,48,48);
             }
         });
+//        GameLogic.checkPunkShotHit(this, minion);
+//        GameLogic.checkPunkShotHit(this, attackGhost);
     }
-    public void deleteHeart() {
-        int size = hpBoard.getChildren().size();
-        System.out.println("Size before deletion: " + size);
-        hpBoard.getChildren().remove(size-1);
-        if (punk.getHp() == 0){
-            punk.setDead(true);
-            //ย้ายหน้า gameover
-            return;
-        }
-    }
-    public void addHeart() {
-        if (hpBoard.getChildren().size() <= 3){
-            ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
-            hp.setFitHeight(20);
-            hp.setFitWidth(25);
-            hpBoard.getChildren().add(hp);
-        }
-    }
+//    public void deleteHeart(Node node) {
+//        int size = hpBoard.getChildren().size();
+//        System.out.println("Size before deletion: " + size);
+//        if (size!=0) hpBoard.getChildren().remove(size-1);
+//        System.out.println(punk.getHp());
+//        if (punk.isDead()){
+//            return;
+//        }
+//        if (punk.getHp() == 0) {
+//            punk.setDead(true);
+//            FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), node);
+//            fadeOut.setFromValue(1.0);
+//            fadeOut.setToValue(0.0);
+//            fadeOut.setOnFinished(event -> {
+//                try {
+//                    System.out.println("Game Over !");
+//                    Main.getInstance().changeSceneJava(GameOverPane.getInstance());
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            fadeOut.play();
+//        }
+//    }
+//    public void addHeart() {
+//        if (hpBoard.getChildren().size() <= 3){
+//            ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
+//            hp.setFitHeight(20);
+//            hp.setFitWidth(25);
+//            hpBoard.getChildren().add(hp);
+//        }
+//    }
     public int randomIndexForCoinFall() {
         Random random = new Random();
         return random.nextInt(6);
@@ -168,6 +187,12 @@ public class ForestMapPane extends AnchorPane {
             coinImage.setVisible(false);
         });
         fallTransition.play();
+    }
+    public double getXPos(ImageView imageView) {
+        return imageView.getTranslateX();
+    }
+    public double getYPos(ImageView imageView) {
+        return imageView.getTranslateY();
     }
     public static ForestMapPane getInstance() {
         if (instance == null) {
