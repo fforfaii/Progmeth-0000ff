@@ -21,6 +21,7 @@ import logic.character.SlowGhost;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 public class CaveMapPane extends AnchorPane {
     private static CaveMapPane instance;
@@ -36,11 +37,12 @@ public class CaveMapPane extends AnchorPane {
     private Image runRight;
     private Image Idle;
     private Image minion;
+    private HBox hpBoard;
     private HBox ScoreBoard;
     private boolean canShoot;
+    private boolean canHit = true;
     private int tmp = 1; // for play ghost slide
     int randomIndex; // for CoinFall
-    boolean isHitCoin = false; // for CheckHitCoin
     ArrayList<Integer> xPos_Down = new ArrayList<Integer>(); // for collect rand x position for ghost to go down
     Punk punk;
     Minions minions;
@@ -85,16 +87,15 @@ public class CaveMapPane extends AnchorPane {
         getChildren().add(Coin);
 
         // Set heart
-        HBox hpBoard = new HBox();
+        hpBoard = new HBox();
+        hpBoard.setAlignment(Pos.CENTER_LEFT);
         hpBoard.setSpacing(8);
         hpBoard.setPrefWidth(91);
         hpBoard.setPrefHeight(20);
-        Hp = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
             hp.setFitHeight(20);
             hp.setFitWidth(25);
-            Hp.add(hp);
             hpBoard.getChildren().add(hp);
         }
         setTopAnchor(hpBoard,10.0);
@@ -178,6 +179,53 @@ public class CaveMapPane extends AnchorPane {
         // Set CoinFall
         CoinFall();
     }
+    public void CheckGhostHit(ImageView ghost) {
+//        Bounds GhostBounds = ghost.getBoundsInParent();
+        if (! canHit){
+            return;
+        }
+        Bounds GhostBounds = new BoundingBox(
+                ghost.getBoundsInParent().getMinX(),
+                ghost.getBoundsInParent().getMinY(),
+                ghost.getBoundsInParent().getWidth(),
+                80
+        );
+        Bounds mainCharBounds = new BoundingBox(
+                mainChar.getBoundsInParent().getMinX() + 20,
+                mainChar.getBoundsInParent().getMinY(),
+                20,
+                100
+        );
+        if (GhostBounds.intersects(mainCharBounds) && ghost.isVisible()) {
+            System.out.println("Ghost hit detected");
+            System.out.println("hp : " + punk.getHp());
+            System.out.println("GhostBound : " + minions.getxPos() + " , " + minions.getyPos());
+            System.out.println("PunkBound : " + punk.getxPos() + " , " + punk.getyPos());
+            punk.setHp(punk.getHp() - 1);
+            deleteHeart();
+            canHit = false;
+            Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> canHit = true));
+            cooldownTimer.play();
+        }
+    }
+    public void deleteHeart() {
+        int size = hpBoard.getChildren().size();
+        System.out.println("Size before deletion: " + size);
+        hpBoard.getChildren().remove(size-1);
+        if (punk.getHp() == 0){
+            punk.setDead(true);
+            //ย้ายหน้า gameover
+            return;
+        }
+    }
+    public void addHeart() {
+        if (hpBoard.getChildren().size() <= 3){
+            ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
+            hp.setFitHeight(20);
+            hp.setFitWidth(25);
+            hpBoard.getChildren().add(hp);
+        }
+    }
     public void setTextScoreBoard(Text text) {
         text.setFont(Font.font("Monospace", FontWeight.EXTRA_BOLD,12));
         text.setFill(Color.rgb(48, 34, 3));
@@ -225,7 +273,7 @@ public class CaveMapPane extends AnchorPane {
             @Override
             public void handle(long currentTime) {
                 double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
-                System.out.println(randomIndexforCoinFall());
+//                System.out.println(randomIndexforCoinFall());
                 System.out.println("playerscore = " + punk.getScore() + " fall : " + Coin.getTranslateY());
                 if (elapsedTimeSeconds >= durations.get(randomIndex)) {
                     Coin.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
@@ -273,7 +321,7 @@ public class CaveMapPane extends AnchorPane {
 
     public void RunGhostAnimation() {
         AnimationTimer GhostAnimationTimer = new AnimationTimer() {
-//            private long startTime = System.nanoTime();
+            private long startTime = System.nanoTime();
             private long lastUpdate = 0;
             @Override
             public void handle(long currentTime) {
@@ -309,8 +357,13 @@ public class CaveMapPane extends AnchorPane {
                     tmp = 1;
                 }
                 int ck = (int) minions.getxPos();
-                System.out.println("ตำแหน่งผีตอนนี้ " + ck);
-                System.out.println("ตำแหน่งที่ต้องลง " + xPos_Down);
+//                System.out.println("ตำแหน่งผีตอนนี้ " + ck);
+//                System.out.println("ตำแหน่งที่ต้องลง " + xPos_Down);
+
+                if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
+                    // Check ghost hit
+                    CheckGhostHit(Minion);
+                }
             }
         };
         GhostAnimationTimer.start();
@@ -380,7 +433,7 @@ public class CaveMapPane extends AnchorPane {
         Boom.setLayoutX(punk.getxPos() + 22);
         punk.setBoomxPos(Boom.getLayoutX());
         punk.setBoomyPos(Boom.getLayoutY());
-        System.out.println("Boom start: " + "(" + punk.getBoomxPos() + "," + punk.getBoomyPos() + ")");
+//        System.out.println("Boom start: " + "(" + punk.getBoomxPos() + "," + punk.getBoomyPos() + ")");
 
         // Animate Boom moving upwards
         TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5), Boom);
@@ -392,13 +445,13 @@ public class CaveMapPane extends AnchorPane {
 
             punk.setBoomxPos(Boom.getLayoutX());
             punk.setBoomyPos(Boom.getLayoutY());
-            System.out.println("Boom reset: "+ "(" + punk.getBoomxPos() + "," + punk.getBoomyPos() + ")");
+//            System.out.println("Boom reset: "+ "(" + punk.getBoomxPos() + "," + punk.getBoomyPos() + ")");
             Boom.setTranslateY(0);
         });
         transition.play();
         punk.setBoomxPos(Boom.getLayoutX());
         punk.setBoomyPos(Boom.getTranslateY());
-        System.out.println("Boom finish: " + "(" + punk.getBoomxPos() + "," + punk.getBoomyPos() + ")");
+//        System.out.println("Boom finish: " + "(" + punk.getBoomxPos() + "," + punk.getBoomyPos() + ")");
     }
 
     public void setMainChar(Image Image, int count, int column, int width, int height) {
