@@ -3,14 +3,16 @@ package gui;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
-import javafx.geometry.Rectangle2D;
+import javafx.geometry.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import logic.character.Minions;
 import logic.character.Punk;
@@ -26,6 +28,7 @@ public class CaveMapPane extends AnchorPane {
     private ImageView Boom;
     private ImageView Coin;
     private ImageView Minion;
+    private ArrayList<ImageView> Hp;
     private Animation mainAni;
     private Animation minionsAni;
     private Image Gun;
@@ -33,6 +36,7 @@ public class CaveMapPane extends AnchorPane {
     private Image runRight;
     private Image Idle;
     private Image minion;
+    private HBox ScoreBoard;
     private boolean canShoot;
     private int tmp = 1; // for play ghost slide
     int randomIndex; // for CoinFall
@@ -48,9 +52,9 @@ public class CaveMapPane extends AnchorPane {
         ImageView groundImageView = new ImageView(groundImage);
         setTopAnchor(groundImageView,530.0);
 
-        this.getChildren().add(groundImageView);
+        getChildren().add(groundImageView);
 
-        //Preload Run Animation
+        // Preload Run Animation
         Gun = new Image(ClassLoader.getSystemResource("Punk_Gun_Resize.png").toString());
         runLeft = new Image(ClassLoader.getSystemResource("Punk_runleft.png").toString());
         runRight = new Image(ClassLoader.getSystemResource("Punk_runright.png").toString());
@@ -80,8 +84,40 @@ public class CaveMapPane extends AnchorPane {
         Coin.setVisible(false);
         getChildren().add(Coin);
 
+        // Set heart
+        HBox hpBoard = new HBox();
+        hpBoard.setSpacing(8);
+        hpBoard.setPrefWidth(91);
+        hpBoard.setPrefHeight(20);
+        Hp = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
+            hp.setFitHeight(20);
+            hp.setFitWidth(25);
+            Hp.add(hp);
+            hpBoard.getChildren().add(hp);
+        }
+        setTopAnchor(hpBoard,10.0);
+        setLeftAnchor(hpBoard,15.0);
+        getChildren().add(hpBoard);
+
+        // Set ScoreBoard ( must stay after set punk )
+        ScoreBoard = new HBox();
+        ScoreBoard.setPadding(new Insets(8));
+        ScoreBoard.setPrefWidth(80);
+        ScoreBoard.setPrefHeight(25);
+        ScoreBoard.setBackground(new Background(new BackgroundFill(Color.rgb(247, 243, 229), new CornerRadii(10.0), null)));
+        ScoreBoard.setAlignment(Pos.CENTER);
+        Text text = new Text("Your Score :  ");
+        Text Score = new Text("" + punk.getScore());
+        setTextScoreBoard(text);
+        setTextScoreBoard(Score);
+        ScoreBoard.getChildren().addAll(text,Score);
+        setRightAnchor(ScoreBoard,25.0);
+        setTopAnchor(ScoreBoard,5.0);
+        getChildren().add(ScoreBoard);
+
         // Set Ghost1
-//        Minions minions = new Minions(10.0,0.0);
         minions = Minions.getInstance();
         Minion = new ImageView(minion);
         minionsAni = new SpriteAnimation(Minion,Duration.millis(1000),6,6,0,0,48,48);
@@ -142,6 +178,16 @@ public class CaveMapPane extends AnchorPane {
         // Set CoinFall
         CoinFall();
     }
+    public void setTextScoreBoard(Text text) {
+        text.setFont(Font.font("Monospace", FontWeight.EXTRA_BOLD,12));
+        text.setFill(Color.rgb(48, 34, 3));
+    }
+    public void SetScoreboard() {
+        ScoreBoard.getChildren().remove(1);
+        Text Score = new Text("" + punk.getScore());
+        setTextScoreBoard(Score);
+        ScoreBoard.getChildren().add(Score);
+    }
     public void CheckCoinHit(ImageView coin) {
 
         Bounds CoinBounds = coin.getBoundsInParent();
@@ -155,6 +201,7 @@ public class CaveMapPane extends AnchorPane {
             punk.setScore(punk.getScore() + 1);
             coin.setTranslateY(0.0);
             coin.setVisible(false);
+            SetScoreboard();
         }
     }
     public int randomIndexforCoinFall() {
@@ -181,8 +228,7 @@ public class CaveMapPane extends AnchorPane {
                 System.out.println(randomIndexforCoinFall());
                 System.out.println("playerscore = " + punk.getScore() + " fall : " + Coin.getTranslateY());
                 if (elapsedTimeSeconds >= durations.get(randomIndex)) {
-//                    Coin.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
-                    Coin.setLayoutX(200.0);
+                    Coin.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
                     Coin.setTranslateY(0.0);
                     Coin.setFitWidth(30);
                     Coin.setFitHeight(30);
