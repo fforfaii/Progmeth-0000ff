@@ -1,6 +1,9 @@
 package logic.character;
 
 public class AttackGhost extends Enemy { //normal ghost that can attack punk. no hit damage
+    private static AttackGhost instance;
+    private double xPos;
+    private double yPos;
     public AttackGhost(){
         setHp(1);
     }
@@ -9,4 +12,27 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
         Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
     }
     public void effect(){}
+
+    public double getxPos() {
+        return xPos;
+    }
+
+    public void setxPos(double xPos) {
+        this.xPos = xPos;
+    }
+
+    public double getyPos() {
+        return yPos;
+    }
+
+    public void setyPos(double yPos) {
+        this.yPos = yPos;
+    }
+
+    public static AttackGhost getInstance() {
+        if (instance == null) {
+            instance = new AttackGhost();
+        }
+        return instance;
+    }
 }
