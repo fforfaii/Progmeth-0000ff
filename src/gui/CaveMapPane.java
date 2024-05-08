@@ -3,7 +3,9 @@ package gui;
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -141,17 +143,19 @@ public class CaveMapPane extends AnchorPane {
         CoinFall();
     }
     public void CheckCoinHit(ImageView coin) {
-        AnimationTimer checkHit = new AnimationTimer() {
-            @Override
-            public void handle(long currentTime) {
-                Bounds CoinBounds = coin.getBoundsInParent();
-                Bounds mainCharBounds = mainChar.getBoundsInParent();
-                if (CoinBounds.intersects(mainCharBounds) && Coin.isVisible()){
-                    // Don't forget to set SCORE
-                }
-            }
-        };
-        checkHit.start();
+
+        Bounds CoinBounds = coin.getBoundsInParent();
+        Bounds mainCharBounds = new BoundingBox(
+                mainChar.getBoundsInParent().getMinX() + 20,
+                mainChar.getBoundsInParent().getMinY(),
+                20,
+                mainChar.getBoundsInParent().getHeight() / 2
+        );
+        if (CoinBounds.intersects(mainCharBounds) && coin.isVisible() && coin.getTranslateY() >= punk.getyPos()){
+            punk.setScore(punk.getScore() + 1);
+            coin.setTranslateY(0.0);
+            coin.setVisible(false);
+        }
     }
     public int randomIndexforCoinFall() {
         Random random = new Random();
@@ -175,10 +179,11 @@ public class CaveMapPane extends AnchorPane {
             public void handle(long currentTime) {
                 double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
                 System.out.println(randomIndexforCoinFall());
-                System.out.println("playerscore = " + punk.getScore());
+                System.out.println("playerscore = " + punk.getScore() + " fall : " + Coin.getTranslateY());
                 if (elapsedTimeSeconds >= durations.get(randomIndex)) {
-                    Coin.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
-                    Coin.setLayoutY(0.0);
+//                    Coin.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
+                    Coin.setLayoutX(200.0);
+                    Coin.setTranslateY(0.0);
                     Coin.setFitWidth(30);
                     Coin.setFitHeight(30);
                     SlideCoin(Coin);
@@ -200,6 +205,7 @@ public class CaveMapPane extends AnchorPane {
         // ต้องมี check mainChar can get coin ?
 
         fallTransition.setOnFinished(event -> {
+            Coin.setTranslateY(0.0);
             Coin.setVisible(false);
         });
         fallTransition.play();
@@ -210,7 +216,7 @@ public class CaveMapPane extends AnchorPane {
             public void handle(long currentTime) {
                 Bounds BoomBounds = Boom.getBoundsInParent();
                 Bounds MinionsBounds = ghost.getBoundsInParent();
-                if (BoomBounds.intersects(MinionsBounds) && Boom.isVisible() == true){
+                if (BoomBounds.intersects(MinionsBounds) && Boom.isVisible()){
                     // Don't forget to set HP of that ghost
                     getChildren().remove(ghost);
                 }
