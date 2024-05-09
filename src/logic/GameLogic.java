@@ -124,6 +124,9 @@ public class GameLogic {
         if (Punk.getInstance().isImmortalDelay()) {
             return;
         }
+        if (!Punk.getInstance().isCanHit()) {
+            return;
+        }
         Bounds FireballBounds = fireball.getBoundsInParent();
         Bounds mainCharBounds = new BoundingBox(
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getMinX() + 20,
@@ -133,6 +136,10 @@ public class GameLogic {
         );
         if (FireballBounds.intersects(mainCharBounds) && fireball.isVisible()) {
             System.out.println("FireBall hit detected");
+            if (Punk.getInstance().isShield()){
+                Shield.setIsHit(true);
+                return;
+            }
             Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
             fireball.setTranslateY(0.0);
             fireball.setVisible(false);

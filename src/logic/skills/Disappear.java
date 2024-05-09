@@ -8,10 +8,11 @@ import logic.character.Punk;
 public class Disappear {
     public static void effect(){
         Punk.getInstance().getPunkImageView().setOpacity(0.5);
-
+        Punk.getInstance().setCanHit(false);
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(5), event -> {
                     Punk.getInstance().getPunkImageView().setOpacity(1.0);
+                    Punk.getInstance().setCanHit(true);
                 })
         );
         timeline.play();
