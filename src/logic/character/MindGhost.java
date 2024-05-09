@@ -1,5 +1,8 @@
 package logic.character;
 
+
+import javafx.scene.image.ImageView;
+
 public class MindGhost extends Enemy { //if hit: inverted control
     public MindGhost(){
         setHp(1);
@@ -10,5 +13,13 @@ public class MindGhost extends Enemy { //if hit: inverted control
     }
     public void effect(){
 
+    }
+    public void runAnimation(){
+
+    }
+
+    @Override
+    public ImageView getImageView() {
+        return null;
     }
 }
