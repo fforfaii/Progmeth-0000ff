@@ -147,7 +147,7 @@ public class CaveMapPane extends AnchorPane {
         FireBall.setLayoutY(50.0);
         FireBall.setVisible(false);
 
-        getChildren().addAll(groundImageView, mainChar, Boom, Coin, hpBoard, ScoreBoard, minionImageView, FireBall, attackGhostImageView);
+        getChildren().addAll(mainChar, Boom, Coin, hpBoard, ScoreBoard, minionImageView, FireBall, attackGhostImageView);
 
         // Keyboard Input
         this.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -248,23 +248,25 @@ public class CaveMapPane extends AnchorPane {
     public void deleteHeart() {
         int size = hpBoard.getChildren().size();
         System.out.println("Size before deletion: " + size);
-        hpBoard.getChildren().remove(size-1);
-        if (punk.getHp() == 0){
+        if (size!=0) hpBoard.getChildren().remove(size-1);
+        System.out.println(punk.getHp());
+        if (punk.isDead()){
+            return;
+        }
+        if (punk.getHp() == 0) {
             punk.setDead(true);
-            //ย้ายหน้า gameover
             FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), this);
-
-                fadeOut.setFromValue(1.0);
-                fadeOut.setToValue(0.0);
-
-                fadeOut.setOnFinished(event -> {
-                    try {
-                        Main.getInstance().changeSceneJava(GameOverPane.getInstance());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-                fadeOut.play();
+            fadeOut.setFromValue(1.0);
+            fadeOut.setToValue(0.0);
+            fadeOut.setOnFinished(event -> {
+                try {
+                    System.out.println("Game Over !");
+                    Main.getInstance().changeSceneJava(GameOverPane.getInstance());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            fadeOut.play();
         }
     }
 //    public void deleteHeart() {

@@ -17,7 +17,7 @@ public class Punk {
     private int score;
     private int atk;
     private int speed;
-    private int delayShoot;
+    private double delayShoot;
     private double punkShotXPos;
     private double punkShotYPos;
     private boolean isDead;
@@ -37,7 +37,7 @@ public class Punk {
         setScore(0);
         setHp(3);
         setSpeed(15);
-        setDelayShoot(2);
+        setDelayShoot(0.5);
         punkImageView = new ImageView(new Image(ClassLoader.getSystemResource("Punk_idle.png").toString()));
         punkAnimation = new SpriteAnimation(punkImageView, Duration.millis(1000),4,4,0,0,48,48);
         runLeft = new Image(ClassLoader.getSystemResource("Punk_runleft.png").toString());
@@ -166,11 +166,11 @@ public class Punk {
     public void setSpeed(int speed) {
         this.speed = Math.max(0, speed);
     }
-    public int getDelayShoot() {
+    public double getDelayShoot() {
         return delayShoot;
     }
 
-    public void setDelayShoot(int delayShoot) {
+    public void setDelayShoot(double delayShoot) {
         this.delayShoot = delayShoot;
     }
 
