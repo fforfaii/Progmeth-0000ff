@@ -17,6 +17,7 @@ import javafx.scene.text.Text;
 import logic.GameLogic;
 import logic.character.Punk;
 import main.Main;
+import utils.Constant;
 
 
 import java.io.IOException;
@@ -50,7 +51,8 @@ public class GameOverPane extends StackPane {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    Main.getInstance().changeSceneJava(MapPane.getInstance());
+                    GameLogic.setHighscoreEachMap(Constant.getIndexMap(GameLogic.getCurrentMap()),player.getScore());
+                    Main.getInstance().changeSceneJava(new MapPane());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

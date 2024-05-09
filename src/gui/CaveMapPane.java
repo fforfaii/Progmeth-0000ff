@@ -6,6 +6,7 @@ import javafx.geometry.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -17,6 +18,7 @@ import logic.character.AttackGhost;
 import logic.character.Minion;
 import logic.character.Punk;
 import main.Main;
+import utils.Constant;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public class CaveMapPane extends AnchorPane {
     private ImageView FireBall;
     private ImageView minionImageView;
     private ImageView attackGhostImageView;
+    private ImageView pause;
     private Animation mainAni;
     private Animation minionsAni;
     private Animation attackghostAni;
@@ -150,6 +153,21 @@ public class CaveMapPane extends AnchorPane {
 
         getChildren().addAll(mainChar, Boom, Coin, hpBoard, ScoreBoard, minionImageView, FireBall, attackGhostImageView);
 
+        // Set exit Button
+        pause = new ImageView(new Image(ClassLoader.getSystemResource("exit.png").toString()));
+        pause.setFitWidth(110);
+        pause.setFitHeight(44);
+        setBottomAnchor(pause, 10.0);
+        setRightAnchor(pause, 10.0);
+        getChildren().add(pause);
+        pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                GameLogic.setHighscoreEachMap(Constant.getIndexMap("CaveMap"),punk.getScore());
+                fadeExitPage();
+            }
+        });
+
         // Keyboard Input
         this.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -200,6 +218,21 @@ public class CaveMapPane extends AnchorPane {
         CoinFall();
     }
 
+    private void fadeExitPage() {
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), this);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.setOnFinished(event -> {
+            try {
+                System.out.println("Game Over !");
+                Main.getInstance().changeSceneJava(new MapPane());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        fadeOut.play();
+    }
+
     @Override
     public String toString() {
         return "CaveMap";
@@ -247,9 +280,9 @@ public class CaveMapPane extends AnchorPane {
         );
         Bounds mainCharBounds = new BoundingBox(
                 mainChar.getBoundsInParent().getMinX() + 20,
-                mainChar.getBoundsInParent().getMinY(),
+                mainChar.getBoundsInParent().getMinY() + 30,
                 20,
-                100
+                mainChar.getBoundsInParent().getHeight() - 5
         );
         if (GhostBounds.intersects(mainCharBounds) && ghost.isVisible()) {
             System.out.println("Ghost hit detected");
@@ -350,9 +383,9 @@ public class CaveMapPane extends AnchorPane {
             Bounds CoinBounds = coin.getBoundsInParent();
             Bounds mainCharBounds = new BoundingBox(
                     mainChar.getBoundsInParent().getMinX() + 20,
-                    mainChar.getBoundsInParent().getMinY(),
+                    mainChar.getBoundsInParent().getMinY() + 30,
                     20,
-                    mainChar.getBoundsInParent().getHeight() / 2
+                    mainChar.getBoundsInParent().getHeight() - 5
             );
             if (CoinBounds.intersects(mainCharBounds) && coin.isVisible() && coin.getTranslateY() >= punk.getYPos()) {
                 punk.setScore(punk.getScore() + 1);

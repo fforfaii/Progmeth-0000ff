@@ -22,9 +22,36 @@ import utils.Constant;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class GameLogic {
+    private static ArrayList<Integer> HighScore = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
+    private static String CurrentMap;
+
+//    public GameLogic(ArrayList<Integer> highScore) {
+//        // 0=CaveMap 1=ForestMap 2=Factory 3=JungleMap
+//        HighScore = new ArrayList<Integer>(4);
+//        for (int i = 0; i < 4; i++) {
+//            HighScore.add(i,0);
+//        }
+//    }
+
+    public static String getCurrentMap() {
+        return CurrentMap;
+    }
+
+    public static void setCurrentMap(String currentMap) {
+        CurrentMap = currentMap;
+    }
+
+    public static void setHighscoreEachMap(int indexMap, int newscore) {
+        int oldscore = HighScore.get(indexMap);
+        if (newscore > oldscore) HighScore.set(indexMap, newscore);
+    }
+    public static int getHighscoreEachMap(String mapname){
+        return HighScore.get(Constant.getIndexMap(mapname));
+    }
     public static String randomSkill() {
         ArrayList<String> Skills = Constant.getInstance().getSkillsname();
         Random random = new Random();
@@ -37,7 +64,7 @@ public class GameLogic {
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getMinX() + 20,
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getMinY() + 30,
                 20,
-                Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight()-5
+                Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() - 5
         );
         if (coinBounds.intersects(mainCharBounds) && coinImage.isVisible() && coinImage.getTranslateY() >= Punk.getInstance().getYPos() - 30){
             Punk.getInstance().setScore(Punk.getInstance().getScore() + addScore);
@@ -153,12 +180,14 @@ public class GameLogic {
         }
         if (Punk.getInstance().getHp() == 0) {
             Punk.getInstance().setDead(true);
+
             FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), node);
             fadeOut.setFromValue(1.0);
             fadeOut.setToValue(0.0);
             fadeOut.setOnFinished(event -> {
                 try {
                     System.out.println("Game Over !");
+//                    GameLogic.setHighscoreEachMap(Constant.getIndexMap(getCurrentMap()),Punk.getInstance().getScore());
                     Main.getInstance().changeSceneJava(GameOverPane.getInstance());
                 } catch (IOException e) {
                     throw new RuntimeException(e);

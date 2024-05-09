@@ -6,13 +6,15 @@ import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import logic.GameLogic;
 import logic.character.Punk;
+import main.Main;
+import utils.Constant;
 
-import java.security.Key;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -21,6 +23,7 @@ import java.util.Set;
 public class ForestMapPane extends AnchorPane {
     private static ForestMapPane instance;
     private ImageView coin;
+    private ImageView pause;
     private HpBoard hpBoard;
     private ScoreBoard scoreBoard;
     int randomIndex;
@@ -60,6 +63,21 @@ public class ForestMapPane extends AnchorPane {
         setRightAnchor(scoreBoard,20.0);
         setTopAnchor(scoreBoard,8.0);
         getChildren().add(scoreBoard);
+
+        // Set exit Button
+        pause = new ImageView(new Image(ClassLoader.getSystemResource("exit.png").toString()));
+        pause.setFitWidth(110);
+        pause.setFitHeight(44);
+        setBottomAnchor(pause, 10.0);
+        setRightAnchor(pause, 10.0);
+        getChildren().add(pause);
+        pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                GameLogic.setHighscoreEachMap(Constant.getIndexMap("ForestMap"),punk.getScore());
+                fadeExitPage();
+            }
+        });
 
         Set<KeyCode> pressedKeys = new HashSet<>();
 
@@ -119,6 +137,21 @@ public class ForestMapPane extends AnchorPane {
 //        GameLogic.checkPunkShotHit();
 //        GameLogic.checkPunkShotHit(this, minion);
 //        GameLogic.checkPunkShotHit(this, attackGhost);
+    }
+
+    private void fadeExitPage() {
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), this);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.setOnFinished(event -> {
+            try {
+                System.out.println("Exit !");
+                Main.getInstance().changeSceneJava(new MapPane());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        fadeOut.play();
     }
 
     @Override

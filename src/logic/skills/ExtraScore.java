@@ -3,12 +3,10 @@ package logic.skills;
 import gui.CaveMapPane;
 import gui.FactoryMapPane;
 import gui.ForestMapPane;
+import gui.JungleMapPane;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import logic.GameLogic;
-import logic.character.Punk;
 
 public class ExtraScore {
     public static void effect(String map){
@@ -41,15 +39,15 @@ public class ExtraScore {
                 );
                 cooldownTimer3.play();
                 break;
-//            case "JungleMap":
-//                JungleMapPane.getInstance().setAddScore(2);
-//                Timeline cooldownTimer4 = new Timeline(
-//                        new KeyFrame(Duration.seconds(5), event ->
-//                                JungleMapPane.getInstance().setAddScore(1)
-//                        )
-//                );
-//                cooldownTimer4.play();
-//                break;
+            case "JungleMap":
+                JungleMapPane.getInstance().setAddScore(2);
+                Timeline cooldownTimer4 = new Timeline(
+                        new KeyFrame(Duration.seconds(5), event ->
+                                JungleMapPane.getInstance().setAddScore(1)
+                        )
+                );
+                cooldownTimer4.play();
+                break;
 
         }
     }

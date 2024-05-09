@@ -5,7 +5,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
@@ -17,13 +17,15 @@ import utils.Constant;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
-public class FactoryMapPane extends AnchorPane {
-    private static FactoryMapPane instance;
-    private ImageView pause;
+public class JungleMapPane extends AnchorPane {
+    private static JungleMapPane instance;
     private ImageView coin;
     private ImageView skill;
+    private ImageView pause;
     private HpBoard hpBoard;
     private ScoreBoard scoreBoard;
     int randomIndex;
@@ -31,11 +33,11 @@ public class FactoryMapPane extends AnchorPane {
     private boolean canShoot;
     private int addScore = 1;
     Punk punk;
-    public FactoryMapPane() {
+    public JungleMapPane() {
         //Set Background and Ground
-        setBackground(new Background(GameLogic.getBGImage("BG_factory.png")));
-        ImageView groundImageView = GameLogic.getGroundImage("factory_ground.png");
-        setTopAnchor(groundImageView,510.0);
+        setBackground(new Background(GameLogic.getBGImage("BG_jungle.jpg")));
+        ImageView groundImageView = GameLogic.getGroundImage("glass_ground_long.png");
+        setTopAnchor(groundImageView,515.0);
         this.getChildren().add(groundImageView);
 
         // Set Main Character
@@ -81,51 +83,65 @@ public class FactoryMapPane extends AnchorPane {
         pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                GameLogic.setHighscoreEachMap(Constant.getIndexMap("FactoryMap"),punk.getScore());
+                GameLogic.setHighscoreEachMap(Constant.getIndexMap("JungleMap"),punk.getScore());
                 fadeExitPage();
             }
         });
 
-        this.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                switch (keyEvent.getCode()) {
-                    case A:
-                        // go left
-                        System.out.println("A");
-                        System.out.println(punk.getPunkImageView().getLayoutX());
-                        punk.runLeft();
-                        break;
-                    case D:
-                        // go right
-                        System.out.println("D");
-                        System.out.println(punk.getPunkImageView().getLayoutX());
-                        punk.runRight();
-                        break;
-                    case SPACE:
-                        // release power
-                        if (!canShoot){
-                            return;
-                        }
-                        punk.shoot();
-                        System.out.println("Boom!");
-                        canShoot = false;
-                        Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(3), event -> canShoot = true));
-                        delayShoot.play();
-                        break;
+        Set<KeyCode> pressedKeys = new HashSet<>();
+
+        this.setOnKeyPressed(event -> {
+            pressedKeys.add(event.getCode());
+            Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(punk.getDelayShoot()), e -> canShoot = true));
+
+            if (pressedKeys.contains(KeyCode.D) && pressedKeys.contains(KeyCode.SPACE)) {
+                // Move right and shoot
+                System.out.println("D & SPACE");
+                if (canShoot){
+                    punk.setXPos(punk.getPunkImageView().getLayoutX());
+                    punk.shoot();
+                    canShoot = false;
+                    delayShoot.play();
                 }
+                punk.runRight();
+            } else if (pressedKeys.contains(KeyCode.A) && pressedKeys.contains(KeyCode.SPACE)){
+                // Move left and shoot
+                System.out.println("A & SPACE");
+                if (canShoot){
+                    punk.setXPos(punk.getPunkImageView().getLayoutX());
+                    punk.shoot();
+                    canShoot = false;
+                    delayShoot.play();
+                }
+                punk.runLeft();
+            } else if (pressedKeys.contains(KeyCode.D)) {
+                // Move right
+                System.out.println("D");
                 punk.setXPos(punk.getPunkImageView().getLayoutX());
-                System.out.println(punk.getXPos());
+                System.out.println("XPos : punk.getXPos()");
+                punk.runRight();
+            } else if (pressedKeys.contains(KeyCode.A)){
+                //Move Left
+                System.out.println("A");
+                punk.setXPos(punk.getPunkImageView().getLayoutX());
+                System.out.println("XPos : punk.getXPos()");
+                punk.runLeft();
+            } else if (pressedKeys.contains(KeyCode.SPACE)) {
+                // Shoot
+                if (canShoot){
+                    System.out.println("Boom!");
+                    punk.setXPos(punk.getPunkImageView().getLayoutX());
+                    punk.shoot();
+                    canShoot = false;
+                    delayShoot.play();
+                }
             }
         });
-        this.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) { //Idle
-                punk.setPunkAnimation(punk.getPunkIdle(),4,4,48,48);
-            }
+        this.setOnKeyReleased(event -> {
+            pressedKeys.remove(event.getCode());
+            // Idle
+            punk.setPunkAnimation(punk.getPunkIdle(), 4, 4, 48, 48);
         });
-//        GameLogic.checkPunkShotHit(this, minion);
-//        GameLogic.checkPunkShotHit(this, attackGhost);
     }
 
     private void fadeExitPage() {
@@ -145,40 +161,8 @@ public class FactoryMapPane extends AnchorPane {
 
     @Override
     public String toString() {
-        return "FactoryMap";
+        return "JungleMap";
     }
-    //    public void deleteHeart(Node node) {
-//        int size = hpBoard.getChildren().size();
-//        System.out.println("Size before deletion: " + size);
-//        if (size!=0) hpBoard.getChildren().remove(size-1);
-//        System.out.println(punk.getHp());
-//        if (punk.isDead()){
-//            return;
-//        }
-//        if (punk.getHp() == 0) {
-//            punk.setDead(true);
-//            FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), node);
-//            fadeOut.setFromValue(1.0);
-//            fadeOut.setToValue(0.0);
-//            fadeOut.setOnFinished(event -> {
-//                try {
-//                    System.out.println("Game Over !");
-//                    Main.getInstance().changeSceneJava(GameOverPane.getInstance());
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            });
-//            fadeOut.play();
-//        }
-//    }
-//    public void addHeart() {
-//        if (hpBoard.getChildren().size() <= 3){
-//            ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
-//            hp.setFitHeight(20);
-//            hp.setFitWidth(25);
-//            hpBoard.getChildren().add(hp);
-//        }
-//    }
 
     public int getAddScore() {
         return addScore;
@@ -309,9 +293,9 @@ public class FactoryMapPane extends AnchorPane {
     public double getYPos(ImageView imageView) {
         return imageView.getTranslateY();
     }
-    public static FactoryMapPane getInstance() {
+    public static JungleMapPane getInstance() {
         if (instance == null) {
-            instance = new FactoryMapPane();
+            instance = new JungleMapPane();
         }
         return instance;
     }
