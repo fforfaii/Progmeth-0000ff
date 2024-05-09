@@ -21,11 +21,13 @@ import java.util.Random;
 public class FactoryMapPane extends AnchorPane {
     private static FactoryMapPane instance;
     private ImageView coin;
+    private ImageView skill;
     private HpBoard hpBoard;
     private ScoreBoard scoreBoard;
     int randomIndex;
     ArrayList<Integer> xPos_Down = new ArrayList<Integer>(); // for collect rand x position for ghost to go down
     private boolean canShoot;
+    private int addScore = 1;
     Punk punk;
     public FactoryMapPane() {
         //Set Background and Ground
@@ -35,7 +37,7 @@ public class FactoryMapPane extends AnchorPane {
         this.getChildren().add(groundImageView);
 
         // Set Main Character
-        punk = Punk.getInstance();
+        punk = new Punk();
         punk.initPunkAnimation();
         setTopAnchor(punk.getPunkImageView(),453.0);
         canShoot = true;
@@ -59,6 +61,13 @@ public class FactoryMapPane extends AnchorPane {
         setRightAnchor(scoreBoard,20.0);
         setTopAnchor(scoreBoard,8.0);
         getChildren().add(scoreBoard);
+
+        // Set skills
+        skill = new ImageView();
+        setSkillImage(GameLogic.randomSkill());
+        skill.setVisible(false);
+        getChildren().add(skill);
+        skillFall(skill);
 
         this.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -101,6 +110,11 @@ public class FactoryMapPane extends AnchorPane {
 //        GameLogic.checkPunkShotHit(this, minion);
 //        GameLogic.checkPunkShotHit(this, attackGhost);
     }
+
+    @Override
+    public String toString() {
+        return "FactoryMap";
+    }
     //    public void deleteHeart(Node node) {
 //        int size = hpBoard.getChildren().size();
 //        System.out.println("Size before deletion: " + size);
@@ -133,12 +147,83 @@ public class FactoryMapPane extends AnchorPane {
 //            hpBoard.getChildren().add(hp);
 //        }
 //    }
-    public void skillFall(String skillname) {
-        ImageView skillimageview;
+
+    public int getAddScore() {
+        return addScore;
+    }
+
+    public void setAddScore(int addScore) {
+        this.addScore = addScore;
+    }
+
+    public void setSkillImage(String skillname) {
+        // Set icon that fall down
+//        ImageView skillimageview = new ImageView();
         switch (skillname) {
             case "Shield":
-                skillimageview = new ImageView(new Image(ClassLoader.getSystemResource("shield.png").toString()));
+                skill.setImage(new Image(ClassLoader.getSystemResource("shield.png").toString()));
+                skill.setFitHeight(30);
+                skill.setFitWidth(30);
+                break;
+            case "ExtraScore":
+                skill.setImage(new Image(ClassLoader.getSystemResource("extrascore.png").toString()));
+                skill.setFitHeight(35);
+                skill.setFitWidth(35);
+                break;
+            case "ExtraDamage":
+                skill.setImage(new Image(ClassLoader.getSystemResource("extradamage.png").toString()));
+                skill.setFitHeight(50);
+                skill.setFitWidth(50);
+                break;
+            case "Heal":
+                skill.setImage(new Image(ClassLoader.getSystemResource("heal.png").toString()));
+                skill.setFitHeight(50);
+                skill.setFitWidth(50);
+                break;
+            case "MoveFaster":
+                skill.setImage(new Image(ClassLoader.getSystemResource("movefaster.png").toString()));
+                skill.setFitHeight(50);
+                skill.setFitWidth(50);
+                break;
+            case "Disappear":
+                skill.setImage(new Image(ClassLoader.getSystemResource("disappear.png").toString()));
+                skill.setFitHeight(65);
+                skill.setFitWidth(65);
+                break;
         }
+    }
+    public void skillFall(ImageView skillimageview) {
+        // Set falldown movement
+        Random random = new Random();
+        ArrayList<Double> durations = new ArrayList<>();
+        durations.add(3.0);
+        durations.add(3.5);
+        durations.add(4.0);
+        durations.add(4.5);
+        durations.add(2.0);
+        durations.add(2.5);
+        randomIndex = randomIndex(); // for getting duration
+        AnimationTimer FallDown = new AnimationTimer() {
+            private long lastUpdate = 0;
+            private String randSkill = GameLogic.randomSkill();
+            @Override
+            public void handle(long currentTime) {
+                double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
+                if (elapsedTimeSeconds >= durations.get(randomIndex)) {
+                    skillimageview.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
+                    skillimageview.setTranslateY(0.0);
+                    skillimageview.setFitWidth(40);
+                    skillimageview.setFitHeight(40);
+                    slideYPos(skillimageview,2.0, 525);
+                    lastUpdate = currentTime;
+                    randomIndex = randomIndex();
+                    randSkill = GameLogic.randomSkill();
+                    setSkillImage(randSkill);
+                }
+                GameLogic.checkSkillHit(this.toString(),skillimageview,randSkill);
+            }
+        };
+        FallDown.start();
     }
     public int randomIndex() {
         Random random = new Random();
@@ -159,31 +244,30 @@ public class FactoryMapPane extends AnchorPane {
             @Override
             public void handle(long currentTime) {
                 double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
-                System.out.println("playerScore = " + punk.getScore() + " fall : " + coin.getTranslateY());
                 if (elapsedTimeSeconds >= durations.get(randomIndex)) {
                     coin.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
                     coin.setTranslateY(0.0);
                     coin.setFitWidth(30);
                     coin.setFitHeight(30);
-                    slideCoin(coin);
+                    slideYPos(coin, 1.5, 535);
                     lastUpdate = currentTime;
                     randomIndex = randomIndex();
                 }
-                GameLogic.checkCoinHit(coin);
+                GameLogic.checkCoinHit(coin,addScore);
             }
         };
         FallDown.start();
     }
-    public void slideCoin(ImageView coinImage) {
-        coinImage.setVisible(true);
-        TranslateTransition fallTransition = new TranslateTransition(Duration.seconds(1.5), coin);
+    public void slideYPos(ImageView imageView, double speed, int ground) {
+        imageView.setVisible(true);
+        TranslateTransition fallTransition = new TranslateTransition(Duration.seconds(speed), imageView);
         fallTransition.setFromY(0);
-        fallTransition.setToY(545);
+        fallTransition.setToY(ground);
         fallTransition.setCycleCount(1);
 
         fallTransition.setOnFinished(event -> {
-            coinImage.setTranslateY(0.0);
-            coinImage.setVisible(false);
+            imageView.setTranslateY(0.0);
+            imageView.setVisible(false);
         });
         fallTransition.play();
     }

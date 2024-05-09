@@ -3,7 +3,7 @@ package logic.skills;
 import logic.character.Punk;
 
 public class Heal {
-    public void effect(){
+    public static void effect() {
         Punk.getInstance().setHp(Punk.getInstance().getHp() + 1);
     }
 }

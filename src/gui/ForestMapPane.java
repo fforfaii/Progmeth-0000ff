@@ -22,6 +22,7 @@ public class ForestMapPane extends AnchorPane {
     int randomIndex;
     ArrayList<Integer> xPos_Down = new ArrayList<Integer>(); // for collect rand x position for ghost to go down
     private boolean canShoot;
+    private int addScore = 1;
     Punk punk;
     public ForestMapPane(){
         //Set Background and Ground
@@ -97,7 +98,21 @@ public class ForestMapPane extends AnchorPane {
 //        GameLogic.checkPunkShotHit(this, minion);
 //        GameLogic.checkPunkShotHit(this, attackGhost);
     }
-//    public void deleteHeart(Node node) {
+
+    @Override
+    public String toString() {
+        return "ForestMap";
+    }
+
+    public int getAddScore() {
+        return addScore;
+    }
+
+    public void setAddScore(int addScore) {
+        this.addScore = addScore;
+    }
+
+    //    public void deleteHeart(Node node) {
 //        int size = hpBoard.getChildren().size();
 //        System.out.println("Size before deletion: " + size);
 //        if (size!=0) hpBoard.getChildren().remove(size-1);
@@ -159,7 +174,7 @@ public class ForestMapPane extends AnchorPane {
                     lastUpdate = currentTime;
                     randomIndex = randomIndex();
                 }
-                GameLogic.checkCoinHit(coin);
+                GameLogic.checkCoinHit(coin, addScore);
             }
         };
         FallDown.start();

@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import logic.character.Punk;
+import logic.skills.*;
 import main.Main;
 import utils.Constant;
 
@@ -30,7 +31,7 @@ public class GameLogic {
         int randomIndex = random.nextInt(Skills.size());
         return Skills.get(randomIndex);
     }
-    public static void checkCoinHit(ImageView coinImage) {
+    public static void checkCoinHit(ImageView coinImage, int addScore) {
         Bounds coinBounds = coinImage.getBoundsInParent();
         Bounds mainCharBounds = new BoundingBox(
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getMinX() + 20,
@@ -39,10 +40,45 @@ public class GameLogic {
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight()-5
         );
         if (coinBounds.intersects(mainCharBounds) && coinImage.isVisible() && coinImage.getTranslateY() >= Punk.getInstance().getYPos() - 30){
-            Punk.getInstance().setScore(Punk.getInstance().getScore() + 1);
+            Punk.getInstance().setScore(Punk.getInstance().getScore() + addScore);
             coinImage.setTranslateY(0.0);
             coinImage.setVisible(false);
             ScoreBoard.getInstance().setScoreboard();
+        }
+    }
+    public static void checkSkillHit(String map, ImageView skillImage,String skillname) {
+        Bounds coinBounds = skillImage.getBoundsInParent();
+        Bounds mainCharBounds = new BoundingBox(
+                Punk.getInstance().getPunkImageView().getBoundsInParent().getMinX() + 20,
+                Punk.getInstance().getPunkImageView().getBoundsInParent().getMinY() + 30,
+                20,
+                Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight()-5
+        );
+        // If player can get skill
+        if (coinBounds.intersects(mainCharBounds) && skillImage.isVisible() && skillImage.getTranslateY() >= Punk.getInstance().getYPos() - 30){
+            skillImage.setTranslateY(0.0);
+            skillImage.setVisible(false);
+            // Call effect skillname
+            switch (skillname) {
+                case "Shield":
+                    Shield.effect();
+                    break;
+                case "ExtraScore":
+                    ExtraScore.effect(map);
+                    break;
+                case "ExtraDamage":
+                    ExtraDamage.effect();
+                    break;
+                case "Heal":
+                    Heal.effect();
+                    break;
+                case "MoveFaster":
+                    MoveFaster.effect();
+                    break;
+                case "Disappear":
+                    Disappear.effect();
+                    break;
+            }
         }
     }
     public static void checkPunkShotHit(AnchorPane currentPane, ImageView ghost) {
