@@ -1,12 +1,16 @@
 package gui;
 
-import javafx.animation.*;
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.util.Duration;
 import logic.GameLogic;
 import logic.character.Punk;
@@ -14,8 +18,8 @@ import logic.character.Punk;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class ForestMapPane extends AnchorPane {
-    private static ForestMapPane instance;
+public class FactoryMapPane extends AnchorPane {
+    private static FactoryMapPane instance;
     private ImageView coin;
     private HpBoard hpBoard;
     private ScoreBoard scoreBoard;
@@ -23,11 +27,11 @@ public class ForestMapPane extends AnchorPane {
     ArrayList<Integer> xPos_Down = new ArrayList<Integer>(); // for collect rand x position for ghost to go down
     private boolean canShoot;
     Punk punk;
-    public ForestMapPane(){
+    public FactoryMapPane() {
         //Set Background and Ground
-        setBackground(new Background(GameLogic.getBGImage("BG_forest.jpg")));
-        ImageView groundImageView = GameLogic.getGroundImage("rock_ground_long.png");
-        setTopAnchor(groundImageView,530.0);
+        setBackground(new Background(GameLogic.getBGImage("BG_factory.png")));
+        ImageView groundImageView = GameLogic.getGroundImage("factory_ground.png");
+        setTopAnchor(groundImageView,510.0);
         this.getChildren().add(groundImageView);
 
         // Set Main Character
@@ -97,7 +101,7 @@ public class ForestMapPane extends AnchorPane {
 //        GameLogic.checkPunkShotHit(this, minion);
 //        GameLogic.checkPunkShotHit(this, attackGhost);
     }
-//    public void deleteHeart(Node node) {
+    //    public void deleteHeart(Node node) {
 //        int size = hpBoard.getChildren().size();
 //        System.out.println("Size before deletion: " + size);
 //        if (size!=0) hpBoard.getChildren().remove(size-1);
@@ -129,6 +133,13 @@ public class ForestMapPane extends AnchorPane {
 //            hpBoard.getChildren().add(hp);
 //        }
 //    }
+    public void skillFall(String skillname) {
+        ImageView skillimageview;
+        switch (skillname) {
+            case "Shield":
+                skillimageview = new ImageView(new Image(ClassLoader.getSystemResource("shield.png").toString()));
+        }
+    }
     public int randomIndex() {
         Random random = new Random();
         return random.nextInt(6);
@@ -148,7 +159,6 @@ public class ForestMapPane extends AnchorPane {
             @Override
             public void handle(long currentTime) {
                 double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
-//                System.out.println(randomIndexforCoinFall());
                 System.out.println("playerScore = " + punk.getScore() + " fall : " + coin.getTranslateY());
                 if (elapsedTimeSeconds >= durations.get(randomIndex)) {
                     coin.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
@@ -183,9 +193,9 @@ public class ForestMapPane extends AnchorPane {
     public double getYPos(ImageView imageView) {
         return imageView.getTranslateY();
     }
-    public static ForestMapPane getInstance() {
+    public static FactoryMapPane getInstance() {
         if (instance == null) {
-            instance = new ForestMapPane();
+            instance = new FactoryMapPane();
         }
         return instance;
     }

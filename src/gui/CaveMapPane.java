@@ -46,8 +46,7 @@ public class CaveMapPane extends AnchorPane {
     private boolean canShoot;
     private boolean canHitGhost = true;
     private boolean canHitFireball = true;
-//    private int tmp = 1; // for play ghost slide
-    int randomIndex; // for CoinFall
+    int randomIndex;
     ArrayList<Integer> xPos_Down = new ArrayList<Integer>(); // for collect rand x position for ghost to go down
     Punk punk;
     Minion minion;
@@ -249,352 +248,386 @@ public class CaveMapPane extends AnchorPane {
     public void deleteHeart() {
         int size = hpBoard.getChildren().size();
         System.out.println("Size before deletion: " + size);
-        if (size!=0) hpBoard.getChildren().remove(size-1);
-        System.out.println(punk.getHp());
-        if (punk.isDead()){
-            return;
-        if (punk.getHp() == 0) {
+        hpBoard.getChildren().remove(size-1);
+        if (punk.getHp() == 0){
             punk.setDead(true);
+            //ย้ายหน้า gameover
             FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), this);
-            fadeOut.setFromValue(1.0);
-            fadeOut.setToValue(0.0);
-            fadeOut.setOnFinished(event -> {
-                try {
-                    Main.getInstance().changeSceneJava(GameOverPane.getInstance());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            fadeOut.play();
-        }
-        if (punk.getHp() == 0) {
-            punk.setDead(true);
-            FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), this);
-            fadeOut.setFromValue(1.0);
-            fadeOut.setToValue(0.0);
-            fadeOut.setOnFinished(event -> {
-                try {
-                    System.out.println("Game Over !");
-                    Main.getInstance().changeSceneJava(GameOverPane.getInstance());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            fadeOut.play();
+
+                fadeOut.setFromValue(1.0);
+                fadeOut.setToValue(0.0);
+
+                fadeOut.setOnFinished(event -> {
+                    try {
+                        Main.getInstance().changeSceneJava(GameOverPane.getInstance());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                fadeOut.play();
         }
     }
-    public void addHeart() {
-        if (hpBoard.getChildren().size() <= 3){
-            ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
-            hp.setFitHeight(20);
-            hp.setFitWidth(25);
-            hpBoard.getChildren().add(hp);
+//    public void deleteHeart() {
+//        int size = hpBoard.getChildren().size();
+//        System.out.println("Size before deletion: " + size);
+//        if (size != 0) hpBoard.getChildren().remove(size - 1);
+//        System.out.println(punk.getHp());
+//        if (punk.isDead()) {
+//            return;
+//            if (punk.getHp() == 0) {
+//
+//                punk.setDead(true);
+//
+//                FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), this);
+//
+//                fadeOut.setFromValue(1.0);
+//                fadeOut.setToValue(0.0);
+//
+//                fadeOut.setOnFinished(event -> {
+//                    try {
+//                        Main.getInstance().changeSceneJava(GameOverPane.getInstance());
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                });
+//                fadeOut.play();
+//            }
+
+//            if (punk.getHp() == 0) {
+//                punk.setDead(true);
+//                FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), this);
+//                fadeOut.setFromValue(1.0);
+//                fadeOut.setToValue(0.0);
+//                fadeOut.setOnFinished(event -> {
+//                    try {
+//                        System.out.println("Game Over !");
+//                        Main.getInstance().changeSceneJava(GameOverPane.getInstance());
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                });
+//                fadeOut.play();
+//            }
+//        }
+//    }
+
+        public void addHeart () {
+            if (hpBoard.getChildren().size() <= 3) {
+                ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
+                hp.setFitHeight(20);
+                hp.setFitWidth(25);
+                hpBoard.getChildren().add(hp);
+            }
         }
-    }
-    public void setTextScoreBoard(Text text) {
-        text.setFont(Font.font("Monospace", FontWeight.EXTRA_BOLD,12));
-        text.setFill(Color.rgb(48, 34, 3));
-    }
-    public void SetScoreboard() {
-        ScoreBoard.getChildren().remove(1);
-        Text Score = new Text("" + punk.getScore());
-        setTextScoreBoard(Score);
-        ScoreBoard.getChildren().add(Score);
-    }
-    public void CheckCoinHit(ImageView coin) {
-        Bounds CoinBounds = coin.getBoundsInParent();
-        Bounds mainCharBounds = new BoundingBox(
-                mainChar.getBoundsInParent().getMinX() + 20,
-                mainChar.getBoundsInParent().getMinY(),
-                20,
-                mainChar.getBoundsInParent().getHeight() / 2
-        );
-        if (CoinBounds.intersects(mainCharBounds) && coin.isVisible() && coin.getTranslateY() >= punk.getYPos()){
-            punk.setScore(punk.getScore() + 1);
-            coin.setTranslateY(0.0);
-            coin.setVisible(false);
-            SetScoreboard();
+        public void setTextScoreBoard (Text text){
+            text.setFont(Font.font("Monospace", FontWeight.EXTRA_BOLD, 12));
+            text.setFill(Color.rgb(48, 34, 3));
         }
-    }
-    public int randomIndex() {
-        Random random = new Random();
-        int randomIndex = random.nextInt(6);
-        return randomIndex;
-    }
-    public void CoinFall() {
-        Random random = new Random();
-
-        ArrayList<Double> durations = new ArrayList<>();
-        durations.add(3.0);
-        durations.add(3.5);
-        durations.add(4.0);
-        durations.add(4.5);
-        durations.add(2.0);
-        durations.add(2.5);
-        randomIndex = randomIndex();
-        AnimationTimer FallDown = new AnimationTimer() {
-            private long lastUpdate = 0;
-            @Override
-            public void handle(long currentTime) {
-                double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
-                if (elapsedTimeSeconds >= durations.get(randomIndex)) {
-                    Coin.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
-                    Coin.setTranslateY(0.0);
-                    Coin.setFitWidth(30);
-                    Coin.setFitHeight(30);
-                    SlideYPos(Coin,1);
-                    lastUpdate = currentTime;
-                    randomIndex = randomIndex();
-                }
-                CheckCoinHit(Coin);
+        public void SetScoreboard () {
+            ScoreBoard.getChildren().remove(1);
+            Text Score = new Text("" + punk.getScore());
+            setTextScoreBoard(Score);
+            ScoreBoard.getChildren().add(Score);
+        }
+        public void CheckCoinHit (ImageView coin){
+            Bounds CoinBounds = coin.getBoundsInParent();
+            Bounds mainCharBounds = new BoundingBox(
+                    mainChar.getBoundsInParent().getMinX() + 20,
+                    mainChar.getBoundsInParent().getMinY(),
+                    20,
+                    mainChar.getBoundsInParent().getHeight() / 2
+            );
+            if (CoinBounds.intersects(mainCharBounds) && coin.isVisible() && coin.getTranslateY() >= punk.getYPos()) {
+                punk.setScore(punk.getScore() + 1);
+                coin.setTranslateY(0.0);
+                coin.setVisible(false);
+                SetScoreboard();
             }
-        };
-        FallDown.start();
-    }
-    public void CheckBoomHit(ImageView ghost) {
-        AnimationTimer checkHit = new AnimationTimer() {
-            @Override
-            public void handle(long currentTime) {
-                Bounds BoomBounds = Boom.getBoundsInParent();
-                Bounds GhostBounds = ghost.getBoundsInParent();
-                if (BoomBounds.intersects(GhostBounds) && Boom.isVisible()){
-                    // Don't forget to set HP of that ghost
-                    getChildren().remove(ghost);
-                }
-            }
-        };
-        checkHit.start();
-    }
+        }
+        public int randomIndex () {
+            Random random = new Random();
+            int randomIndex = random.nextInt(6);
+            return randomIndex;
+        }
+        public void CoinFall () {
+            Random random = new Random();
 
-    public void RunAttackGhostAnimation() {
-        ArrayList<Double> durations = new ArrayList<>();
-        durations.add(2.0);
-        durations.add(3.0);
-        durations.add(1.5);
-        durations.add(3.5);
-        durations.add(2.5);
-        durations.add(4.0);
-        randomIndex = randomIndex();
-        AnimationTimer GhostAnimationTimer = new AnimationTimer() {
-            private long startTime = System.nanoTime();
-            private long lastUpdate = 0;
-            @Override
-            public void handle(long currentTime) {
-                // Slide X axis
-                if (currentTime - lastUpdate >= 6_000_000_000L){
-                    SlideXPos(AttackGhost,3);
-                    lastUpdate = currentTime;
-                }
-                // Get Position & Set to Minions class
-                attackGhost.setxPos(getXPos(AttackGhost));
-                attackGhost.setyPos(getYPos(AttackGhost));
-                // Release Power
-                double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
-                if (elapsedTimeSeconds >= durations.get(randomIndex)) {
-                    FireBall.setLayoutX(attackGhost.getxPos() + 30);
-                    FireBall.setTranslateY(50.0);
-                    FireBall.setFitWidth(40);
-                    FireBall.setFitHeight(40);
-                    SlideYPos(FireBall,1);
-                    lastUpdate = currentTime;
-                    randomIndex = randomIndex();
-                }
+            ArrayList<Double> durations = new ArrayList<>();
+            durations.add(3.0);
+            durations.add(3.5);
+            durations.add(4.0);
+            durations.add(4.5);
+            durations.add(2.0);
+            durations.add(2.5);
+            randomIndex = randomIndex();
+            AnimationTimer FallDown = new AnimationTimer() {
+                private long lastUpdate = 0;
 
-                if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
-                    // Check fireball hit
-                    CheckFireballHit(FireBall);
-                }
-            }
-        };
-        GhostAnimationTimer.start();
-    }
-
-    public void RunMinionAnimation() {
-        AnimationTimer GhostAnimationTimer = new AnimationTimer() {
-            private long startTime = System.nanoTime();
-            private long lastUpdate = 0;
-            @Override
-            public void handle(long currentTime) {
-                // Slide X axis
-                if (currentTime - lastUpdate >= 6_000_000_000L){
-                    SlideXPos(attackGhostImageView,3);
-                if (currentTime - lastUpdate >= 10_000_000_000L){
-                    SlideXPos(Minion,5);
-                    lastUpdate = currentTime;
-                }
-                // Get Position & Set to Minions class
-                attackGhost.setXPos(getXPos(attackGhostImageView));
-                attackGhost.setYPos(getYPos(attackGhostImageView));
-                // Release Power
-                double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
-                if (elapsedTimeSeconds >= durations.get(randomIndex)) {
-                    FireBall.setLayoutX(attackGhost.getXPos() + 30);
-                    FireBall.setTranslateY(50.0);
-                    FireBall.setFitWidth(40);
-                    FireBall.setFitHeight(40);
-                    SlideYPos(FireBall,1);
-                    lastUpdate = currentTime;
-                    randomIndex = randomIndex();
-                }
-
-                if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
-                    // Check fireball hit
-                    CheckFireballHit(FireBall);
-                }
-            }
-        };
-        GhostAnimationTimer.start();
-    }
-
-    public void RunMinionAnimation() {
-        AnimationTimer GhostAnimationTimer = new AnimationTimer() {
-            private long startTime = System.nanoTime();
-            private long lastUpdate = 0;
-            @Override
-            public void handle(long currentTime) {
-                // Slide X axis
-                if (currentTime - lastUpdate >= 10_000_000_000L){
-                    SlideXPos(minionImageView,5);
-                    lastUpdate = currentTime;
-                }
-                // Get Position & Set to Minions class
-                minion.setXPos(getXPos(minionImageView));
-                minion.setYPos(getYPos(minionImageView));
-
-                // get random XPos
-                if (xPos_Down.size() < 20){
-                    xPos_Down.add(xPos_Down.size(),randXPos());
-                }
-                // Check xPos to goDown
-                int stay = (int) minionImageView.getTranslateX();
-                if (xPos_Down.contains(stay)){
-                    // remove used xPos
-                    xPos_Down.remove(xPos_Down.indexOf(stay));
-                    System.out.println("stay = " + stay + " go down !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
-                    if (currentTime - lastUpdate >= 4_000_000_000L){
-                        goDown(minionImageView);
+                @Override
+                public void handle(long currentTime) {
+                    double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
+                    if (elapsedTimeSeconds >= durations.get(randomIndex)) {
+                        Coin.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
+                        Coin.setTranslateY(0.0);
+                        Coin.setFitWidth(30);
+                        Coin.setFitHeight(30);
+                        SlideYPos(Coin, 1);
                         lastUpdate = currentTime;
+                        randomIndex = randomIndex();
+                    }
+                    CheckCoinHit(Coin);
+                }
+            };
+            FallDown.start();
+        }
+        public void CheckBoomHit (ImageView ghost){
+            AnimationTimer checkHit = new AnimationTimer() {
+                @Override
+                public void handle(long currentTime) {
+                    Bounds BoomBounds = Boom.getBoundsInParent();
+                    Bounds GhostBounds = ghost.getBoundsInParent();
+                    if (BoomBounds.intersects(GhostBounds) && Boom.isVisible()) {
+                        // Don't forget to set HP of that ghost
+                        getChildren().remove(ghost);
                     }
                 }
-
-                if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
-                    // Check ghost hit
-                    CheckGhostHit(minionImageView);
-                }
-            }
-        };
-        GhostAnimationTimer.start();
-    }
-    public double getXPos(ImageView imageView) {
-        return imageView.getTranslateX();
-    }
-    public double getYPos(ImageView imageView) {
-        return imageView.getTranslateY();
-    }
-    public void SlideYPos(ImageView imageView, int duration) {
-        imageView.setVisible(true);
-        TranslateTransition fallTransition = new TranslateTransition(Duration.seconds(duration), imageView);
-        fallTransition.setFromY(0);
-        fallTransition.setToY(545);
-        fallTransition.setCycleCount(1);
-
-        fallTransition.setOnFinished(event -> {
-            imageView.setTranslateY(0.0);
-            imageView.setVisible(false);
-        });
-        fallTransition.play();
-    }
-    public void SlideXPos(ImageView imageView, int duration) {
-        // Create TranslateTransition for left-right movement
-        TranslateTransition translateXTransition = new TranslateTransition(Duration.seconds(duration), imageView);
-        translateXTransition.setFromX(10);
-        translateXTransition.setToX(1142 - imageView.getFitWidth());
-        translateXTransition.setCycleCount(1);
-        translateXTransition.setAutoReverse(true);
-        translateXTransition.setOnFinished(event -> {
-            // Create another TranslateTransition to move back from right-left
-            TranslateTransition reverseTransition = new TranslateTransition(Duration.seconds(duration), imageView);
-            reverseTransition.setFromX(1142 - imageView.getFitWidth());
-            reverseTransition.setToX(10);
-            reverseTransition.setCycleCount(1);
-            reverseTransition.setAutoReverse(false);
-            reverseTransition.play();
-        });
-
-        translateXTransition.play();
-    }
-    public int randXPos() {
-        int randXPos = ThreadLocalRandom.current().nextInt(10, 1062);
-        return randXPos;
-    }
-    public void goDown(ImageView imageView) {
-        // Move down
-        TranslateTransition translateYTransitionDown = new TranslateTransition(Duration.seconds(2), imageView);
-        translateYTransitionDown.setFromY(0);
-        translateYTransitionDown.setToY(460);
-        translateYTransitionDown.setCycleCount(1);
-        translateYTransitionDown.setAutoReverse(true);
-
-        // Move up
-        TranslateTransition translateYTransitionUp = new TranslateTransition(Duration.seconds(2), imageView);
-        translateYTransitionUp.setFromY(460);
-        translateYTransitionUp.setToY(0);
-        translateYTransitionUp.setCycleCount(1);
-        translateYTransitionUp.setAutoReverse(true);
-        translateYTransitionUp.setDelay(Duration.seconds(0)); // No Delay before moving up
-
-        SequentialTransition sequentialTransition = new SequentialTransition(translateYTransitionDown, translateYTransitionUp);
-        sequentialTransition.play();
-    }
-
-    public void Shoot(Image image) {
-        // Set mainChar when Shoot
-        mainChar.setImage(image);
-        mainChar.setViewport(new Rectangle2D(96, 0, 48, 48));
-
-        // Set Boom when start Shooting
-        Boom.setVisible(true);
-        Boom.setFitWidth(24);
-        Boom.setFitHeight(120);
-        Boom.setLayoutX(punk.getXPos() + 22);
-        punk.setPunkShotXPos(Boom.getLayoutX());
-        punk.setPunkShotYPos(Boom.getLayoutY());
-
-        // Animate Boom moving upwards
-        TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5), Boom);
-        transition.setByY(-453); // Move the Boom from its initial position (453) to 0
-        transition.setOnFinished(event -> {
-            // Hide Boom and reset its position after the animation finishes
-            Boom.setVisible(false);
-            Boom.setLayoutY(mainChar.getLayoutY());
-
-            punk.setPunkShotXPos(Boom.getLayoutX());
-            punk.setPunkShotYPos(Boom.getLayoutY());
-            Boom.setTranslateY(0);
-        });
-        transition.play();
-        punk.setPunkShotXPos(Boom.getLayoutX());
-        punk.setPunkShotYPos(Boom.getTranslateY());
-    }
-
-    public void setMainChar(Image Image, int count, int column, int width, int height) {
-        mainChar.setImage(Image);
-        SpriteAnimation.getInstance().setCount(count);
-        SpriteAnimation.getInstance().setColumns(column);
-        SpriteAnimation.getInstance().setWidth(width);
-        SpriteAnimation.getInstance().setHeight(height);
-        mainAni.setCycleCount(Animation.INDEFINITE);
-        mainChar.setFitWidth(100);
-        mainChar.setFitHeight(100);
-        mainAni.play();
-        setTopAnchor(mainChar,453.0);
-    }
-
-    public static CaveMapPane getInstance() {
-        if (instance == null) {
-            instance = new CaveMapPane();
+            };
+            checkHit.start();
         }
-        return instance;
-    }
-}
+
+        public void RunAttackGhostAnimation () {
+            ArrayList<Double> durations = new ArrayList<>();
+            durations.add(2.0);
+            durations.add(3.0);
+            durations.add(1.5);
+            durations.add(3.5);
+            durations.add(2.5);
+            durations.add(4.0);
+            randomIndex = randomIndex();
+            AnimationTimer GhostAnimationTimer = new AnimationTimer() {
+                private long startTime = System.nanoTime();
+                private long lastUpdate = 0;
+
+                @Override
+                public void handle(long currentTime) {
+                    // Slide X axis
+                    if (currentTime - lastUpdate >= 6_000_000_000L) {
+                        SlideXPos(attackGhostImageView, 3);
+                        lastUpdate = currentTime;
+                    }
+                    // Get Position & Set to Minions class
+                    attackGhost.setXPos(getXPos(attackGhostImageView));
+                    attackGhost.setYPos(getYPos(attackGhostImageView));
+                    // Release Power
+                    double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
+                    if (elapsedTimeSeconds >= durations.get(randomIndex)) {
+                        FireBall.setLayoutX(attackGhost.getXPos() + 30);
+                        FireBall.setTranslateY(50.0);
+                        FireBall.setFitWidth(40);
+                        FireBall.setFitHeight(40);
+                        SlideYPos(FireBall, 1);
+                        lastUpdate = currentTime;
+                        randomIndex = randomIndex();
+                    }
+
+                    if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
+                        // Check fireball hit
+                        CheckFireballHit(FireBall);
+                    }
+                }
+            };
+            GhostAnimationTimer.start();
+        }
+
+//        public void RunMinionAnimation () {
+//            AnimationTimer GhostAnimationTimer = new AnimationTimer() {
+//                private long startTime = System.nanoTime();
+//                private long lastUpdate = 0;
+//
+//                @Override
+//                public void handle(long currentTime) {
+//                    // Slide X axis
+//                    if (currentTime - lastUpdate >= 6_000_000_000L) {
+//                        SlideXPos(attackGhostImageView, 3);
+//                        if (currentTime - lastUpdate >= 10_000_000_000L) {
+//                            SlideXPos(minionImageView, 5);
+//                            lastUpdate = currentTime;
+//                        }
+//                        // Get Position & Set to Minions class
+//                        attackGhost.setXPos(getXPos(attackGhostImageView));
+//                        attackGhost.setYPos(getYPos(attackGhostImageView));
+//                        // Release Power
+//                        double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
+//                        if (elapsedTimeSeconds >= durations.get(randomIndex)) {
+//                            FireBall.setLayoutX(attackGhost.getXPos() + 30);
+//                            FireBall.setTranslateY(50.0);
+//                            FireBall.setFitWidth(40);
+//                            FireBall.setFitHeight(40);
+//                            SlideYPos(FireBall, 1);
+//                            lastUpdate = currentTime;
+//                            randomIndex = randomIndex();
+//                        }
+//
+//                        if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
+//                            // Check fireball hit
+//                            CheckFireballHit(FireBall);
+//                        }
+//                    }
+//                }
+//            };
+//            GhostAnimationTimer.start();
+//        }
+
+            public void RunMinionAnimation () {
+                AnimationTimer GhostAnimationTimer = new AnimationTimer() {
+                    private long startTime = System.nanoTime();
+                    private long lastUpdate = 0;
+
+                    @Override
+                    public void handle(long currentTime) {
+                        // Slide X axis
+                        if (currentTime - lastUpdate >= 10_000_000_000L) {
+                            SlideXPos(minionImageView, 5);
+                            lastUpdate = currentTime;
+                        }
+                        // Get Position & Set to Minions class
+                        minion.setXPos(getXPos(minionImageView));
+                        minion.setYPos(getYPos(minionImageView));
+
+                        // get random XPos
+                        if (xPos_Down.size() < 20) {
+                            xPos_Down.add(xPos_Down.size(), randXPos());
+                        }
+                        // Check xPos to goDown
+                        int stay = (int) minionImageView.getTranslateX();
+                        if (xPos_Down.contains(stay)) {
+                            // remove used xPos
+                            xPos_Down.remove(xPos_Down.indexOf(stay));
+                            System.out.println("stay = " + stay + " go down !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+                            if (currentTime - lastUpdate >= 4_000_000_000L) {
+                                goDown(minionImageView);
+                                lastUpdate = currentTime;
+                            }
+                        }
+
+                        if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
+                            // Check ghost hit
+                            CheckGhostHit(minionImageView);
+                        }
+                    }
+                };
+                GhostAnimationTimer.start();
+            }
+            public double getXPos (ImageView imageView){
+                return imageView.getTranslateX();
+            }
+            public double getYPos (ImageView imageView){
+                return imageView.getTranslateY();
+            }
+            public void SlideYPos (ImageView imageView,int duration){
+                imageView.setVisible(true);
+                TranslateTransition fallTransition = new TranslateTransition(Duration.seconds(duration), imageView);
+                fallTransition.setFromY(0);
+                fallTransition.setToY(545);
+                fallTransition.setCycleCount(1);
+
+                fallTransition.setOnFinished(event -> {
+                    imageView.setTranslateY(0.0);
+                    imageView.setVisible(false);
+                });
+                fallTransition.play();
+            }
+            public void SlideXPos (ImageView imageView,int duration){
+                // Create TranslateTransition for left-right movement
+                TranslateTransition translateXTransition = new TranslateTransition(Duration.seconds(duration), imageView);
+                translateXTransition.setFromX(10);
+                translateXTransition.setToX(1142 - imageView.getFitWidth());
+                translateXTransition.setCycleCount(1);
+                translateXTransition.setAutoReverse(true);
+                translateXTransition.setOnFinished(event -> {
+                    // Create another TranslateTransition to move back from right-left
+                    TranslateTransition reverseTransition = new TranslateTransition(Duration.seconds(duration), imageView);
+                    reverseTransition.setFromX(1142 - imageView.getFitWidth());
+                    reverseTransition.setToX(10);
+                    reverseTransition.setCycleCount(1);
+                    reverseTransition.setAutoReverse(false);
+                    reverseTransition.play();
+                });
+
+                translateXTransition.play();
+            }
+            public int randXPos () {
+                int randXPos = ThreadLocalRandom.current().nextInt(10, 1062);
+                return randXPos;
+            }
+            public void goDown (ImageView imageView){
+                // Move down
+                TranslateTransition translateYTransitionDown = new TranslateTransition(Duration.seconds(2), imageView);
+                translateYTransitionDown.setFromY(0);
+                translateYTransitionDown.setToY(460);
+                translateYTransitionDown.setCycleCount(1);
+                translateYTransitionDown.setAutoReverse(true);
+
+                // Move up
+                TranslateTransition translateYTransitionUp = new TranslateTransition(Duration.seconds(2), imageView);
+                translateYTransitionUp.setFromY(460);
+                translateYTransitionUp.setToY(0);
+                translateYTransitionUp.setCycleCount(1);
+                translateYTransitionUp.setAutoReverse(true);
+                translateYTransitionUp.setDelay(Duration.seconds(0)); // No Delay before moving up
+
+                SequentialTransition sequentialTransition = new SequentialTransition(translateYTransitionDown, translateYTransitionUp);
+                sequentialTransition.play();
+            }
+
+            public void Shoot (Image image){
+                // Set mainChar when Shoot
+                mainChar.setImage(image);
+                mainChar.setViewport(new Rectangle2D(96, 0, 48, 48));
+
+                // Set Boom when start Shooting
+                Boom.setVisible(true);
+                Boom.setFitWidth(24);
+                Boom.setFitHeight(120);
+                Boom.setLayoutX(punk.getXPos() + 22);
+                punk.setPunkShotXPos(Boom.getLayoutX());
+                punk.setPunkShotYPos(Boom.getLayoutY());
+
+                // Animate Boom moving upwards
+                TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5), Boom);
+                transition.setByY(-453); // Move the Boom from its initial position (453) to 0
+                transition.setOnFinished(event -> {
+                    // Hide Boom and reset its position after the animation finishes
+                    Boom.setVisible(false);
+                    Boom.setLayoutY(mainChar.getLayoutY());
+
+                    punk.setPunkShotXPos(Boom.getLayoutX());
+                    punk.setPunkShotYPos(Boom.getLayoutY());
+                    Boom.setTranslateY(0);
+                });
+                transition.play();
+                punk.setPunkShotXPos(Boom.getLayoutX());
+                punk.setPunkShotYPos(Boom.getTranslateY());
+            }
+
+            public void setMainChar (Image Image,int count, int column, int width, int height){
+                mainChar.setImage(Image);
+                SpriteAnimation.getInstance().setCount(count);
+                SpriteAnimation.getInstance().setColumns(column);
+                SpriteAnimation.getInstance().setWidth(width);
+                SpriteAnimation.getInstance().setHeight(height);
+                mainAni.setCycleCount(Animation.INDEFINITE);
+                mainChar.setFitWidth(100);
+                mainChar.setFitHeight(100);
+                mainAni.play();
+                setTopAnchor(mainChar, 453.0);
+            }
+
+            public static CaveMapPane getInstance () {
+                if (instance == null) {
+                    instance = new CaveMapPane();
+                }
+                return instance;
+            }
+        }

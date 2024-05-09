@@ -17,17 +17,26 @@ import javafx.scene.layout.*;
 import javafx.util.Duration;
 import logic.character.Punk;
 import main.Main;
+import utils.Constant;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class GameLogic {
+    public static String randomSkill() {
+        ArrayList<String> Skills = Constant.getInstance().getSkillsname();
+        Random random = new Random();
+        int randomIndex = random.nextInt(Skills.size());
+        return Skills.get(randomIndex);
+    }
     public static void checkCoinHit(ImageView coinImage) {
         Bounds coinBounds = coinImage.getBoundsInParent();
         Bounds mainCharBounds = new BoundingBox(
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getMinX() + 20,
-                Punk.getInstance().getPunkImageView().getBoundsInParent().getMinY(),
+                Punk.getInstance().getPunkImageView().getBoundsInParent().getMinY() + 30,
                 20,
-                Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() / 2
+                Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight()-5
         );
         if (coinBounds.intersects(mainCharBounds) && coinImage.isVisible() && coinImage.getTranslateY() >= Punk.getInstance().getYPos() - 30){
             Punk.getInstance().setScore(Punk.getInstance().getScore() + 1);

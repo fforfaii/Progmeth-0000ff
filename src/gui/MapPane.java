@@ -36,9 +36,9 @@ public class MapPane extends VBox {
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(20);
         VBox vBox1 = setMap("BG_Cave.jpg","Map 1");
-        VBox vBox2 = setMap("BG_forest1.jpg", "Map 2");
+        VBox vBox2 = setMap("BG_forest.jpg", "Map 2");
         VBox vBox3 = setMap("BG_factory.png", "Map 3");
-        VBox vBox4 = setMap("BG_forest2.jpg", "Map 4");
+        VBox vBox4 = setMap("BG_jungle.jpg", "Map 4");
         hBox.getChildren().addAll(vBox1, vBox2, vBox3, vBox4);
 
         // Change Scene to 'Each' MapPane
@@ -46,7 +46,7 @@ public class MapPane extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    Main.getInstance().changeSceneJava(new CaveMapPane());
+                    Main.getInstance().changeSceneJava(CaveMapPane.getInstance());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -62,6 +62,17 @@ public class MapPane extends VBox {
                 }
             }
         });
+        MapBTN3.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    Main.getInstance().changeSceneJava(FactoryMapPane.getInstance());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
         getChildren().addAll(welcome,hBox);
     }
 
