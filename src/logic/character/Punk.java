@@ -28,6 +28,8 @@ public class Punk {
     private Image punkGun; //Gun
     private Image punkIdle; //Idle
     private ImageView punkShot; //Boom
+    private int scorePerCoin;
+    private boolean immortalDelay;
     public Punk() {
         // always start at (0.0,453.0)
         setXPos(0); // ระยะห่างจากขอบซ้ายของ window
@@ -38,6 +40,8 @@ public class Punk {
         setHp(3);
         setSpeed(15);
         setDelayShoot(0.5);
+        setScorePerCoin(1);
+        setImmortalDelay(false);
         punkImageView = new ImageView(new Image(ClassLoader.getSystemResource("Punk_idle.png").toString()));
         punkAnimation = new SpriteAnimation(punkImageView, Duration.millis(1000),4,4,0,0,48,48);
         runLeft = new Image(ClassLoader.getSystemResource("Punk_runleft.png").toString());
@@ -230,5 +234,21 @@ public class Punk {
     }
     public void setPunkShot(ImageView punkShot) {
         this.punkShot = punkShot;
+    }
+
+    public int getScorePerCoin() {
+        return scorePerCoin;
+    }
+
+    public void setScorePerCoin(int scorePerCoin) {
+        this.scorePerCoin = scorePerCoin;
+    }
+
+    public boolean isImmortalDelay() {
+        return immortalDelay;
+    }
+
+    public void setImmortalDelay(boolean immortalDelay) {
+        this.immortalDelay = immortalDelay;
     }
 }

@@ -10,6 +10,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import logic.GameLogic;
+import logic.character.AttackGhost;
+import logic.character.Enemy;
+import logic.character.Minion;
 import logic.character.Punk;
 import main.Main;
 import utils.Constant;
@@ -27,23 +30,22 @@ public class ForestMapPane extends AnchorPane {
     private HpBoard hpBoard;
     private ScoreBoard scoreBoard;
     int randomIndex;
-    ArrayList<Integer> xPos_Down = new ArrayList<Integer>(); // for collect rand x position for ghost to go down
     private boolean canShoot;
     private int addScore = 1;
     Punk punk;
+    ArrayList<Enemy> enemies;
     public ForestMapPane(){
         //Set Background and Ground
         setBackground(new Background(GameLogic.getBGImage("BG_forest.jpg")));
         ImageView groundImageView = GameLogic.getGroundImage("rock_ground_long.png");
         setTopAnchor(groundImageView,530.0);
-        this.getChildren().add(groundImageView);
 
         // Set Main Character
         punk = new Punk();
         punk.initPunkAnimation();
         setTopAnchor(punk.getPunkImageView(),453.0);
         canShoot = true;
-        getChildren().addAll(punk.getPunkImageView(), punk.getPunkShot());
+        getChildren().addAll(groundImageView, punk.getPunkImageView(), punk.getPunkShot());
 
         // Set Coin
         coin = new ImageView(new Image(ClassLoader.getSystemResource("coin.png").toString()));
@@ -51,18 +53,42 @@ public class ForestMapPane extends AnchorPane {
         getChildren().add(coin);
         coinFall();
 
-        // Set heart
+        // Set hpBoard and scoreBoard
         hpBoard = HpBoard.getInstance();
         hpBoard.setAlignment(Pos.CENTER_LEFT);
         setTopAnchor(hpBoard,10.0);
         setLeftAnchor(hpBoard,15.0);
-        getChildren().add(hpBoard);
 
-        // Set ScoreBoard ( must stay after set punk )
         scoreBoard = ScoreBoard.getInstance();
         setRightAnchor(scoreBoard,20.0);
         setTopAnchor(scoreBoard,8.0);
-        getChildren().add(scoreBoard);
+        getChildren().addAll(hpBoard, scoreBoard);
+
+        //Set enemies
+        enemies = new ArrayList<>();
+        for (int i = 0; i < 3; i++){
+            Random random = new Random();
+            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+            System.out.println("RanX : "+ randomX +", RandY: "+randomY);
+            enemies.add(new Minion(randomX, randomY));
+            setTopAnchor(enemies.get(i).getImageView(), 50.0);
+            enemies.get(i).runAnimation();
+            getChildren().add(enemies.get(i).getImageView());
+        }
+        for (int i = 3; i < 6; i++){
+            Random random = new Random();
+            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+            System.out.println("RanX : "+ randomX +", RandY: "+randomY);
+            enemies.add(new AttackGhost(randomX, randomY));
+            setTopAnchor(enemies.get(i).getImageView(), 50.0);
+            enemies.get(i).runAnimation();
+            getChildren().add(enemies.get(i).getImageView());
+            if (enemies.get(i) instanceof AttackGhost){
+                getChildren().add(((AttackGhost) enemies.get(i)).getFireBall());
+            }
+        }
 
         // Set exit Button
         pause = new ImageView(new Image(ClassLoader.getSystemResource("exit.png").toString()));
@@ -79,8 +105,8 @@ public class ForestMapPane extends AnchorPane {
             }
         });
 
+        //Event Handler for KeyPressed
         Set<KeyCode> pressedKeys = new HashSet<>();
-
         this.setOnKeyPressed(event -> {
             pressedKeys.add(event.getCode());
             Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(punk.getDelayShoot()), e -> canShoot = true));
@@ -130,13 +156,11 @@ public class ForestMapPane extends AnchorPane {
         });
         this.setOnKeyReleased(event -> {
             pressedKeys.remove(event.getCode());
-            // Idle
             punk.setPunkAnimation(punk.getPunkIdle(), 4, 4, 48, 48);
         });
 
-//        GameLogic.checkPunkShotHit();
-//        GameLogic.checkPunkShotHit(this, minion);
-//        GameLogic.checkPunkShotHit(this, attackGhost);
+        //update game
+        GameLogic.checkPunkShotHit(this, enemies);
     }
 
     private void fadeExitPage() {
@@ -167,39 +191,6 @@ public class ForestMapPane extends AnchorPane {
         this.addScore = addScore;
     }
 
-    //    public void deleteHeart(Node node) {
-//        int size = hpBoard.getChildren().size();
-//        System.out.println("Size before deletion: " + size);
-//        if (size!=0) hpBoard.getChildren().remove(size-1);
-//        System.out.println(punk.getHp());
-//        if (punk.isDead()){
-//            return;
-//        }
-//        if (punk.getHp() == 0) {
-//            punk.setDead(true);
-//            FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), node);
-//            fadeOut.setFromValue(1.0);
-//            fadeOut.setToValue(0.0);
-//            fadeOut.setOnFinished(event -> {
-//                try {
-//                    System.out.println("Game Over !");
-//                    Main.getInstance().changeSceneJava(GameOverPane.getInstance());
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            });
-//            fadeOut.play();
-//        }
-//    }
-//    public void addHeart() {
-//        if (hpBoard.getChildren().size() <= 3){
-//            ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
-//            hp.setFitHeight(20);
-//            hp.setFitWidth(25);
-//            hpBoard.getChildren().add(hp);
-//        }
-//    }
-
     public int randomIndex() {
         Random random = new Random();
         return random.nextInt(6);
@@ -229,7 +220,7 @@ public class ForestMapPane extends AnchorPane {
                     lastUpdate = currentTime;
                     randomIndex = randomIndex();
                 }
-                GameLogic.checkCoinHit(coin, addScore);
+                GameLogic.checkCoinHit(coin);
             }
         };
         FallDown.start();
