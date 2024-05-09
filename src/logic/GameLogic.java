@@ -31,16 +31,19 @@ public class GameLogic {
         int randomIndex = random.nextInt(Skills.size());
         return Skills.get(randomIndex);
     }
-    public static void checkCoinHit(ImageView coinImage, int addScore) {
+    public static void checkHit(){
+
+    }
+    public static void checkCoinHit(ImageView coinImage) {
         Bounds coinBounds = coinImage.getBoundsInParent();
         Bounds mainCharBounds = new BoundingBox(
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getMinX() + 20,
-                Punk.getInstance().getPunkImageView().getBoundsInParent().getMinY() + 30,
+                Punk.getInstance().getPunkImageView().getBoundsInParent().getMinY(),
                 20,
-                Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight()-5
+                Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() / 2
         );
         if (coinBounds.intersects(mainCharBounds) && coinImage.isVisible() && coinImage.getTranslateY() >= Punk.getInstance().getYPos() - 30){
-            Punk.getInstance().setScore(Punk.getInstance().getScore() + addScore);
+            Punk.getInstance().setScore(Punk.getInstance().getScore() + Punk.getInstance().getScorePerCoin());
             coinImage.setTranslateY(0.0);
             coinImage.setVisible(false);
             ScoreBoard.getInstance().setScoreboard();
@@ -146,7 +149,7 @@ public class GameLogic {
     public void deleteHeart(Node node) {
         int size = HpBoard.getInstance().getChildren().size();
         System.out.println("Size before deletion: " + size);
-        if (size!=0) HpBoard.getInstance().getChildren().remove(size-1);
+        if (size!=0) HpBoard.getInstance().getChildren().remove(size - 1);
         System.out.println(Punk.getInstance().getHp());
         if (Punk.getInstance().isDead()){
             return;

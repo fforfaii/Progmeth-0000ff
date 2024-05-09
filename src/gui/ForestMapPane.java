@@ -112,7 +112,6 @@ public class ForestMapPane extends AnchorPane {
         });
         this.setOnKeyReleased(event -> {
             pressedKeys.remove(event.getCode());
-            // Idle
             punk.setPunkAnimation(punk.getPunkIdle(), 4, 4, 48, 48);
         });
 
@@ -133,39 +132,6 @@ public class ForestMapPane extends AnchorPane {
     public void setAddScore(int addScore) {
         this.addScore = addScore;
     }
-
-    //    public void deleteHeart(Node node) {
-//        int size = hpBoard.getChildren().size();
-//        System.out.println("Size before deletion: " + size);
-//        if (size!=0) hpBoard.getChildren().remove(size-1);
-//        System.out.println(punk.getHp());
-//        if (punk.isDead()){
-//            return;
-//        }
-//        if (punk.getHp() == 0) {
-//            punk.setDead(true);
-//            FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), node);
-//            fadeOut.setFromValue(1.0);
-//            fadeOut.setToValue(0.0);
-//            fadeOut.setOnFinished(event -> {
-//                try {
-//                    System.out.println("Game Over !");
-//                    Main.getInstance().changeSceneJava(GameOverPane.getInstance());
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            });
-//            fadeOut.play();
-//        }
-//    }
-//    public void addHeart() {
-//        if (hpBoard.getChildren().size() <= 3){
-//            ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
-//            hp.setFitHeight(20);
-//            hp.setFitWidth(25);
-//            hpBoard.getChildren().add(hp);
-//        }
-//    }
 
     public int randomIndex() {
         Random random = new Random();
@@ -196,7 +162,7 @@ public class ForestMapPane extends AnchorPane {
                     lastUpdate = currentTime;
                     randomIndex = randomIndex();
                 }
-                GameLogic.checkCoinHit(coin, addScore);
+                GameLogic.checkCoinHit(coin);
             }
         };
         FallDown.start();

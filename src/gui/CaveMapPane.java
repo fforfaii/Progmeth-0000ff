@@ -26,13 +26,11 @@ import java.util.concurrent.TimeUnit;
 
 public class CaveMapPane extends AnchorPane {
     private static CaveMapPane instance;
-    private ImageView mainChar;
     private ImageView Boom;
     private ImageView Coin;
     private ImageView FireBall;
     private ImageView minionImageView;
     private ImageView attackGhostImageView;
-    private Animation mainAni;
     private Animation minionsAni;
     private Animation attackghostAni;
     private Image Gun;
@@ -70,13 +68,11 @@ public class CaveMapPane extends AnchorPane {
 
         // Set Main Character
         punk = new Punk();
-        mainChar = new ImageView(new Image(ClassLoader.getSystemResource("Punk_idle.png").toString()));
-        mainAni = new SpriteAnimation(mainChar,Duration.millis(1000),4,4,0,0,48,48);
-        mainAni.setCycleCount(Animation.INDEFINITE);
-        mainChar.setFitWidth(100);
-        mainChar.setFitHeight(100);
-        mainAni.play();
-        setTopAnchor(mainChar,453.0);
+        punk.getPunkAnimation().setCycleCount(Animation.INDEFINITE);
+        punk.getPunkImageView().setFitWidth(100);
+        punk.getPunkImageView().setFitHeight(100);
+        punk.getPunkAnimation().play();
+        setTopAnchor(punk.getPunkImageView(),453.0);
 
         // Set GunBoom
         canShoot = true;
@@ -148,7 +144,7 @@ public class CaveMapPane extends AnchorPane {
         FireBall.setLayoutY(50.0);
         FireBall.setVisible(false);
 
-        getChildren().addAll(mainChar, Boom, Coin, hpBoard, ScoreBoard, minionImageView, FireBall, attackGhostImageView);
+        getChildren().addAll(punk.getPunkImageView(), Boom, Coin, hpBoard, ScoreBoard, minionImageView, FireBall, attackGhostImageView);
 
         // Keyboard Input
         this.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -158,13 +154,13 @@ public class CaveMapPane extends AnchorPane {
                     case A:
                         // go left
                         System.out.println("A");
-                        if (mainChar.getLayoutX() >= 5.0) mainChar.setLayoutX(mainChar.getLayoutX()-punk.getSpeed());
+                        if (punk.getPunkImageView().getLayoutX() >= 5.0) punk.getPunkImageView().setLayoutX(punk.getPunkImageView().getLayoutX()-punk.getSpeed());
                         setMainChar(runLeft,6,6,48,48);
                         break;
                     case D:
                         // go right
                         System.out.println("D");
-                        if (mainChar.getLayoutX() <= 1080) mainChar.setLayoutX(mainChar.getLayoutX()+punk.getSpeed());
+                        if (punk.getPunkImageView().getLayoutX() <= 1080) punk.getPunkImageView().setLayoutX(punk.getPunkImageView().getLayoutX()+punk.getSpeed());
                         setMainChar(runRight,6,6,48,48);
                         break;
                     case SPACE:
@@ -179,7 +175,7 @@ public class CaveMapPane extends AnchorPane {
                         System.out.println("Boom!");
                         break;
                 }
-                punk.setXPos(mainChar.getLayoutX());
+                punk.setXPos(punk.getPunkImageView().getLayoutX());
                 System.out.println("Punk X : " + punk.getXPos());
                 System.out.println("Punk Y : " + punk.getYPos());
             }
@@ -219,10 +215,10 @@ public class CaveMapPane extends AnchorPane {
         }
         Bounds FireballBounds = fireball.getBoundsInParent();
         Bounds mainCharBounds = new BoundingBox(
-                mainChar.getBoundsInParent().getMinX() + 20,
-                mainChar.getBoundsInParent().getMinY() + 22,
+                punk.getPunkImageView().getBoundsInParent().getMinX() + 20,
+                punk.getPunkImageView().getBoundsInParent().getMinY() + 22,
                 20,
-                mainChar.getBoundsInParent().getHeight() / 2
+                punk.getPunkImageView().getBoundsInParent().getHeight() / 2
         );
         if (FireballBounds.intersects(mainCharBounds) && fireball.isVisible()){
             System.out.println("FireBall hit detected");
@@ -246,8 +242,8 @@ public class CaveMapPane extends AnchorPane {
                 80
         );
         Bounds mainCharBounds = new BoundingBox(
-                mainChar.getBoundsInParent().getMinX() + 20,
-                mainChar.getBoundsInParent().getMinY(),
+                punk.getPunkImageView().getBoundsInParent().getMinX() + 20,
+                punk.getPunkImageView().getBoundsInParent().getMinY(),
                 20,
                 100
         );
@@ -349,10 +345,10 @@ public class CaveMapPane extends AnchorPane {
         public void CheckCoinHit (ImageView coin){
             Bounds CoinBounds = coin.getBoundsInParent();
             Bounds mainCharBounds = new BoundingBox(
-                    mainChar.getBoundsInParent().getMinX() + 20,
-                    mainChar.getBoundsInParent().getMinY(),
+                    punk.getPunkImageView().getBoundsInParent().getMinX() + 20,
+                    punk.getPunkImageView().getBoundsInParent().getMinY(),
                     20,
-                    mainChar.getBoundsInParent().getHeight() / 2
+                    punk.getPunkImageView().getBoundsInParent().getHeight() / 2
             );
             if (CoinBounds.intersects(mainCharBounds) && coin.isVisible() && coin.getTranslateY() >= punk.getYPos()) {
                 punk.setScore(punk.getScore() + 1);
@@ -600,8 +596,8 @@ public class CaveMapPane extends AnchorPane {
 
             public void Shoot (Image image){
                 // Set mainChar when Shoot
-                mainChar.setImage(image);
-                mainChar.setViewport(new Rectangle2D(96, 0, 48, 48));
+                punk.getPunkImageView().setImage(image);
+                punk.getPunkImageView().setViewport(new Rectangle2D(96, 0, 48, 48));
 
                 // Set Boom when start Shooting
                 Boom.setVisible(true);
@@ -617,7 +613,7 @@ public class CaveMapPane extends AnchorPane {
                 transition.setOnFinished(event -> {
                     // Hide Boom and reset its position after the animation finishes
                     Boom.setVisible(false);
-                    Boom.setLayoutY(mainChar.getLayoutY());
+                    Boom.setLayoutY(punk.getPunkImageView().getLayoutY());
 
                     punk.setPunkShotXPos(Boom.getLayoutX());
                     punk.setPunkShotYPos(Boom.getLayoutY());
@@ -629,16 +625,16 @@ public class CaveMapPane extends AnchorPane {
             }
 
             public void setMainChar (Image Image,int count, int column, int width, int height){
-                mainChar.setImage(Image);
+                punk.getPunkImageView().setImage(Image);
                 SpriteAnimation.getInstance().setCount(count);
                 SpriteAnimation.getInstance().setColumns(column);
                 SpriteAnimation.getInstance().setWidth(width);
                 SpriteAnimation.getInstance().setHeight(height);
-                mainAni.setCycleCount(Animation.INDEFINITE);
-                mainChar.setFitWidth(100);
-                mainChar.setFitHeight(100);
-                mainAni.play();
-                setTopAnchor(mainChar, 453.0);
+                punk.getPunkAnimation().setCycleCount(Animation.INDEFINITE);
+                punk.getPunkImageView().setFitWidth(100);
+                punk.getPunkImageView().setFitHeight(100);
+                punk.getPunkAnimation().play();
+                setTopAnchor(punk.getPunkImageView(), 453.0);
             }
 
             public static CaveMapPane getInstance () {
