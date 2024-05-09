@@ -7,6 +7,7 @@ import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import logic.GameLogic;
 
@@ -31,7 +32,7 @@ public class Minion extends Enemy { //can do nothing but player needs to avoid
         minionImageView.setFitWidth(80);
         minionAnimation.play();
     }
-    public void runAnimation() {
+    public void runAnimation(AnchorPane currentPane) {
         ArrayList<Integer> xPosDown = new ArrayList<>();
         AnimationTimer GhostAnimationTimer = new AnimationTimer() {
             private long startTime = System.nanoTime();
@@ -63,10 +64,10 @@ public class Minion extends Enemy { //can do nothing but player needs to avoid
                         lastUpdate = currentTime;
                     }
                 }
-//
+
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check ghost hit
-//                    GameLogic.checkGhostHit(minionImageView);
+                    GameLogic.checkGhostHit(currentPane, minionImageView);
                 }
             }
         };

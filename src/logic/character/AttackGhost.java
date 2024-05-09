@@ -6,6 +6,7 @@ import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import logic.GameLogic;
 
@@ -39,7 +40,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
     public void hitDamage(){
         Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
     }
-    public void runAnimation() {
+    public void runAnimation(AnchorPane currentPane) {
         ArrayList<Double> durations = new ArrayList<>();
         durations.add(2.0);
         durations.add(3.0);
@@ -80,7 +81,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check fireBall hit
-//                    GameLogic.checkFireballHit(fireBall);
+                    GameLogic.checkFireballHit(currentPane, fireBall);
                 }
             }
         };

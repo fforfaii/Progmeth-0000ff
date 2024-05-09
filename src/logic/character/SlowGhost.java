@@ -3,6 +3,7 @@ package logic.character;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
 
@@ -14,7 +15,7 @@ public class SlowGhost extends Enemy { //if hit: slow
     public void hitDamage(){
         Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
     }
-    public void runAnimation(){
+    public void runAnimation(AnchorPane currentPane){
 
     }
 

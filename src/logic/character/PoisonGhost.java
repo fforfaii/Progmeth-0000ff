@@ -2,6 +2,7 @@ package logic.character;
 
 
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 public class PoisonGhost extends Enemy { //if punk get poison: cannot attack for 3 secs
     public PoisonGhost(){
@@ -11,7 +12,7 @@ public class PoisonGhost extends Enemy { //if punk get poison: cannot attack for
     public void hitDamage(){
         Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
     }
-    public void runAnimation(){
+    public void runAnimation(AnchorPane currentPane){
 
     }
 

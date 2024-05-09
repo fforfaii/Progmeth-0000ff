@@ -2,6 +2,7 @@ package logic.character;
 
 
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 public class MindGhost extends Enemy { //if hit: inverted control
     public MindGhost(){
@@ -14,7 +15,7 @@ public class MindGhost extends Enemy { //if hit: inverted control
     public void effect(){
 
     }
-    public void runAnimation(){
+    public void runAnimation(AnchorPane currentPane){
 
     }
 

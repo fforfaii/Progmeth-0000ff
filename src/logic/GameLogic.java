@@ -29,14 +29,6 @@ public class GameLogic {
     private static ArrayList<Integer> HighScore = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
     private static String CurrentMap;
 
-//    public GameLogic(ArrayList<Integer> highScore) {
-//        // 0=CaveMap 1=ForestMap 2=Factory 3=JungleMap
-//        HighScore = new ArrayList<Integer>(4);
-//        for (int i = 0; i < 4; i++) {
-//            HighScore.add(i,0);
-//        }
-//    }
-
     public static String getCurrentMap() {
         return CurrentMap;
     }
@@ -152,7 +144,7 @@ public class GameLogic {
     }
 
     //for every type of enemy
-    public void checkGhostHit(AnchorPane currentPane, ImageView ghost) {
+    public static void checkGhostHit(AnchorPane currentPane, ImageView ghost) {
         if (Punk.getInstance().isImmortalDelay()){
             return;
         }
@@ -173,7 +165,7 @@ public class GameLogic {
             Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
             deleteHeart(currentPane);
             Punk.getInstance().setImmortalDelay(true);
-            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(true)));
+            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
             delayTimer.play();
         }
     }
@@ -240,7 +232,6 @@ public class GameLogic {
             reverseTransition.setCycleCount(1);
             reverseTransition.setAutoReverse(false);
             reverseTransition.play();
-//            translateXTransition.play();
         });
         translateXTransition.play();
         return newLastXPos;

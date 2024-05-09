@@ -73,7 +73,7 @@ public class ForestMapPane extends AnchorPane {
             System.out.println("RanX : "+ randomX +", RandY: "+randomY);
             enemies.add(new Minion(randomX, randomY));
             setTopAnchor(enemies.get(i).getImageView(), 50.0);
-            enemies.get(i).runAnimation();
+            enemies.get(i).runAnimation(this);
             getChildren().add(enemies.get(i).getImageView());
         }
         for (int i = 3; i < 6; i++){
@@ -83,7 +83,7 @@ public class ForestMapPane extends AnchorPane {
             System.out.println("RanX : "+ randomX +", RandY: "+randomY);
             enemies.add(new AttackGhost(randomX, randomY));
             setTopAnchor(enemies.get(i).getImageView(), 50.0);
-            enemies.get(i).runAnimation();
+            enemies.get(i).runAnimation(this);
             getChildren().add(enemies.get(i).getImageView());
             if (enemies.get(i) instanceof AttackGhost){
                 getChildren().add(((AttackGhost) enemies.get(i)).getFireBall());

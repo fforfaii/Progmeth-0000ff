@@ -120,7 +120,7 @@ public class CaveMapPane extends AnchorPane {
         // Set Ghost1 --> Minion
         minion = new Minion(10, 10);
         setTopAnchor(minion.getImageView(), 50.0);
-        minion.runAnimation();
+        minion.runAnimation(this);
 
         // Set Ghost2 --> AttackGhost
         attackGhost = logic.character.AttackGhost.getInstance();
