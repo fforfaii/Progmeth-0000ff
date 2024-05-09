@@ -46,6 +46,7 @@ public class CaveMapPane extends AnchorPane {
     private boolean canShoot;
     private boolean canHitGhost = true;
     private boolean canHitFireball = true;
+    private int addScore = 1;
     int randomIndex;
     ArrayList<Integer> xPos_Down = new ArrayList<Integer>(); // for collect rand x position for ghost to go down
     Punk punk;
@@ -198,6 +199,20 @@ public class CaveMapPane extends AnchorPane {
         // Set CoinFall
         CoinFall();
     }
+
+    @Override
+    public String toString() {
+        return "CaveMap";
+    }
+
+    public int getAddScore() {
+        return addScore;
+    }
+
+    public void setAddScore(int addScore) {
+        this.addScore = addScore;
+    }
+
     public void CheckFireballHit(ImageView fireball) {
         if (! canHitFireball){
             return;

@@ -26,6 +26,7 @@ public class ForestMapPane extends AnchorPane {
     int randomIndex;
     ArrayList<Integer> xPos_Down = new ArrayList<Integer>(); // for collect rand x position for ghost to go down
     private boolean canShoot;
+    private int addScore = 1;
     Punk punk;
     public ForestMapPane(){
         //Set Background and Ground
@@ -119,6 +120,53 @@ public class ForestMapPane extends AnchorPane {
 //        GameLogic.checkPunkShotHit(this, minion);
 //        GameLogic.checkPunkShotHit(this, attackGhost);
     }
+
+    @Override
+    public String toString() {
+        return "ForestMap";
+    }
+
+    public int getAddScore() {
+        return addScore;
+    }
+
+    public void setAddScore(int addScore) {
+        this.addScore = addScore;
+    }
+
+    //    public void deleteHeart(Node node) {
+//        int size = hpBoard.getChildren().size();
+//        System.out.println("Size before deletion: " + size);
+//        if (size!=0) hpBoard.getChildren().remove(size-1);
+//        System.out.println(punk.getHp());
+//        if (punk.isDead()){
+//            return;
+//        }
+//        if (punk.getHp() == 0) {
+//            punk.setDead(true);
+//            FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), node);
+//            fadeOut.setFromValue(1.0);
+//            fadeOut.setToValue(0.0);
+//            fadeOut.setOnFinished(event -> {
+//                try {
+//                    System.out.println("Game Over !");
+//                    Main.getInstance().changeSceneJava(GameOverPane.getInstance());
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            fadeOut.play();
+//        }
+//    }
+//    public void addHeart() {
+//        if (hpBoard.getChildren().size() <= 3){
+//            ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
+//            hp.setFitHeight(20);
+//            hp.setFitWidth(25);
+//            hpBoard.getChildren().add(hp);
+//        }
+//    }
+
     public int randomIndex() {
         Random random = new Random();
         return random.nextInt(6);
@@ -148,7 +196,7 @@ public class ForestMapPane extends AnchorPane {
                     lastUpdate = currentTime;
                     randomIndex = randomIndex();
                 }
-                GameLogic.checkCoinHit(coin);
+                GameLogic.checkCoinHit(coin, addScore);
             }
         };
         FallDown.start();

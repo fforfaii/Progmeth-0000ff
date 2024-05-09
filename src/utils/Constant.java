@@ -10,13 +10,15 @@ public class Constant {
 
     public Constant() {
         // Set skillsname ArrayList
+        skillsname = new ArrayList<>();
         skillsname.add("Shield");
         skillsname.add("ExtraScore");
         skillsname.add("ExtraDamage");
         skillsname.add("Heal");
         skillsname.add("MoveFaster");
-        skillsname.add("DamageFaster");
         skillsname.add("Disappear");
+//        skillsname.add("DamageFaster");
+//        skillsname.add("WideDamage");
     }
 
     public static Constant getInstance() {
