@@ -273,7 +273,7 @@ public class CaveMapPane extends AnchorPane {
                 punk.getPunkImageView().getBoundsInParent().getMinX() + 20,
                 punk.getPunkImageView().getBoundsInParent().getMinY() + 30,
                 20,
-                mainChar.getBoundsInParent().getHeight() - 5
+                punk.getPunkImageView().getBoundsInParent().getHeight() - 5
         );
         if (GhostBounds.intersects(mainCharBounds) && ghost.isVisible()) {
             System.out.println("Ghost hit detected");

@@ -269,7 +269,7 @@ public class JungleMapPane extends AnchorPane {
                     lastUpdate = currentTime;
                     randomIndex = randomIndex();
                 }
-                GameLogic.checkCoinHit(coin,addScore);
+                GameLogic.checkCoinHit(coin);
             }
         };
         FallDown.start();
