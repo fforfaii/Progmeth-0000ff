@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import logic.GameLogic;
 import main.Main;
 
 import java.io.IOException;
@@ -35,10 +36,10 @@ public class MapPane extends VBox {
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(20);
-        VBox vBox1 = setMap("BG_Cave.jpg","Map 1");
-        VBox vBox2 = setMap("BG_forest.jpg", "Map 2");
-        VBox vBox3 = setMap("BG_factory.png", "Map 3");
-        VBox vBox4 = setMap("BG_jungle.jpg", "Map 4");
+        VBox vBox1 = setMap("BG_Cave.jpg","CaveMap");
+        VBox vBox2 = setMap("BG_forest.jpg", "ForestMap");
+        VBox vBox3 = setMap("BG_factory.png", "FactoryMap");
+        VBox vBox4 = setMap("BG_jungle.jpg", "JungleMap");
         hBox.getChildren().addAll(vBox1, vBox2, vBox3, vBox4);
 
         // Change Scene to 'Each' MapPane
@@ -46,6 +47,7 @@ public class MapPane extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
+                    GameLogic.setCurrentMap("CaveMap");
                     Main.getInstance().changeSceneJava(new CaveMapPane());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -56,6 +58,7 @@ public class MapPane extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
+                    GameLogic.setCurrentMap("ForestMap");
                     Main.getInstance().changeSceneJava(new ForestMapPane());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -66,7 +69,19 @@ public class MapPane extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
+                    GameLogic.setCurrentMap("FactoryMap");
                     Main.getInstance().changeSceneJava(new FactoryMapPane());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        MapBTN4.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    GameLogic.setCurrentMap("JungleMap");
+                    Main.getInstance().changeSceneJava(new JungleMapPane());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -90,19 +105,25 @@ public class MapPane extends VBox {
         mapText.setTextFill(Color.rgb(0,51,102));
         mapText.setPrefWidth(150);
         switch (mapName) {
-            case "Map 1":
+            case "CaveMap":
                 MapBTN1 = mapText;
                 break;
-            case "Map 2":
+            case "ForestMap":
                 MapBTN2 = mapText;
-            case "Map 3":
+            case "FactoryMap":
                 MapBTN3 = mapText;
                 break;
-            case "Map 4":
+            case "JungleMap":
                 MapBTN4 = mapText;
             default: break;
         }
-        vBox.getChildren().addAll(imageView,mapText);
+        Text space1 = new Text(" ");
+        space1.setFont(Font.font("Monospace", FontWeight.BOLD,8));
+        Text highscore = new Text("" + GameLogic.getHighscoreEachMap(mapName));
+        highscore.setFont(Font.font("Monospace", FontWeight.BOLD,16));
+        Text space2 = new Text(" ");
+        space2.setFont(Font.font("Monospace", FontWeight.BOLD,8));
+        vBox.getChildren().addAll(imageView,mapText,space1,highscore,space2);
 
         return vBox;
     }

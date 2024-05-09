@@ -3,12 +3,10 @@ package logic.skills;
 import gui.CaveMapPane;
 import gui.FactoryMapPane;
 import gui.ForestMapPane;
+import gui.JungleMapPane;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import logic.GameLogic;
-import logic.character.Punk;
 
 public class ExtraScore {
     public static void effect(String map){

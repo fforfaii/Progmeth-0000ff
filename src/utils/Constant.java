@@ -32,4 +32,17 @@ public class Constant {
         return skillsname;
     }
 
+    public static int getIndexMap(String mapname) {
+        switch (mapname) {
+            case "CaveMap":
+                return 0;
+            case "ForestMap":
+                return 1;
+            case "FactoryMap":
+                return 2;
+            case "JungleMap":
+                return 3;
+            default: return -1;
+        }
+    }
 }

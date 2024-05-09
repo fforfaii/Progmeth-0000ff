@@ -1,25 +1,27 @@
 package gui;
 
-import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.util.Duration;
 import logic.GameLogic;
 import logic.character.Punk;
+import main.Main;
+import utils.Constant;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class FactoryMapPane extends AnchorPane {
     private static FactoryMapPane instance;
+    private ImageView pause;
     private ImageView coin;
     private ImageView skill;
     private HpBoard hpBoard;
@@ -69,6 +71,21 @@ public class FactoryMapPane extends AnchorPane {
         getChildren().add(skill);
         skillFall(skill);
 
+        // Set exit Button
+        pause = new ImageView(new Image(ClassLoader.getSystemResource("exit.png").toString()));
+        pause.setFitWidth(110);
+        pause.setFitHeight(44);
+        setBottomAnchor(pause, 10.0);
+        setRightAnchor(pause, 10.0);
+        getChildren().add(pause);
+        pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                GameLogic.setHighscoreEachMap(Constant.getIndexMap("FactoryMap"),punk.getScore());
+                fadeExitPage();
+            }
+        });
+
         this.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
@@ -109,6 +126,21 @@ public class FactoryMapPane extends AnchorPane {
         });
 //        GameLogic.checkPunkShotHit(this, minion);
 //        GameLogic.checkPunkShotHit(this, attackGhost);
+    }
+
+    private void fadeExitPage() {
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), this);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.setOnFinished(event -> {
+            try {
+                System.out.println("Exit !");
+                Main.getInstance().changeSceneJava(new MapPane());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        fadeOut.play();
     }
 
     @Override
