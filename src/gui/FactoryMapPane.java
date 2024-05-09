@@ -35,7 +35,7 @@ public class FactoryMapPane extends AnchorPane {
         this.getChildren().add(groundImageView);
 
         // Set Main Character
-        punk = Punk.getInstance();
+        punk = new Punk();
         punk.initPunkAnimation();
         setTopAnchor(punk.getPunkImageView(),453.0);
         canShoot = true;

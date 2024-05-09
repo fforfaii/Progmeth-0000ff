@@ -46,7 +46,7 @@ public class MapPane extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    Main.getInstance().changeSceneJava(CaveMapPane.getInstance());
+                    Main.getInstance().changeSceneJava(new CaveMapPane());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -56,7 +56,7 @@ public class MapPane extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    Main.getInstance().changeSceneJava(ForestMapPane.getInstance());
+                    Main.getInstance().changeSceneJava(new ForestMapPane());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -66,7 +66,7 @@ public class MapPane extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    Main.getInstance().changeSceneJava(FactoryMapPane.getInstance());
+                    Main.getInstance().changeSceneJava(new FactoryMapPane());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

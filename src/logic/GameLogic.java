@@ -59,6 +59,7 @@ public class GameLogic {
         };
         checkHit.start();
     }
+
 //    public static void CheckGhostHit(AnchorPane currentPane, ImageView ghost) {
 //        if (! canHitGhost){
 //            return;
@@ -106,30 +107,30 @@ public class GameLogic {
 //            delayTimer.play();
 //        }
 //    }
-public void deleteHeart(Node node) {
-    int size = HpBoard.getInstance().getChildren().size();
-    System.out.println("Size before deletion: " + size);
-    if (size!=0) HpBoard.getInstance().getChildren().remove(size-1);
-    System.out.println(Punk.getInstance().getHp());
-    if (Punk.getInstance().isDead()){
-        return;
+    public void deleteHeart(Node node) {
+        int size = HpBoard.getInstance().getChildren().size();
+        System.out.println("Size before deletion: " + size);
+        if (size!=0) HpBoard.getInstance().getChildren().remove(size-1);
+        System.out.println(Punk.getInstance().getHp());
+        if (Punk.getInstance().isDead()){
+            return;
+        }
+        if (Punk.getInstance().getHp() == 0) {
+            Punk.getInstance().setDead(true);
+            FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), node);
+            fadeOut.setFromValue(1.0);
+            fadeOut.setToValue(0.0);
+            fadeOut.setOnFinished(event -> {
+                try {
+                    System.out.println("Game Over !");
+                    Main.getInstance().changeSceneJava(GameOverPane.getInstance());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            fadeOut.play();
+        }
     }
-    if (Punk.getInstance().getHp() == 0) {
-        Punk.getInstance().setDead(true);
-        FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), node);
-        fadeOut.setFromValue(1.0);
-        fadeOut.setToValue(0.0);
-        fadeOut.setOnFinished(event -> {
-            try {
-                System.out.println("Game Over !");
-                Main.getInstance().changeSceneJava(GameOverPane.getInstance());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        fadeOut.play();
-    }
-}
     public void addHeart() {
         if (HpBoard.getInstance().getChildren().size() <= 3){
             ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
