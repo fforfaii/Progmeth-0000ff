@@ -7,6 +7,7 @@ import gui.JungleMapPane;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+import logic.character.Punk;
 
 public class ExtraScore {
     public static void effect(String map){
