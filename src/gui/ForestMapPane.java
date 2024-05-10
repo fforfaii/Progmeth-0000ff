@@ -28,6 +28,7 @@ public class ForestMapPane extends AnchorPane {
     private HpBoard hpBoard;
     private ScoreBoard scoreBoard;
     int randomIndex;
+    private boolean isMindControl; // for MindGhost
 //    private boolean canShoot; --> set in Punk instead set in here
     private int addScore = 1;
     Punk punk;
@@ -66,32 +67,45 @@ public class ForestMapPane extends AnchorPane {
         //Event Handler for KeyPressed
         GameLogic.getPlayerInput(this);
 
-        //Set enemies
+        //Set enemies (ใช้เทสอยู่)
         enemies = new ArrayList<>();
+//        for (int i = 0; i < 3; i++){
+//            Random random = new Random();
+//            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+//            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+//            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
+//            enemies.add(new Minion(randomX, randomY));
+//            setTopAnchor(enemies.get(i).getImageView(), 50.0);
+//            enemies.get(i).runAnimation(this);
+//            getChildren().add(enemies.get(i).getImageView());
+//        }
+//        for (int i = 3; i < 6; i++){
+//            Random random = new Random();
+//            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+//            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+//            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
+//            enemies.add(new AttackGhost(randomX, randomY));
+//            setTopAnchor(enemies.get(i).getImageView(), 50.0);
+//            enemies.get(i).runAnimation(this);
+//            getChildren().add(enemies.get(i).getImageView());
+//            if (enemies.get(i) instanceof AttackGhost){
+//                getChildren().add(((AttackGhost) enemies.get(i)).getFireBall());
+//            }
+//        }
         for (int i = 0; i < 3; i++){
             Random random = new Random();
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
             System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            enemies.add(new Minion(randomX, randomY));
+            enemies.add(new PoisonGhost(randomX, randomY));
             setTopAnchor(enemies.get(i).getImageView(), 50.0);
             enemies.get(i).runAnimation(this);
             getChildren().add(enemies.get(i).getImageView());
-        }
-        for (int i = 3; i < 6; i++){
-            Random random = new Random();
-            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            enemies.add(new AttackGhost(randomX, randomY));
-            setTopAnchor(enemies.get(i).getImageView(), 50.0);
-            enemies.get(i).runAnimation(this);
-            getChildren().add(enemies.get(i).getImageView());
-            if (enemies.get(i) instanceof AttackGhost){
-                getChildren().add(((AttackGhost) enemies.get(i)).getFireBall());
+            if (enemies.get(i) instanceof PoisonGhost){
+                getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
             }
         }
-        for (int i = 6; i < 7; i++) {
+        for (int i = 3; i < 4; i++) {
             Random random = new Random();
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
@@ -100,9 +114,6 @@ public class ForestMapPane extends AnchorPane {
             setTopAnchor(enemies.get(i).getImageView(), 50.0);
             enemies.get(i).runAnimation(this);
             getChildren().add(enemies.get(i).getImageView());
-//            if (enemies.get(i) instanceof Hitable){
-//                ((Hitable) enemies.get(i)).hitDamage(this);
-//            }
         }
 
         // Set exit Button
@@ -123,6 +134,117 @@ public class ForestMapPane extends AnchorPane {
         //update game
         GameLogic.checkPunkShotHit(this, enemies);
     }
+
+    private void getPlayerInput() {
+        Set<KeyCode> pressedKeys = new HashSet<>();
+        this.setOnKeyPressed(event -> {
+            pressedKeys.add(event.getCode());
+            Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(punk.getDelayShoot()), e -> punk.setCanShoot(true)));
+
+            if (pressedKeys.contains(KeyCode.D) && pressedKeys.contains(KeyCode.SPACE)) {
+                // Move right and shoot
+                System.out.println("D & SPACE");
+                if (punk.isCanShoot()){
+                    punk.setXPos(punk.getPunkImageView().getLayoutX());
+                    punk.shoot();
+                    punk.setCanShoot(false);
+                    delayShoot.play();
+                }
+                punk.runRight();
+            } else if (pressedKeys.contains(KeyCode.A) && pressedKeys.contains(KeyCode.SPACE)){
+                // Move left and shoot
+                System.out.println("A & SPACE");
+                if (punk.isCanShoot()){
+                    punk.setXPos(punk.getPunkImageView().getLayoutX());
+                    punk.shoot();
+                    punk.setCanShoot(false);
+                    delayShoot.play();
+                }
+                punk.runLeft();
+            } else if (pressedKeys.contains(KeyCode.D)) {
+                // Move right
+                System.out.println("D");
+                punk.setXPos(punk.getPunkImageView().getLayoutX());
+                System.out.println("XPos : punk.getXPos()");
+                punk.runRight();
+            } else if (pressedKeys.contains(KeyCode.A)){
+                //Move Left
+                System.out.println("A");
+                punk.setXPos(punk.getPunkImageView().getLayoutX());
+                System.out.println("XPos : punk.getXPos()");
+                punk.runLeft();
+            } else if (pressedKeys.contains(KeyCode.SPACE)) {
+                // Shoot
+                if (punk.isCanShoot()){
+                    System.out.println("Boom!");
+                    punk.setXPos(punk.getPunkImageView().getLayoutX());
+                    punk.shoot();
+                    punk.setCanShoot(false);
+                    delayShoot.play();
+                }
+            }
+        });
+        this.setOnKeyReleased(event -> {
+            pressedKeys.remove(event.getCode());
+            punk.setPunkAnimation(punk.getPunkIdle(), 4, 4, 48, 48);
+        });
+    }
+
+//    private void ReversegetPlayerInput() {
+//        Set<KeyCode> pressedKeys = new HashSet<>();
+//        Punk punk = Punk.getInstance();
+//        this.setOnKeyPressed(event -> {
+//            pressedKeys.add(event.getCode());
+//            Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(punk.getDelayShoot()), e -> punk.setCanShoot(true)));
+//
+//            if (pressedKeys.contains(KeyCode.D) && pressedKeys.contains(KeyCode.SPACE)) {
+//                // Move left and shoot
+//                System.out.println("D & SPACE");
+//                if (punk.isCanShoot()){
+//                    punk.setXPos(punk.getPunkImageView().getLayoutX());
+//                    punk.shoot();
+//                    punk.setCanShoot(false);
+//                    delayShoot.play();
+//                }
+//                punk.runLeft();
+//            } else if (pressedKeys.contains(KeyCode.A) && pressedKeys.contains(KeyCode.SPACE)){
+//                // Move left and shoot
+//                System.out.println("A & SPACE");
+//                if (punk.isCanShoot()){
+//                    punk.setXPos(punk.getPunkImageView().getLayoutX());
+//                    punk.shoot();
+//                    punk.setCanShoot(false);
+//                    delayShoot.play();
+//                }
+//                punk.runRight();
+//            } else if (pressedKeys.contains(KeyCode.D)) {
+//                // Move right
+//                System.out.println("D");
+//                punk.setXPos(punk.getPunkImageView().getLayoutX());
+//                System.out.println("XPos : punk.getXPos()");
+//                punk.runLeft();
+//            } else if (pressedKeys.contains(KeyCode.A)){
+//                //Move Left
+//                System.out.println("A");
+//                punk.setXPos(punk.getPunkImageView().getLayoutX());
+//                System.out.println("XPos : punk.getXPos()");
+//                punk.runRight();
+//            } else if (pressedKeys.contains(KeyCode.SPACE)) {
+//                // Shoot
+//                if (punk.isCanShoot()){
+//                    System.out.println("Boom!");
+//                    punk.setXPos(punk.getPunkImageView().getLayoutX());
+//                    punk.shoot();
+//                    punk.setCanShoot(false);
+//                    delayShoot.play();
+//                }
+//            }
+//        });
+//        this.setOnKeyReleased(event -> {
+//            pressedKeys.remove(event.getCode());
+//            punk.setPunkAnimation(punk.getPunkIdle(), 4, 4, 48, 48);
+//        });
+//    }
     private void fadeExitPage() {
         FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), this);
         fadeOut.setFromValue(1.0);
@@ -149,6 +271,14 @@ public class ForestMapPane extends AnchorPane {
 
     public void setAddScore(int addScore) {
         this.addScore = addScore;
+    }
+
+    public boolean isMindControl() {
+        return isMindControl;
+    }
+
+    public void setMindControl(boolean mindControl) {
+        isMindControl = mindControl;
     }
 
     public int randomIndex() {

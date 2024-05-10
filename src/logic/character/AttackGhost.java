@@ -82,7 +82,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check fireBall hit
-                    GameLogic.checkFireballHit(currentPane, fireBall);
+                    GameLogic.checkFireballHit(currentPane, fireBall,getInstance());
                 }
             }
         };
@@ -93,8 +93,6 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
     public ImageView getImageView() {
         return attackGhostImageView;
     }
-
-    public void effect(){}
 
     @Override
     public int getHp() {

@@ -256,12 +256,21 @@ public class GameLogic {
                     Bounds GhostBounds = eachEnemy.getImageView().getBoundsInParent();
                     if (punkShotBounds.intersects(GhostBounds) && Punk.getInstance().getPunkShot().isVisible()){
                         eachEnemy.setHp(eachEnemy.getHp() - 1); // Decrease Ghost HP when hit
-                        if (eachEnemy instanceof SlowGhost) ((SlowGhost) eachEnemy).noDecreaseHP(); // Undecrease SlowGhost HP (immortal)
+                        if (eachEnemy instanceof SlowGhost){
+                            ((SlowGhost) eachEnemy).noDecreaseHP(); // Undecrease SlowGhost HP (immortal)
+                        }
+                        if (eachEnemy instanceof MindGhost){
+                            ((MindGhost) eachEnemy).noDecreaseHP(); // Undecrease MindGhost HP (immortal)
+                        }
                         if (eachEnemy.getHp() == 0) {
                             currentPane.getChildren().remove(eachEnemy.getImageView());
                             if (eachEnemy instanceof AttackGhost){
                                 // Get AttackGhost's Fireball out !
                                 currentPane.getChildren().remove(((AttackGhost) eachEnemy).getFireBall());
+                            }
+                            if (eachEnemy instanceof PoisonGhost){
+                                // Get PoisonGhost's Poison out !
+                                currentPane.getChildren().remove(((PoisonGhost) eachEnemy).getPoison());
                             }
                         }
                         splashDelay = true;
@@ -274,7 +283,7 @@ public class GameLogic {
         checkHit.start();
     }
     //for AttackGhost
-    public static void checkFireballHit(AnchorPane currentPane, ImageView fireball) {
+    public static void checkFireballHit(AnchorPane currentPane, ImageView fireball, AttackGhost attackGhost) {
         if (Punk.getInstance().isImmortalDelay()) {
             return;
         }
@@ -294,7 +303,7 @@ public class GameLogic {
                 Shield.setIsHit(true);
                 return;
             }
-            Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
+            attackGhost.hitDamage();
             fireball.setTranslateY(0.0);
             fireball.setVisible(false);
             deleteHeart(currentPane);
@@ -304,15 +313,47 @@ public class GameLogic {
         }
     }
 
+    //for PoisonGhost
+//    public static void checkPoisonHit(ImageView poison, PoisonGhost poisonGhost) {
+//        if (Punk.getInstance().isImmortalDelay()) {
+//            return;
+//        }
+//        if (!Punk.getInstance().isCanHit()) {
+//            return;
+//        }
+//        Bounds FireballBounds = poison.getBoundsInParent();
+//        Bounds mainCharBounds = new BoundingBox(
+//                Punk.getInstance().getPunkImageView().getBoundsInParent().getMinX() + 20,
+//                Punk.getInstance().getPunkImageView().getBoundsInParent().getMinY() + 22,
+//                20,
+//                Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() / 2
+//        );
+//        if (FireballBounds.intersects(mainCharBounds) && poison.isVisible()) {
+//            System.out.println("Poison hit detected");
+//            if (Punk.getInstance().isShield()){
+//                Shield.setIsHit(true);
+//                return;
+//            }
+//            poisonGhost.hitDamage();
+//            // set position of poison at the same as PoisonGhost
+//            poison.setTranslateY(poisonGhost.getYPos());
+//            poison.setTranslateX(poisonGhost.getXPos());
+//            poison.setVisible(false);
+//            Punk.getInstance().setImmortalDelay(true);
+//            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
+//            delayTimer.play();
+//        }
+//    }
+
     //for every type of enemy
-    public static void checkGhostHit(AnchorPane currentPane, Enemy enemy) {
+    public static void checkGhostHit(AnchorPane currentPane, Enemy enemy, ImageView enemyimageview) {
         if (Punk.getInstance().isImmortalDelay()){
             return;
         }
         Bounds GhostBounds = new BoundingBox(
-                enemy.getImageView().getBoundsInParent().getMinX(),
-                enemy.getImageView().getBoundsInParent().getMinY(),
-                enemy.getImageView().getBoundsInParent().getWidth(),
+                enemyimageview.getBoundsInParent().getMinX(),
+                enemyimageview.getBoundsInParent().getMinY(),
+                enemyimageview.getBoundsInParent().getWidth(),
                 80
         );
         Bounds mainCharBounds = new BoundingBox(
@@ -321,8 +362,9 @@ public class GameLogic {
                 20,
                 100
         );
-        if (GhostBounds.intersects(mainCharBounds) && enemy.getImageView().isVisible()) {
+        if (GhostBounds.intersects(mainCharBounds) && enemyimageview.isVisible()) {
             System.out.println("Ghost hit detected");
+//<<<<<<< HEAD
 //            if (enemy instanceof Hitable) {
 //                if (enemy instanceof Minion) {
 //                    enemy.hitDamage();
@@ -344,6 +386,46 @@ public class GameLogic {
 //            Punk.getInstance().setImmortalDelay(true);
 //            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
 //            delayTimer.play();
+//||||||| 2d12347
+//            if (enemy instanceof Hitable) {
+//                if (enemy instanceof Minion) {
+//                    enemy.hitDamage();
+////                    Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
+//                    deleteHeart(currentPane);
+//                }
+//                if (enemy instanceof MindGhost) {
+//                    ((MindGhost) enemy).setCurrentPane(currentPane);
+//                    enemy.hitDamage();
+//                    Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(4), event -> {
+//                            ((MindGhost) enemy).BacktoNormal();
+//                    }));
+//                    cooldownTimer.play();
+//                }
+//                if (enemy instanceof SlowGhost) {
+//                    enemy.hitDamage();
+//                }
+//            }
+//            Punk.getInstance().setImmortalDelay(true);
+//            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
+//            delayTimer.play();
+//=======
+            if (enemy instanceof Hitable) {
+                if (enemy instanceof Minion) {
+                    ((Minion) enemy).hitDamage(currentPane);
+//                    Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
+                    deleteHeart(currentPane);
+                }
+                if (enemy instanceof MindGhost) {
+                    ((MindGhost) enemy).setCurrentPane(currentPane);
+                    ((MindGhost) enemy).hitDamage(currentPane);
+                }
+                if (enemy instanceof SlowGhost) {
+                    ((SlowGhost) enemy).hitDamage(currentPane);
+                }
+            }
+            Punk.getInstance().setImmortalDelay(true);
+            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
+            delayTimer.play();
         }
     }
     public static void deleteHeart(AnchorPane currentPane) {
@@ -375,7 +457,7 @@ public class GameLogic {
             fadeOut.play();
         }
     }
-    public void addHeart() {
+    public static void addHeart() {
         if (HpBoard.getInstance().getChildren().size() <= 3){
             ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
             hp.setFitHeight(20);
