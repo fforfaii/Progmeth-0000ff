@@ -12,10 +12,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
-import logic.character.AttackGhost;
-import logic.character.Enemy;
-import logic.character.Punk;
-import logic.character.SlowGhost;
+import logic.ability.Hitable;
+import logic.character.*;
 import logic.skills.*;
 import main.Main;
 import utils.Constant;
@@ -164,14 +162,14 @@ public class GameLogic {
     }
 
     //for every type of enemy
-    public static void checkGhostHit(AnchorPane currentPane, ImageView ghost) {
+    public static void checkGhostHit(AnchorPane currentPane, Enemy enemy) {
         if (Punk.getInstance().isImmortalDelay()){
             return;
         }
         Bounds GhostBounds = new BoundingBox(
-                ghost.getBoundsInParent().getMinX(),
-                ghost.getBoundsInParent().getMinY(),
-                ghost.getBoundsInParent().getWidth(),
+                enemy.getImageView().getBoundsInParent().getMinX(),
+                enemy.getImageView().getBoundsInParent().getMinY(),
+                enemy.getImageView().getBoundsInParent().getWidth(),
                 80
         );
         Bounds mainCharBounds = new BoundingBox(
@@ -180,10 +178,26 @@ public class GameLogic {
                 20,
                 100
         );
-        if (GhostBounds.intersects(mainCharBounds) && ghost.isVisible()) {
+        if (GhostBounds.intersects(mainCharBounds) && enemy.getImageView().isVisible()) {
             System.out.println("Ghost hit detected");
-            Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
-            deleteHeart(currentPane);
+            if (enemy instanceof Hitable) {
+                if (enemy instanceof Minion) {
+                    enemy.hitDamage();
+//                    Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
+                    deleteHeart(currentPane);
+                }
+                if (enemy instanceof MindGhost) {
+                    ((MindGhost) enemy).setCurrentPane(currentPane);
+                    enemy.hitDamage();
+                    Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(4), event -> {
+                            ((MindGhost) enemy).BacktoNormal();
+                    }));
+                    cooldownTimer.play();
+                }
+                if (enemy instanceof SlowGhost) {
+                    enemy.hitDamage();
+                }
+            }
             Punk.getInstance().setImmortalDelay(true);
             Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
             delayTimer.play();
@@ -240,18 +254,18 @@ public class GameLogic {
         fallTransition.play();
     }
 
-    public static double slideXPos(double lastXPos, ImageView imageView, int duration) {
+    public static double slideXPos(double lastXPos, ImageView imageView, int duration, double finalXpath) {
         // Create TranslateTransition for left-right movement
         TranslateTransition translateXTransition = new TranslateTransition(Duration.seconds(duration), imageView);
         translateXTransition.setFromX(lastXPos);
-        translateXTransition.setToX(1142 - imageView.getFitWidth()); //final path
+        translateXTransition.setToX(1142 - finalXpath); //final path
         translateXTransition.setCycleCount(1);
         translateXTransition.setAutoReverse(true);
         final double newLastXPos = randXPos();
         translateXTransition.setOnFinished(event -> {
             // Create another TranslateTransition to move back from right-left
             TranslateTransition reverseTransition = new TranslateTransition(Duration.seconds(duration), imageView);
-            reverseTransition.setFromX(1142 - imageView.getFitWidth());
+            reverseTransition.setFromX(1142 - finalXpath);
             reverseTransition.setToX(newLastXPos);
             reverseTransition.setCycleCount(1);
             reverseTransition.setAutoReverse(false);

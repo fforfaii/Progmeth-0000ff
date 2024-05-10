@@ -22,6 +22,7 @@ public class Punk {
     private double punkShotYPos;
     private boolean isDead;
     private boolean canHit;
+    private boolean canShoot;
     private boolean isShield;
     private ImageView punkImageView; //mainChar
     private Animation punkAnimation; //mainAni
@@ -45,6 +46,7 @@ public class Punk {
         setScorePerCoin(1);
         setImmortalDelay(false);
         setCanHit(true);
+        setCanShoot(true);
         setShield(false);
         punkImageView = new ImageView(new Image(ClassLoader.getSystemResource("Punk_idle.png").toString()));
         punkAnimation = new SpriteAnimation(punkImageView, Duration.millis(1000),4,4,0,0,48,48);
@@ -263,6 +265,14 @@ public class Punk {
 
     public void setCanHit(boolean canbeHit) {
         this.canHit = canbeHit;
+    }
+
+    public boolean isCanShoot() {
+        return canShoot;
+    }
+
+    public void setCanShoot(boolean canShoot) {
+        this.canShoot = canShoot;
     }
 
     public boolean isShield() {

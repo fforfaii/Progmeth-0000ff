@@ -44,7 +44,7 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
             public void handle(long currentTime) {
                 // Slide X axis
                 if (currentTime - lastUpdate >= 6_000_000_000L) {
-                    GameLogic.slideXPos(minionImageView.getTranslateX(), minionImageView, 3);
+                    GameLogic.slideXPos(minionImageView.getTranslateX(), minionImageView, 4,getImageView().getFitWidth());
                     lastUpdate = currentTime;
                 }
                 // Get Position & Set to Minions class
@@ -70,7 +70,7 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check ghost hit
-                    GameLogic.checkGhostHit(currentPane, minionImageView);
+                    GameLogic.checkGhostHit(currentPane, getInstance());
                 }
             }
         };
@@ -109,7 +109,6 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
     public void setYPos(double yPos) {
         this.yPos = yPos;
     }
-    public void effect(){}
     @Override
     public void hitDamage() {
         Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
@@ -136,9 +135,10 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
         SequentialTransition sequentialTransition = new SequentialTransition(translateYTransitionDown, translateYTransitionUp);
         sequentialTransition.play();
     }
+
     public static Minion getInstance() {
         if (instance == null) {
-            instance = new Minion(10.0,0.0);
+            instance = new Minion(10.0, 0.0);
         }
         return instance;
     }

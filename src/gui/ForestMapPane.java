@@ -10,10 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import logic.GameLogic;
-import logic.character.AttackGhost;
-import logic.character.Enemy;
-import logic.character.Minion;
-import logic.character.Punk;
+import logic.character.*;
 import main.Main;
 import utils.Constant;
 
@@ -30,7 +27,7 @@ public class ForestMapPane extends AnchorPane {
     private HpBoard hpBoard;
     private ScoreBoard scoreBoard;
     int randomIndex;
-    private boolean canShoot;
+//    private boolean canShoot; --> set in Punk instead set in here
     private int addScore = 1;
     Punk punk;
     ArrayList<Enemy> enemies;
@@ -44,7 +41,7 @@ public class ForestMapPane extends AnchorPane {
         punk = new Punk();
         punk.initPunkAnimation();
         setTopAnchor(punk.getPunkImageView(),453.0);
-        canShoot = true;
+        punk.setCanShoot(true);
         getChildren().addAll(groundImageView, punk.getPunkImageView(), punk.getPunkShot());
         GameLogic.setIsGameOver(false);
 
@@ -90,6 +87,16 @@ public class ForestMapPane extends AnchorPane {
                 getChildren().add(((AttackGhost) enemies.get(i)).getFireBall());
             }
         }
+        for (int i = 6; i < 8; i++) {
+            Random random = new Random();
+            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+            System.out.println("RanX : "+ randomX +", RandY: "+randomY);
+            enemies.add(new MindGhost(randomX, randomY));
+            setTopAnchor(enemies.get(i).getImageView(), 50.0);
+            enemies.get(i).runAnimation(this);
+            getChildren().add(enemies.get(i).getImageView());
+        }
 
         // Set exit Button
         pause = new ImageView(new Image(ClassLoader.getSystemResource("exit.png").toString()));
@@ -107,28 +114,35 @@ public class ForestMapPane extends AnchorPane {
         });
 
         //Event Handler for KeyPressed
+        getPlayerInput();
+
+        //update game
+        GameLogic.checkPunkShotHit(this, enemies);
+    }
+
+    private void getPlayerInput() {
         Set<KeyCode> pressedKeys = new HashSet<>();
         this.setOnKeyPressed(event -> {
             pressedKeys.add(event.getCode());
-            Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(punk.getDelayShoot()), e -> canShoot = true));
+            Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(punk.getDelayShoot()), e -> punk.setCanShoot(true)));
 
             if (pressedKeys.contains(KeyCode.D) && pressedKeys.contains(KeyCode.SPACE)) {
                 // Move right and shoot
                 System.out.println("D & SPACE");
-                if (canShoot){
+                if (punk.isCanShoot()){
                     punk.setXPos(punk.getPunkImageView().getLayoutX());
                     punk.shoot();
-                    canShoot = false;
+                    punk.setCanShoot(false);
                     delayShoot.play();
                 }
                 punk.runRight();
             } else if (pressedKeys.contains(KeyCode.A) && pressedKeys.contains(KeyCode.SPACE)){
                 // Move left and shoot
                 System.out.println("A & SPACE");
-                if (canShoot){
+                if (punk.isCanShoot()){
                     punk.setXPos(punk.getPunkImageView().getLayoutX());
                     punk.shoot();
-                    canShoot = false;
+                    punk.setCanShoot(false);
                     delayShoot.play();
                 }
                 punk.runLeft();
@@ -146,11 +160,11 @@ public class ForestMapPane extends AnchorPane {
                 punk.runLeft();
             } else if (pressedKeys.contains(KeyCode.SPACE)) {
                 // Shoot
-                if (canShoot){
+                if (punk.isCanShoot()){
                     System.out.println("Boom!");
                     punk.setXPos(punk.getPunkImageView().getLayoutX());
                     punk.shoot();
-                    canShoot = false;
+                    punk.setCanShoot(false);
                     delayShoot.play();
                 }
             }
@@ -159,10 +173,15 @@ public class ForestMapPane extends AnchorPane {
             pressedKeys.remove(event.getCode());
             punk.setPunkAnimation(punk.getPunkIdle(), 4, 4, 48, 48);
         });
-
-        //update game
-        GameLogic.checkPunkShotHit(this, enemies);
     }
+
+//    public boolean isCanShoot() {
+//        return canShoot;
+//    }
+//
+//    public void setCanShoot(boolean canShoot) {
+//        this.canShoot = canShoot;
+//    }
 
     private void fadeExitPage() {
         FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), this);
