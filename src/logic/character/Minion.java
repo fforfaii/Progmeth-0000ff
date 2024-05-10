@@ -10,12 +10,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import logic.GameLogic;
+import logic.ability.GoDownable;
+import logic.ability.Hitable;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class Minion extends Enemy { //can do nothing but player needs to avoid
+public class Minion extends Enemy implements Hitable, GoDownable { //can do nothing but player needs to avoid
     private static Minion instance;
+    private int hp;
     private double xPos;
     private double yPos;
     private ImageView minionImageView;
@@ -25,7 +28,7 @@ public class Minion extends Enemy { //can do nothing but player needs to avoid
         setHp(1);
         setXPos(x);
         setYPos(y);
-        minionImageView = new ImageView(new Image(ClassLoader.getSystemResource("ghost1.png").toString()));
+        minionImageView = new ImageView(new Image(ClassLoader.getSystemResource("minion.png").toString()));
         minionAnimation = new SpriteAnimation(minionImageView,Duration.millis(1000),6,6,0,0,48,48);
         minionAnimation.setCycleCount(Animation.INDEFINITE);
         minionImageView.setFitHeight(80);
@@ -73,6 +76,45 @@ public class Minion extends Enemy { //can do nothing but player needs to avoid
         };
         GhostAnimationTimer.start();
     }
+    public ImageView getImageView() {
+        return minionImageView;
+    }
+
+    public Animation getAnimation(){
+        return minionAnimation;
+    }
+
+    @Override
+    public int getHp() {
+        return hp;
+    }
+
+    @Override
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
+    public double getXPos() {
+        return xPos;
+    }
+
+    public void setXPos(double xPos) {
+        this.xPos = xPos + 10;
+    }
+
+    public double getYPos() {
+        return yPos;
+    }
+
+    public void setYPos(double yPos) {
+        this.yPos = yPos;
+    }
+    public void effect(){}
+    @Override
+    public void hitDamage() {
+        Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
+    }
+    @Override
     public void goDown(ImageView imageView) {
         // Move down
         TranslateTransition translateYTransitionDown = new TranslateTransition(Duration.seconds(2), imageView);
@@ -92,34 +134,6 @@ public class Minion extends Enemy { //can do nothing but player needs to avoid
         SequentialTransition sequentialTransition = new SequentialTransition(translateYTransitionDown, translateYTransitionUp);
         sequentialTransition.play();
     }
-    public ImageView getImageView() {
-        return minionImageView;
-    }
-
-    public Animation getAnimation(){
-        return minionAnimation;
-    }
-
-    public double getXPos() {
-        return xPos;
-    }
-
-    public void setXPos(double xPos) {
-        this.xPos = xPos + 10;
-    }
-
-    public double getYPos() {
-        return yPos;
-    }
-
-    public void setYPos(double yPos) {
-        this.yPos = yPos;
-    }
-
-    public void hitDamage(){
-        Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
-    }
-    public void effect(){}
     public static Minion getInstance() {
         if (instance == null) {
             instance = new Minion(10.0,0.0);
