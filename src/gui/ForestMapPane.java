@@ -134,62 +134,6 @@ public class ForestMapPane extends AnchorPane {
         //update game
         GameLogic.checkPunkShotHit(this, enemies);
     }
-
-    private void getPlayerInput() {
-        Set<KeyCode> pressedKeys = new HashSet<>();
-        this.setOnKeyPressed(event -> {
-            pressedKeys.add(event.getCode());
-            Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(punk.getDelayShoot()), e -> punk.setCanShoot(true)));
-
-            if (pressedKeys.contains(KeyCode.D) && pressedKeys.contains(KeyCode.SPACE)) {
-                // Move right and shoot
-                System.out.println("D & SPACE");
-                if (punk.isCanShoot()){
-                    punk.setXPos(punk.getPunkImageView().getLayoutX());
-                    punk.shoot();
-                    punk.setCanShoot(false);
-                    delayShoot.play();
-                }
-                punk.runRight();
-            } else if (pressedKeys.contains(KeyCode.A) && pressedKeys.contains(KeyCode.SPACE)){
-                // Move left and shoot
-                System.out.println("A & SPACE");
-                if (punk.isCanShoot()){
-                    punk.setXPos(punk.getPunkImageView().getLayoutX());
-                    punk.shoot();
-                    punk.setCanShoot(false);
-                    delayShoot.play();
-                }
-                punk.runLeft();
-            } else if (pressedKeys.contains(KeyCode.D)) {
-                // Move right
-                System.out.println("D");
-                punk.setXPos(punk.getPunkImageView().getLayoutX());
-                System.out.println("XPos : punk.getXPos()");
-                punk.runRight();
-            } else if (pressedKeys.contains(KeyCode.A)){
-                //Move Left
-                System.out.println("A");
-                punk.setXPos(punk.getPunkImageView().getLayoutX());
-                System.out.println("XPos : punk.getXPos()");
-                punk.runLeft();
-            } else if (pressedKeys.contains(KeyCode.SPACE)) {
-                // Shoot
-                if (punk.isCanShoot()){
-                    System.out.println("Boom!");
-                    punk.setXPos(punk.getPunkImageView().getLayoutX());
-                    punk.shoot();
-                    punk.setCanShoot(false);
-                    delayShoot.play();
-                }
-            }
-        });
-        this.setOnKeyReleased(event -> {
-            pressedKeys.remove(event.getCode());
-            punk.setPunkAnimation(punk.getPunkIdle(), 4, 4, 48, 48);
-        });
-    }
-
 //    private void ReversegetPlayerInput() {
 //        Set<KeyCode> pressedKeys = new HashSet<>();
 //        Punk punk = Punk.getInstance();
