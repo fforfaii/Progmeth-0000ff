@@ -110,7 +110,7 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
         this.yPos = yPos;
     }
     @Override
-    public void hitDamage() {
+    public void hitDamage(AnchorPane currentPane) {
         Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
     }
     @Override

@@ -10,6 +10,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import logic.ability.Hitable;
@@ -19,6 +20,7 @@ import main.Main;
 import utils.Constant;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -29,7 +31,148 @@ public class GameLogic {
     private static String currentMap;
     private static boolean splashDelay = false;
     private static boolean isGameOver = false;
+    private static boolean isLeftKeyPressed = false;
+    private static boolean isRightKeyPressed = false;
+    private static boolean isSpaceKeyPressed = false;
+    private static Timeline continuousMovement = new Timeline(new KeyFrame(Duration.seconds(3), e -> System.out.println("YAY from normal")));
+    private static Timeline reverseContinuousMovement = new Timeline(new KeyFrame(Duration.seconds(3), e -> System.out.println("YAY from reverse")));;
 
+    public static void getPlayerInput(AnchorPane currentPane) {
+        Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), e -> Punk.getInstance().setCanShoot(true)));
+
+        continuousMovement = new Timeline(new KeyFrame(Duration.millis(50), e -> {
+            if (isLeftKeyPressed && isSpaceKeyPressed) {
+                // Move left and shoot
+                Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
+                Punk.getInstance().runLeft();
+                if (Punk.getInstance().isCanShoot()){
+                    Punk.getInstance().shoot();
+                    Punk.getInstance().setCanShoot(false);
+                    delayShoot.play();
+                }
+            } else if (isRightKeyPressed && isSpaceKeyPressed) {
+                // Move right and shoot
+                Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
+                Punk.getInstance().runRight();
+                if (Punk.getInstance().isCanShoot()){
+                    Punk.getInstance().shoot();
+                    Punk.getInstance().setCanShoot(false);
+                    delayShoot.play();
+                }
+            } else if (isLeftKeyPressed) {
+                // Move left
+                System.out.println("Normal Click");
+                Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
+                Punk.getInstance().runLeft();
+            } else if (isRightKeyPressed) {
+                // Move right
+                System.out.println("Normal Click");
+                Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
+                Punk.getInstance().runRight();
+            } else if (isSpaceKeyPressed && Punk.getInstance().isCanShoot()){
+                System.out.println("Boom!");
+                Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
+                Punk.getInstance().shoot();
+                Punk.getInstance().setCanShoot(false);
+                delayShoot.play();
+            }
+        }));
+        continuousMovement.setCycleCount(Timeline.INDEFINITE);
+
+        currentPane.setOnKeyPressed(event -> {
+            KeyCode keyCode = event.getCode();
+            if (keyCode == KeyCode.A) {
+                isLeftKeyPressed = true;
+            } else if (keyCode == KeyCode.D) {
+                isRightKeyPressed = true;
+            } else if (keyCode == KeyCode.SPACE) {
+                isSpaceKeyPressed = true;
+            }
+        });
+
+        currentPane.setOnKeyReleased(event -> {
+            KeyCode keyCode = event.getCode();
+            if (keyCode == KeyCode.A) {
+                isLeftKeyPressed = false;
+            } else if (keyCode == KeyCode.D) {
+                isRightKeyPressed = false;
+            } else if (keyCode == KeyCode.SPACE) {
+                isSpaceKeyPressed = false;
+            }
+            Punk.getInstance().setPunkAnimation(Punk.getInstance().getPunkIdle(), 4, 4, 48, 48);
+        });
+
+        continuousMovement.play();
+    }
+    public static void reversePlayerInput(AnchorPane currentPane) {
+        Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), e -> Punk.getInstance().setCanShoot(true)));
+
+        reverseContinuousMovement = new Timeline(new KeyFrame(Duration.millis(50), e -> {
+            if (isRightKeyPressed && isSpaceKeyPressed) {
+                // Move left and shoot
+                System.out.println("Reverse Clicked");
+                Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
+                Punk.getInstance().runLeft();
+                if (Punk.getInstance().isCanShoot()){
+                    Punk.getInstance().shoot();
+                    Punk.getInstance().setCanShoot(false);
+                    delayShoot.play();
+                }
+            } else if (isLeftKeyPressed && isSpaceKeyPressed) {
+                // Move right and shoot
+                System.out.println("Reverse Clicked");
+                Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
+                Punk.getInstance().runRight();
+                if (Punk.getInstance().isCanShoot()){
+                    Punk.getInstance().shoot();
+                    Punk.getInstance().setCanShoot(false);
+                    delayShoot.play();
+                }
+            } else if (isRightKeyPressed) {
+                // Move left
+                Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
+                System.out.println("Reverse Clicked");
+                Punk.getInstance().runLeft();
+            } else if (isLeftKeyPressed) {
+                // Move right
+                Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
+                System.out.println("Reverse Clicked");
+                Punk.getInstance().runRight();
+            } else if (isSpaceKeyPressed && Punk.getInstance().isCanShoot()){
+                System.out.println("Boom!");
+                Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
+                Punk.getInstance().shoot();
+                Punk.getInstance().setCanShoot(false);
+                delayShoot.play();
+            }
+        }));
+        reverseContinuousMovement.setCycleCount(Timeline.INDEFINITE);
+
+        currentPane.setOnKeyPressed(event -> {
+            KeyCode keyCode = event.getCode();
+            if (keyCode == KeyCode.A) {
+                isLeftKeyPressed = true;
+            } else if (keyCode == KeyCode.D) {
+                isRightKeyPressed = true;
+            } else if (keyCode == KeyCode.SPACE) {
+                isSpaceKeyPressed = true;
+            }
+        });
+
+        currentPane.setOnKeyReleased(event -> {
+            KeyCode keyCode = event.getCode();
+            if (keyCode == KeyCode.A) {
+                isLeftKeyPressed = false;
+            } else if (keyCode == KeyCode.D) {
+                isRightKeyPressed = false;
+            } else if (keyCode == KeyCode.SPACE) {
+                isSpaceKeyPressed = false;
+            }
+            Punk.getInstance().setPunkAnimation(Punk.getInstance().getPunkIdle(), 4, 4, 48, 48);
+        });
+
+        reverseContinuousMovement.play();
+    }
     public static String getCurrentMap() {
         return currentMap;
     }
@@ -180,27 +323,27 @@ public class GameLogic {
         );
         if (GhostBounds.intersects(mainCharBounds) && enemy.getImageView().isVisible()) {
             System.out.println("Ghost hit detected");
-            if (enemy instanceof Hitable) {
-                if (enemy instanceof Minion) {
-                    enemy.hitDamage();
-//                    Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
-                    deleteHeart(currentPane);
-                }
-                if (enemy instanceof MindGhost) {
-                    ((MindGhost) enemy).setCurrentPane(currentPane);
-                    enemy.hitDamage();
-                    Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(4), event -> {
-                            ((MindGhost) enemy).BacktoNormal();
-                    }));
-                    cooldownTimer.play();
-                }
-                if (enemy instanceof SlowGhost) {
-                    enemy.hitDamage();
-                }
-            }
-            Punk.getInstance().setImmortalDelay(true);
-            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
-            delayTimer.play();
+//            if (enemy instanceof Hitable) {
+//                if (enemy instanceof Minion) {
+//                    enemy.hitDamage();
+////                    Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
+//                    deleteHeart(currentPane);
+//                }
+//                if (enemy instanceof MindGhost) {
+//                    ((MindGhost) enemy).setCurrentPane(currentPane);
+//                    enemy.hitDamage();
+//                    Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(4), event -> {
+//                            ((MindGhost) enemy).BacktoNormal();
+//                    }));
+//                    cooldownTimer.play();
+//                }
+//                if (enemy instanceof SlowGhost) {
+//                    enemy.hitDamage();
+//                }
+//            }
+//            Punk.getInstance().setImmortalDelay(true);
+//            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
+//            delayTimer.play();
         }
     }
     public static void deleteHeart(AnchorPane currentPane) {
@@ -299,5 +442,13 @@ public class GameLogic {
 
     public static void setIsGameOver(boolean isGameOver) {
         GameLogic.isGameOver = isGameOver;
+    }
+
+    public static Timeline getContinuousMovement() {
+        return continuousMovement;
+    }
+
+    public static Timeline getReverseContinuousMovement() {
+        return reverseContinuousMovement;
     }
 }

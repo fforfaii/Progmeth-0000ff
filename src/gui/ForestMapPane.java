@@ -10,6 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import logic.GameLogic;
+import logic.ability.Hitable;
 import logic.character.*;
 import main.Main;
 import utils.Constant;
@@ -62,6 +63,9 @@ public class ForestMapPane extends AnchorPane {
         setTopAnchor(scoreBoard,8.0);
         getChildren().addAll(hpBoard, scoreBoard);
 
+        //Event Handler for KeyPressed
+        GameLogic.getPlayerInput(this);
+
         //Set enemies
         enemies = new ArrayList<>();
         for (int i = 0; i < 3; i++){
@@ -87,7 +91,7 @@ public class ForestMapPane extends AnchorPane {
                 getChildren().add(((AttackGhost) enemies.get(i)).getFireBall());
             }
         }
-        for (int i = 6; i < 8; i++) {
+        for (int i = 6; i < 7; i++) {
             Random random = new Random();
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
@@ -96,6 +100,9 @@ public class ForestMapPane extends AnchorPane {
             setTopAnchor(enemies.get(i).getImageView(), 50.0);
             enemies.get(i).runAnimation(this);
             getChildren().add(enemies.get(i).getImageView());
+//            if (enemies.get(i) instanceof Hitable){
+//                ((Hitable) enemies.get(i)).hitDamage(this);
+//            }
         }
 
         // Set exit Button
@@ -108,13 +115,10 @@ public class ForestMapPane extends AnchorPane {
         pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                GameLogic.setHighscoreEachMap(Constant.getIndexMap("ForestMap"),punk.getScore());
+                GameLogic.setHighscoreEachMap(Constant.getIndexMap("ForestMap"), punk.getScore());
                 fadeExitPage();
             }
         });
-
-        //Event Handler for KeyPressed
-        getPlayerInput();
 
         //update game
         GameLogic.checkPunkShotHit(this, enemies);
