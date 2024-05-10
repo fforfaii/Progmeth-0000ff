@@ -9,7 +9,7 @@ import java.util.Random;
 public abstract class Enemy { //template for every enemy
     int hp;
     public abstract void hitDamage();
-    public abstract void effect();
+//    public abstract void effect();
     public abstract void runAnimation(AnchorPane currentPane);
     public abstract ImageView getImageView();
     public static double randYPos(){

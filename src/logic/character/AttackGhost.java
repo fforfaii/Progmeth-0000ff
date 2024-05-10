@@ -60,7 +60,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
             public void handle(long currentTime) {
                 // Slide X axis
                 if (currentTime - lastMove >= 6_000_000_000L) {
-                    double newRandomStart = GameLogic.slideXPos(randomStart, attackGhostImageView, 3);
+                    double newRandomStart = GameLogic.slideXPos(randomStart, attackGhostImageView, 3,getImageView().getFitWidth());
                     lastMove = currentTime;
                     randomStart = newRandomStart;
                 }
