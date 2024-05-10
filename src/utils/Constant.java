@@ -1,6 +1,7 @@
 package utils;
 
-import gui.FactoryMapPane;
+import gui.*;
+import javafx.scene.Node;
 
 import java.util.ArrayList;
 
@@ -43,6 +44,20 @@ public class Constant {
             case "JungleMap":
                 return 3;
             default: return -1;
+        }
+    }
+
+    public static Node getinstanceMap(String mapname) {
+        switch (mapname) {
+            case "CaveMap":
+                return CaveMapPane.getInstance();
+            case "ForestMap":
+                return ForestMapPane.getInstance();
+            case "FactoryMap":
+                return FactoryMapPane.getInstance();
+            case "JungleMap":
+                return JungleMapPane.getInstance();
+            default: return LoginPane.getInstance();
         }
     }
 }

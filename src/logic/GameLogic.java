@@ -15,6 +15,7 @@ import javafx.util.Duration;
 import logic.character.AttackGhost;
 import logic.character.Enemy;
 import logic.character.Punk;
+import logic.character.SlowGhost;
 import logic.skills.*;
 import main.Main;
 import utils.Constant;
@@ -26,7 +27,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GameLogic {
-    private static ArrayList<Integer> HighScore = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
+    private static final ArrayList<Integer> HighScore = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
     private static String currentMap;
     private static boolean splashDelay = false;
     private static boolean isGameOver = false;
@@ -113,10 +114,14 @@ public class GameLogic {
                     Bounds punkShotBounds = Punk.getInstance().getPunkShot().getBoundsInParent();
                     Bounds GhostBounds = eachEnemy.getImageView().getBoundsInParent();
                     if (punkShotBounds.intersects(GhostBounds) && Punk.getInstance().getPunkShot().isVisible()){
-                        // Don't forget to set HP of that ghost
-                        currentPane.getChildren().remove(eachEnemy.getImageView());
-                        if (eachEnemy instanceof AttackGhost){
-                            currentPane.getChildren().remove(((AttackGhost) eachEnemy).getFireBall());
+                        eachEnemy.setHp(eachEnemy.getHp() - 1); // Decrease Ghost HP when hit
+                        if (eachEnemy instanceof SlowGhost) ((SlowGhost) eachEnemy).noDecreaseHP(); // Undecrease SlowGhost HP (immortal)
+                        if (eachEnemy.getHp() == 0) {
+                            currentPane.getChildren().remove(eachEnemy.getImageView());
+                            if (eachEnemy instanceof AttackGhost){
+                                // Get AttackGhost's Fireball out !
+                                currentPane.getChildren().remove(((AttackGhost) eachEnemy).getFireBall());
+                            }
                         }
                         splashDelay = true;
                         Timeline delay = new Timeline(new KeyFrame(Duration.seconds(Math.max(0.5, Punk.getInstance().getDelayShoot() - 1)), event -> splashDelay = false));
@@ -132,6 +137,9 @@ public class GameLogic {
         if (Punk.getInstance().isImmortalDelay()) {
             return;
         }
+        if (!Punk.getInstance().isCanHit()) {
+            return;
+        }
         Bounds FireballBounds = fireball.getBoundsInParent();
         Bounds mainCharBounds = new BoundingBox(
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getMinX() + 20,
@@ -141,6 +149,10 @@ public class GameLogic {
         );
         if (FireballBounds.intersects(mainCharBounds) && fireball.isVisible()) {
             System.out.println("FireBall hit detected");
+            if (Punk.getInstance().isShield()){
+                Shield.setIsHit(true);
+                return;
+            }
             Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
             fireball.setTranslateY(0.0);
             fireball.setVisible(false);

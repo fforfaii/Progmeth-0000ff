@@ -65,7 +65,7 @@ public class CaveMapPane extends AnchorPane {
         runLeft = new Image(ClassLoader.getSystemResource("Punk_runleft.png").toString());
         runRight = new Image(ClassLoader.getSystemResource("Punk_runright.png").toString());
         Idle = new Image(ClassLoader.getSystemResource("Punk_idle.png").toString());
-        attackGhostImage = new Image(ClassLoader.getSystemResource("ghost2.png").toString());
+        attackGhostImage = new Image(ClassLoader.getSystemResource("attackghost.png").toString());
 
         // Set Main Character
         punk = new Punk();

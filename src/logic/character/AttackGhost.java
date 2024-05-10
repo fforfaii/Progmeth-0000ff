@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AttackGhost extends Enemy { //normal ghost that can attack punk. no hit damage
     private static AttackGhost instance;
+    private int hp;
     private double xPos;
     private double yPos;
     private ImageView attackGhostImageView;
@@ -24,7 +25,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
         setHp(1);
         setXPos(x);
         setYPos(y);
-        attackGhostImageView = new ImageView(new Image(ClassLoader.getSystemResource("ghost2.png").toString()));
+        attackGhostImageView = new ImageView(new Image(ClassLoader.getSystemResource("attackghost.png").toString()));
         attackghostAnimation = new SpriteAnimation(attackGhostImageView, Duration.millis(1000), 6, 6, 0, 0, 48, 48);
         attackghostAnimation.setCycleCount(Animation.INDEFINITE);
         attackGhostImageView.setFitWidth(80);
@@ -95,6 +96,16 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
 
     public void effect(){}
 
+    @Override
+    public int getHp() {
+        return hp;
+    }
+
+    @Override
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
     public double getXPos() {
         return xPos;
     }
@@ -114,7 +125,6 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
     public ImageView getFireBall(){
         return fireBall;
     }
-
     public static AttackGhost getInstance() {
         if (instance == null) {
             instance = new AttackGhost(10.0, 10.0);

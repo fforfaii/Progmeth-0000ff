@@ -21,6 +21,8 @@ public class Punk {
     private double punkShotXPos;
     private double punkShotYPos;
     private boolean isDead;
+    private boolean canHit;
+    private boolean isShield;
     private ImageView punkImageView; //mainChar
     private Animation punkAnimation; //mainAni
     private Image runLeft; //runLeft
@@ -42,6 +44,8 @@ public class Punk {
         setDelayShoot(3);
         setScorePerCoin(1);
         setImmortalDelay(false);
+        setCanHit(true);
+        setShield(false);
         punkImageView = new ImageView(new Image(ClassLoader.getSystemResource("Punk_idle.png").toString()));
         punkAnimation = new SpriteAnimation(punkImageView, Duration.millis(1000),4,4,0,0,48,48);
         runLeft = new Image(ClassLoader.getSystemResource("Punk_runleft.png").toString());
@@ -251,5 +255,21 @@ public class Punk {
 
     public void setImmortalDelay(boolean immortalDelay) {
         this.immortalDelay = immortalDelay;
+    }
+
+    public boolean isCanHit() {
+        return canHit;
+    }
+
+    public void setCanHit(boolean canbeHit) {
+        this.canHit = canbeHit;
+    }
+
+    public boolean isShield() {
+        return isShield;
+    }
+
+    public void setShield(boolean shield) {
+        isShield = shield;
     }
 }
