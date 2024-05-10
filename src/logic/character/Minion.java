@@ -41,7 +41,7 @@ public class Minion extends Enemy { //can do nothing but player needs to avoid
             public void handle(long currentTime) {
                 // Slide X axis
                 if (currentTime - lastUpdate >= 6_000_000_000L) {
-                    GameLogic.slideXPos(minionImageView.getTranslateX(), minionImageView, 4);
+                    GameLogic.slideXPos(minionImageView.getTranslateX(), minionImageView, 3);
                     lastUpdate = currentTime;
                 }
                 // Get Position & Set to Minions class
@@ -76,7 +76,7 @@ public class Minion extends Enemy { //can do nothing but player needs to avoid
     public void goDown(ImageView imageView) {
         // Move down
         TranslateTransition translateYTransitionDown = new TranslateTransition(Duration.seconds(2), imageView);
-        translateYTransitionDown.setFromY(0);
+        translateYTransitionDown.setFromY(imageView.getTranslateY());
         translateYTransitionDown.setToY(460);
         translateYTransitionDown.setCycleCount(1);
         translateYTransitionDown.setAutoReverse(true);
@@ -84,7 +84,9 @@ public class Minion extends Enemy { //can do nothing but player needs to avoid
         // Move up
         TranslateTransition translateYTransitionUp = new TranslateTransition(Duration.seconds(2), imageView);
         translateYTransitionUp.setFromY(460);
-        translateYTransitionUp.setToY(0);
+        randYPos();
+        translateYTransitionUp.setToY(randYPos());
+        imageView.setTranslateY(randYPos());
         translateYTransitionUp.setCycleCount(1);
         translateYTransitionUp.setAutoReverse(true);
         translateYTransitionUp.setDelay(Duration.seconds(0)); // No Delay before moving up

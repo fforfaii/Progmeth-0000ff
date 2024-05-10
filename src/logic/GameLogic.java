@@ -27,14 +27,16 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class GameLogic {
     private static ArrayList<Integer> HighScore = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
-    private static String CurrentMap;
+    private static String currentMap;
+    private static boolean splashDelay = false;
+    private static boolean isGameOver = false;
 
     public static String getCurrentMap() {
-        return CurrentMap;
+        return currentMap;
     }
 
-    public static void setCurrentMap(String currentMap) {
-        CurrentMap = currentMap;
+    public static void setCurrentMap(String currentMapIn) {
+        currentMap = currentMapIn;
     }
 
     public static void setHighscoreEachMap(int indexMap, int newscore) {
@@ -105,14 +107,20 @@ public class GameLogic {
             @Override
             public void handle(long currentTime) {
                 for (Enemy eachEnemy: enemies){
-                    Bounds BoomBounds = Punk.getInstance().getPunkShot().getBoundsInParent();
+                    if (splashDelay){
+                        return;
+                    }
+                    Bounds punkShotBounds = Punk.getInstance().getPunkShot().getBoundsInParent();
                     Bounds GhostBounds = eachEnemy.getImageView().getBoundsInParent();
-                    if (BoomBounds.intersects(GhostBounds) && Punk.getInstance().getPunkShot().isVisible()){
+                    if (punkShotBounds.intersects(GhostBounds) && Punk.getInstance().getPunkShot().isVisible()){
                         // Don't forget to set HP of that ghost
                         currentPane.getChildren().remove(eachEnemy.getImageView());
                         if (eachEnemy instanceof AttackGhost){
                             currentPane.getChildren().remove(((AttackGhost) eachEnemy).getFireBall());
                         }
+                        splashDelay = true;
+                        Timeline delay = new Timeline(new KeyFrame(Duration.seconds(Math.max(0.5, Punk.getInstance().getDelayShoot() - 1)), event -> splashDelay = false));
+                        delay.play();
                     }
                 }
             }
@@ -177,8 +185,12 @@ public class GameLogic {
         if (Punk.getInstance().isDead()){
             return;
         }
+        if (isGameOver()){
+            return;
+        }
         if (Punk.getInstance().getHp() == 0) {
             Punk.getInstance().setDead(true);
+            setIsGameOver(true);
             FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), currentPane);
             fadeOut.setFromValue(1.0);
             fadeOut.setToValue(0.0);
@@ -253,5 +265,13 @@ public class GameLogic {
     public static ImageView getGroundImage(String ImgPath){
         Image groundImage = new Image(ClassLoader.getSystemResource(ImgPath).toString());
         return new ImageView(groundImage);
+    }
+
+    public static boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public static void setIsGameOver(boolean isGameOver) {
+        GameLogic.isGameOver = isGameOver;
     }
 }
