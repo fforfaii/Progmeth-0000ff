@@ -43,6 +43,7 @@ public class ForestMapPane extends AnchorPane {
         setTopAnchor(punk.getPunkImageView(),453.0);
         punk.setCanShoot(true);
         getChildren().addAll(groundImageView, punk.getPunkImageView(), punk.getPunkShot());
+        GameLogic.setIsGameOver(false);
 
         // Set Coin
         coin = new ImageView(new Image(ClassLoader.getSystemResource("coin.png").toString()));
@@ -67,7 +68,7 @@ public class ForestMapPane extends AnchorPane {
             Random random = new Random();
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-            System.out.println("RanX : "+ randomX +", RandY: "+randomY);
+            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
             enemies.add(new Minion(randomX, randomY));
             setTopAnchor(enemies.get(i).getImageView(), 50.0);
             enemies.get(i).runAnimation(this);
@@ -77,7 +78,7 @@ public class ForestMapPane extends AnchorPane {
             Random random = new Random();
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-            System.out.println("RanX : "+ randomX +", RandY: "+randomY);
+            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
             enemies.add(new AttackGhost(randomX, randomY));
             setTopAnchor(enemies.get(i).getImageView(), 50.0);
             enemies.get(i).runAnimation(this);
@@ -230,6 +231,7 @@ public class ForestMapPane extends AnchorPane {
             public void handle(long currentTime) {
                 double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
                 System.out.println("playerScore = " + punk.getScore() + " fall : " + coin.getTranslateY());
+                System.out.println("playerHp = " + punk.getHp());
                 if (elapsedTimeSeconds >= durations.get(randomIndex)) {
                     coin.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
                     coin.setTranslateY(0.0);
@@ -256,12 +258,6 @@ public class ForestMapPane extends AnchorPane {
             coinImage.setVisible(false);
         });
         fallTransition.play();
-    }
-    public double getXPos(ImageView imageView) {
-        return imageView.getTranslateX();
-    }
-    public double getYPos(ImageView imageView) {
-        return imageView.getTranslateY();
     }
     public static ForestMapPane getInstance() {
         if (instance == null) {
