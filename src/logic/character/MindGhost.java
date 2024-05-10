@@ -173,7 +173,7 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
 //    }
     @Override
     public void hitDamage(AnchorPane currentPane) {
-        if (!Punk.getInstance().isCanHit()) {
+        if (Punk.getInstance().isImmortalDelay()) {
             return;
         }
         GameLogic.getContinuousMovement().stop();
