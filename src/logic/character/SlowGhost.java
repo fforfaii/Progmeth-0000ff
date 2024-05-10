@@ -65,7 +65,6 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
                 if (xPosDown.contains(stay)) {
                     // remove used xPos
                     xPosDown.remove(xPosDown.indexOf(stay));
-                    System.out.println("stay = " + stay + " go down !!!!!!!!");
 
                     if (currentTime - lastUpdate >= 4_000_000_000L) {
                         goDown(slowGhostImageView);

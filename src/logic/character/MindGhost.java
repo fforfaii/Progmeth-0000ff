@@ -12,11 +12,12 @@ import logic.GameLogic;
 import logic.ability.GoDownable;
 import logic.ability.Hitable;
 import javafx.geometry.Rectangle2D;
+import logic.ability.Imperishable;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class MindGhost extends Enemy implements Hitable, GoDownable { //if hit: inverted control
+public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishable { //if hit: inverted control
     private static MindGhost instance;
     private int hp;
     private double xPos;
@@ -154,5 +155,10 @@ public class MindGhost extends Enemy implements Hitable, GoDownable { //if hit: 
 
     public void setCurrentPane(AnchorPane currentPane) {
         this.currentPane = currentPane;
+    }
+
+    @Override
+    public void noDecreaseHP() {
+        setHp(getHp() + 1);
     }
 }

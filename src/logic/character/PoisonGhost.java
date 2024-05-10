@@ -2,10 +2,7 @@ package logic.character;
 
 
 import gui.SpriteAnimation;
-import javafx.animation.Animation;
-import javafx.animation.AnimationTimer;
-import javafx.animation.SequentialTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -45,9 +42,12 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
     //need to check if hit or not in the GameLogic.update()
     @Override
     public void hitDamage() {
-
+        Punk.getInstance().setCanShoot(false);
+        Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(5), event -> Punk.getInstance().setCanShoot(true)));
+        cooldownTimer.play();
     }
     public void runAnimation(AnchorPane currentPane){
+        ArrayList<Integer> xPosDown = new ArrayList<>();
         ArrayList<Double> durations = new ArrayList<>();
         durations.add(2.0);
         durations.add(3.0);
@@ -66,13 +66,28 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
             public void handle(long currentTime) {
                 // Slide X axis
                 if (currentTime - lastMove >= 6_000_000_000L) {
-                    double newRandomStart = GameLogic.slideXPos(randomStart, poisonGhostImageView, 3,getImageView().getFitWidth());
+                    double newRandomStart = GameLogic.slideXPos(randomStart, poisonGhostImageView, 4,getImageView().getFitWidth());
                     lastMove = currentTime;
                     randomStart = newRandomStart;
                 }
                 // Get Position & Set to Minions class
                 setXPos(poisonGhostImageView.getTranslateX());
                 setYPos(poisonGhostImageView.getTranslateY());
+                // get random XPos
+                if (xPosDown.size() < 20) {
+                    xPosDown.add(xPosDown.size(), (int) GameLogic.randXPos());
+                }
+                // Check xPos to goDown
+                int stay = (int) poisonGhostImageView.getTranslateX();
+                if (xPosDown.contains(stay)) {
+                    // remove used xPos
+                    xPosDown.remove(xPosDown.indexOf(stay));
+
+                    if (currentTime - lastUpdate >= 4_000_000_000L) {
+                        goDown(poisonGhostImageView);
+                        lastUpdate = currentTime;
+                    }
+                }
                 // Release Power
                 double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
                 int randomIndex = GameLogic.randomIndex();
@@ -89,7 +104,7 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check poison hit
-                    GameLogic.checkPoisonHit(currentPane, Poison,getInstance());
+                    GameLogic.checkPoisonHit(Poison,getInstance());
                 }
             }
         };
@@ -124,6 +139,10 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
 
     public void setYPos(double yPos) {
         this.yPos = yPos;
+    }
+
+    public ImageView getPoison() {
+        return Poison;
     }
 
     @Override

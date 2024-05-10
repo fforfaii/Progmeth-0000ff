@@ -113,12 +113,21 @@ public class GameLogic {
                     Bounds GhostBounds = eachEnemy.getImageView().getBoundsInParent();
                     if (punkShotBounds.intersects(GhostBounds) && Punk.getInstance().getPunkShot().isVisible()){
                         eachEnemy.setHp(eachEnemy.getHp() - 1); // Decrease Ghost HP when hit
-                        if (eachEnemy instanceof SlowGhost) ((SlowGhost) eachEnemy).noDecreaseHP(); // Undecrease SlowGhost HP (immortal)
+                        if (eachEnemy instanceof SlowGhost){
+                            ((SlowGhost) eachEnemy).noDecreaseHP(); // Undecrease SlowGhost HP (immortal)
+                        }
+                        if (eachEnemy instanceof MindGhost){
+                            ((MindGhost) eachEnemy).noDecreaseHP(); // Undecrease MindGhost HP (immortal)
+                        }
                         if (eachEnemy.getHp() == 0) {
                             currentPane.getChildren().remove(eachEnemy.getImageView());
                             if (eachEnemy instanceof AttackGhost){
                                 // Get AttackGhost's Fireball out !
                                 currentPane.getChildren().remove(((AttackGhost) eachEnemy).getFireBall());
+                            }
+                            if (eachEnemy instanceof PoisonGhost){
+                                // Get PoisonGhost's Poison out !
+                                currentPane.getChildren().remove(((PoisonGhost) eachEnemy).getPoison());
                             }
                         }
                         splashDelay = true;
@@ -162,7 +171,7 @@ public class GameLogic {
     }
 
     //for PoisonGhost
-    public static void checkPoisonHit(AnchorPane currentPane, ImageView poison, PoisonGhost poisonGhost) {
+    public static void checkPoisonHit(ImageView poison, PoisonGhost poisonGhost) {
         if (Punk.getInstance().isImmortalDelay()) {
             return;
         }
@@ -187,7 +196,6 @@ public class GameLogic {
             poison.setTranslateY(poisonGhost.getYPos());
             poison.setTranslateX(poisonGhost.getXPos());
             poison.setVisible(false);
-            deleteHeart(currentPane);
             Punk.getInstance().setImmortalDelay(true);
             Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
             delayTimer.play();
