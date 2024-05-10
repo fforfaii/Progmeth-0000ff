@@ -70,7 +70,7 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check ghost hit
-                    GameLogic.checkGhostHit(currentPane, getInstance());
+                    GameLogic.checkGhostHit(currentPane, getInstance(), minionImageView);
                 }
             }
         };

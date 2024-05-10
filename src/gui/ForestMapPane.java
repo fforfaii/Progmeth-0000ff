@@ -27,6 +27,7 @@ public class ForestMapPane extends AnchorPane {
     private HpBoard hpBoard;
     private ScoreBoard scoreBoard;
     int randomIndex;
+    private boolean isMindControl; // for MindGhost
 //    private boolean canShoot; --> set in Punk instead set in here
     private int addScore = 1;
     Punk punk;
@@ -97,6 +98,7 @@ public class ForestMapPane extends AnchorPane {
             enemies.get(i).runAnimation(this);
             getChildren().add(enemies.get(i).getImageView());
         }
+        setMindControl(false);
 
         // Set exit Button
         pause = new ImageView(new Image(ClassLoader.getSystemResource("exit.png").toString()));
@@ -114,20 +116,25 @@ public class ForestMapPane extends AnchorPane {
         });
 
         //Event Handler for KeyPressed
-        getPlayerInput();
+        if (isMindControl){
+            ReversegetPlayerInput();
+        } else {
+            getPlayerInput();
+        }
+
 
         //update game
         GameLogic.checkPunkShotHit(this, enemies);
     }
-    public static void ReversegetPlayerInput() {
+    private void ReversegetPlayerInput() {
         Set<KeyCode> pressedKeys = new HashSet<>();
         Punk punk = Punk.getInstance();
-        ForestMapPane.getInstance().setOnKeyPressed(event -> {
+        this.setOnKeyPressed(event -> {
             pressedKeys.add(event.getCode());
             Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(punk.getDelayShoot()), e -> punk.setCanShoot(true)));
 
-            if (pressedKeys.contains(KeyCode.A) && pressedKeys.contains(KeyCode.SPACE)) {
-                // Move right and shoot
+            if (pressedKeys.contains(KeyCode.D) && pressedKeys.contains(KeyCode.SPACE)) {
+                // Move left and shoot
                 System.out.println("D & SPACE");
                 if (punk.isCanShoot()){
                     punk.setXPos(punk.getPunkImageView().getLayoutX());
@@ -135,8 +142,8 @@ public class ForestMapPane extends AnchorPane {
                     punk.setCanShoot(false);
                     delayShoot.play();
                 }
-                punk.runRight();
-            } else if (pressedKeys.contains(KeyCode.D) && pressedKeys.contains(KeyCode.SPACE)){
+                punk.runLeft();
+            } else if (pressedKeys.contains(KeyCode.A) && pressedKeys.contains(KeyCode.SPACE)){
                 // Move left and shoot
                 System.out.println("A & SPACE");
                 if (punk.isCanShoot()){
@@ -145,19 +152,19 @@ public class ForestMapPane extends AnchorPane {
                     punk.setCanShoot(false);
                     delayShoot.play();
                 }
-                punk.runLeft();
-            } else if (pressedKeys.contains(KeyCode.A)) {
+                punk.runRight();
+            } else if (pressedKeys.contains(KeyCode.D)) {
                 // Move right
                 System.out.println("D");
                 punk.setXPos(punk.getPunkImageView().getLayoutX());
                 System.out.println("XPos : punk.getXPos()");
-                punk.runRight();
-            } else if (pressedKeys.contains(KeyCode.D)){
+                punk.runLeft();
+            } else if (pressedKeys.contains(KeyCode.A)){
                 //Move Left
                 System.out.println("A");
                 punk.setXPos(punk.getPunkImageView().getLayoutX());
                 System.out.println("XPos : punk.getXPos()");
-                punk.runLeft();
+                punk.runRight();
             } else if (pressedKeys.contains(KeyCode.SPACE)) {
                 // Shoot
                 if (punk.isCanShoot()){
@@ -169,15 +176,15 @@ public class ForestMapPane extends AnchorPane {
                 }
             }
         });
-        ForestMapPane.getInstance().setOnKeyReleased(event -> {
+        this.setOnKeyReleased(event -> {
             pressedKeys.remove(event.getCode());
             punk.setPunkAnimation(punk.getPunkIdle(), 4, 4, 48, 48);
         });
     }
-    public static void getPlayerInput() {
+    private void getPlayerInput() {
         Set<KeyCode> pressedKeys = new HashSet<>();
         Punk punk = Punk.getInstance();
-        ForestMapPane.getInstance().setOnKeyPressed(event -> {
+        this.setOnKeyPressed(event -> {
             pressedKeys.add(event.getCode());
             Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(punk.getDelayShoot()), e -> punk.setCanShoot(true)));
 
@@ -224,7 +231,7 @@ public class ForestMapPane extends AnchorPane {
                 }
             }
         });
-        ForestMapPane.getInstance().setOnKeyReleased(event -> {
+        this.setOnKeyReleased(event -> {
             pressedKeys.remove(event.getCode());
             punk.setPunkAnimation(punk.getPunkIdle(), 4, 4, 48, 48);
         });
@@ -264,6 +271,14 @@ public class ForestMapPane extends AnchorPane {
 
     public void setAddScore(int addScore) {
         this.addScore = addScore;
+    }
+
+    public boolean isMindControl() {
+        return isMindControl;
+    }
+
+    public void setMindControl(boolean mindControl) {
+        isMindControl = mindControl;
     }
 
     public int randomIndex() {
