@@ -46,7 +46,7 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
             public void handle(long currentTime) {
                 // Slide X axis
                 if (currentTime - lastUpdate >= 6_000_000_000L) {
-                    GameLogic.slideXPos(mindGhostImageView.getTranslateX(), mindGhostImageView, 5,getImageView().getFitWidth()+10.0);
+                    GameLogic.slideXPos(mindGhostImageView.getTranslateX(), mindGhostImageView, 5,getImageView().getFitWidth() + 10.0);
                     lastUpdate = currentTime;
                 }
                 // Get Position & Set to Minions class

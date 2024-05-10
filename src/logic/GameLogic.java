@@ -314,36 +314,36 @@ public class GameLogic {
     }
 
     //for PoisonGhost
-//    public static void checkPoisonHit(ImageView poison, PoisonGhost poisonGhost) {
-//        if (Punk.getInstance().isImmortalDelay()) {
-//            return;
-//        }
-//        if (!Punk.getInstance().isCanHit()) {
-//            return;
-//        }
-//        Bounds FireballBounds = poison.getBoundsInParent();
-//        Bounds mainCharBounds = new BoundingBox(
-//                Punk.getInstance().getPunkImageView().getBoundsInParent().getMinX() + 20,
-//                Punk.getInstance().getPunkImageView().getBoundsInParent().getMinY() + 22,
-//                20,
-//                Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() / 2
-//        );
-//        if (FireballBounds.intersects(mainCharBounds) && poison.isVisible()) {
-//            System.out.println("Poison hit detected");
-//            if (Punk.getInstance().isShield()){
-//                Shield.setIsHit(true);
-//                return;
-//            }
-//            poisonGhost.hitDamage();
-//            // set position of poison at the same as PoisonGhost
-//            poison.setTranslateY(poisonGhost.getYPos());
-//            poison.setTranslateX(poisonGhost.getXPos());
-//            poison.setVisible(false);
-//            Punk.getInstance().setImmortalDelay(true);
-//            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
-//            delayTimer.play();
-//        }
-//    }
+    public static void checkPoisonHit(AnchorPane currentPane, ImageView poison, PoisonGhost poisonGhost) {
+        if (Punk.getInstance().isImmortalDelay()) {
+            return;
+        }
+        if (!Punk.getInstance().isCanHit()) {
+            return;
+        }
+        Bounds FireballBounds = poison.getBoundsInParent();
+        Bounds mainCharBounds = new BoundingBox(
+                Punk.getInstance().getPunkImageView().getBoundsInParent().getMinX() + 20,
+                Punk.getInstance().getPunkImageView().getBoundsInParent().getMinY() + 22,
+                20,
+                Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() / 2
+        );
+        if (FireballBounds.intersects(mainCharBounds) && poison.isVisible()) {
+            System.out.println("Poison hit detected");
+            if (Punk.getInstance().isShield()){
+                Shield.setIsHit(true);
+                return;
+            }
+            poisonGhost.hitDamage(currentPane);
+            // set position of poison at the same as PoisonGhost
+            poison.setTranslateY(poisonGhost.getYPos());
+            poison.setTranslateX(poisonGhost.getXPos());
+            poison.setVisible(false);
+            Punk.getInstance().setImmortalDelay(true);
+            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
+            delayTimer.play();
+        }
+    }
 
     //for every type of enemy
     public static void checkGhostHit(AnchorPane currentPane, Enemy enemy, ImageView enemyimageview) {
