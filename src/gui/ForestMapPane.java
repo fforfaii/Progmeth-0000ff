@@ -105,7 +105,7 @@ public class ForestMapPane extends AnchorPane {
                 getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
             }
         }
-        for (int i = 3; i < 4; i++) {
+        for (int i = 3; i < 7; i++) {
             Random random = new Random();
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();

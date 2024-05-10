@@ -261,6 +261,8 @@ public class GameLogic {
                         }
                         if (eachEnemy instanceof MindGhost){
                             ((MindGhost) eachEnemy).noDecreaseHP(); // Undecrease MindGhost HP (immortal)
+                            Punk.getInstance().setMindGhostDelay(true);
+                            Timeline mindGhostDelay = new Timeline(new KeyFrame(Duration.seconds(4), event -> Punk.getInstance().setMindGhostDelay(false)));
                         }
                         if (eachEnemy.getHp() == 0) {
                             currentPane.getChildren().remove(eachEnemy.getImageView());
