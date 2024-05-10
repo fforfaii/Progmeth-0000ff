@@ -1,6 +1,7 @@
 package logic.character;
 
 
+import gui.ForestMapPane;
 import gui.SpriteAnimation;
 import javafx.animation.*;
 import javafx.scene.Node;
@@ -207,56 +208,8 @@ public class MindGhost extends Enemy implements Hitable, GoDownable { //if hit: 
     }
 
     public void BacktoNormal() {
-        AnchorPane currentmap = getCurrentPane();
-        Punk punk = Punk.getInstance();
+        if (currentPane instanceof ForestMapPane) {
 
-        Set<KeyCode> pressedKeys = new HashSet<>();
-        currentmap.setOnKeyPressed(event -> {
-            pressedKeys.add(event.getCode());
-            Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(punk.getDelayShoot()), e -> punk.setCanShoot(true)));
-
-            if (pressedKeys.contains(KeyCode.D) && pressedKeys.contains(KeyCode.SPACE)) {
-                // Move right and shoot
-                if (punk.isCanShoot()){
-                    punk.setXPos(punk.getPunkImageView().getLayoutX());
-                    punk.shoot();
-                    punk.setCanShoot(false);
-                    delayShoot.play();
-                }
-                punk.runRight();
-            } else if (pressedKeys.contains(KeyCode.A) && pressedKeys.contains(KeyCode.SPACE)){
-                // Move left and shoot
-                if (punk.isCanShoot()){
-                    punk.setXPos(punk.getPunkImageView().getLayoutX());
-                    punk.shoot();
-                    punk.setCanShoot(false);
-                    delayShoot.play();
-                }
-                punk.runLeft();
-            } else if (pressedKeys.contains(KeyCode.D)) {
-                // Move right
-                punk.setXPos(punk.getPunkImageView().getLayoutX());
-                System.out.println("XPos : punk.getXPos()");
-                punk.runRight();
-            } else if (pressedKeys.contains(KeyCode.A)){
-                //Move Left
-                punk.setXPos(punk.getPunkImageView().getLayoutX());
-                System.out.println("XPos : punk.getXPos()");
-                punk.runLeft();
-            } else if (pressedKeys.contains(KeyCode.SPACE)) {
-                // Shoot
-                if (punk.isCanShoot()){
-                    System.out.println("Boom!");
-                    punk.setXPos(punk.getPunkImageView().getLayoutX());
-                    punk.shoot();
-                    punk.setCanShoot(false);
-                    delayShoot.play();
-                }
-            }
-        });
-        currentmap.setOnKeyReleased(event -> {
-            pressedKeys.remove(event.getCode());
-            punk.setPunkAnimation(punk.getPunkIdle(), 4, 4, 48, 48);
-        });
+        }
     }
 }

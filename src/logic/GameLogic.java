@@ -179,12 +179,12 @@ public class GameLogic {
                     deleteHeart(currentPane);
                 }
                 if (enemy instanceof MindGhost) {
-                    ((MindGhost) enemy).setCurrentPane(currentPane);
-                    enemy.hitDamage();
-                    Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(4), event -> {
-                            ((MindGhost) enemy).BacktoNormal();
-                    }));
-                    cooldownTimer.play();
+//                    ((MindGhost) enemy).setCurrentPane(currentPane);
+//                    enemy.hitDamage();
+//                    Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(4), event -> {
+//                            ((MindGhost) enemy).BacktoNormal();
+//                    }));
+//                    cooldownTimer.play();
                 }
                 if (enemy instanceof SlowGhost) {
                     enemy.hitDamage();
