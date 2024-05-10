@@ -15,6 +15,7 @@ import javafx.util.Duration;
 import logic.character.AttackGhost;
 import logic.character.Enemy;
 import logic.character.Punk;
+import logic.character.SlowGhost;
 import logic.skills.*;
 import main.Main;
 import utils.Constant;
@@ -108,10 +109,14 @@ public class GameLogic {
                     Bounds BoomBounds = Punk.getInstance().getPunkShot().getBoundsInParent();
                     Bounds GhostBounds = eachEnemy.getImageView().getBoundsInParent();
                     if (BoomBounds.intersects(GhostBounds) && Punk.getInstance().getPunkShot().isVisible()){
-                        // Don't forget to set HP of that ghost
-                        currentPane.getChildren().remove(eachEnemy.getImageView());
-                        if (eachEnemy instanceof AttackGhost){
-                            currentPane.getChildren().remove(((AttackGhost) eachEnemy).getFireBall());
+                        eachEnemy.setHp(eachEnemy.getHp() - 1); // Decrease Ghost HP when hit
+                        if (eachEnemy instanceof SlowGhost) ((SlowGhost) eachEnemy).noDecreaseHP(); // Undecrease SlowGhost HP (immortal)
+                        if (eachEnemy.getHp() == 0) {
+                            currentPane.getChildren().remove(eachEnemy.getImageView());
+                            if (eachEnemy instanceof AttackGhost){
+                                // Get AttackGhost's Fireball out !
+                                currentPane.getChildren().remove(((AttackGhost) eachEnemy).getFireBall());
+                            }
                         }
                     }
                 }

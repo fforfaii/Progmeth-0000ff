@@ -1,16 +1,7 @@
 package logic.skills;
 
 import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.util.Duration;
 import logic.character.Punk;
-import utils.Constant;
-
-import java.util.concurrent.TimeUnit;
 
 public class Shield {
     private static boolean isHit;
