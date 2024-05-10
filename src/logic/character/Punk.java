@@ -42,7 +42,7 @@ public class Punk {
         setScore(0);
         setHp(3);
         setSpeed(15);
-        setDelayShoot(0.5);
+        setDelayShoot(3);
         setScorePerCoin(1);
         setImmortalDelay(false);
         setCanHit(true);
@@ -99,6 +99,7 @@ public class Punk {
         punkShot.setLayoutX(getXPos() + 22);
         setPunkShotXPos(punkShot.getLayoutX());
         setPunkShotYPos(punkShot.getLayoutY());
+        punkShot.setLayoutY(453);
 
         // Animate Boom moving upwards
         TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5), punkShot);
