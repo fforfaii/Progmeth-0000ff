@@ -1,6 +1,7 @@
 package logic.character;
 
 
+import gui.SpriteAnimation;
 import javafx.animation.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,12 +30,16 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
 //        poisonGhostAnimation.setCycleCount(Animation.INDEFINITE);
         poisonGhostImageView.setFitWidth(80);
         poisonGhostImageView.setFitHeight(80);
+        poisonGhostImageView.setTranslateX(GameLogic.randXPos());
+//        poisonGhostImageView.setTranslateY(randYPos() / 1.8);
 //        poisonGhostAnimation.play();
 
         // Set Poison
         poison = new ImageView(new Image(ClassLoader.getSystemResource("poison.png").toString()));
             // set position at the same x,y of poisonGhost
+
         poison.setLayoutY(getYPos());
+        poison.setTranslateY(poisonGhostImageView.getTranslateY());
         poison.setLayoutX(getXPos());
         poison.setVisible(false);
     }
@@ -56,48 +61,29 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
 //        int randomIndex = GameLogic.randomIndex();
         AnimationTimer GhostAnimationTimer = new AnimationTimer() {
             private long startTime = System.nanoTime();
-            private long lastUpdate = 0;
+            private long lastShoot = 0;
             private long lastMove = 0;
-            private double randomStart = poisonGhostImageView.getTranslateX();
 
             @Override
             public void handle(long currentTime) {
                 // Slide X axis
-                if (currentTime - lastMove >= 6_000_000_000L) {
-                    double newRandomStart = GameLogic.slideXPos(randomStart, poisonGhostImageView, 4,getImageView().getFitWidth());
+                if (currentTime - lastMove >= 10_000_000_000L) {
+                    GameLogic.slideXPos(poisonGhostImageView.getTranslateX(), poisonGhostImageView, 5, GameLogic.randXPos() / 1.2);
                     lastMove = currentTime;
-                    randomStart = newRandomStart;
                 }
-                // Get Position & Set to Minions class
+                // Get Position & Set to class
                 setXPos(poisonGhostImageView.getTranslateX());
                 setYPos(poisonGhostImageView.getTranslateY());
-                // get random XPos
-                if (xPosDown.size() < 20) {
-                    xPosDown.add(xPosDown.size(), (int) GameLogic.randXPos());
-                }
-                // Check xPos to goDown
-                int stay = (int) poisonGhostImageView.getTranslateX();
-                if (xPosDown.contains(stay)) {
-                    // remove used xPos
-                    xPosDown.remove(xPosDown.indexOf(stay));
 
-                    if (currentTime - lastUpdate >= 4_000_000_000L) {
-                        goDown(poisonGhostImageView);
-                        lastUpdate = currentTime;
-                    }
-                }
                 // Release Power
-                double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
+                double elapsedTimeSeconds = (currentTime - lastShoot) / 1_000_000_000.0;
                 int randomIndex = GameLogic.randomIndex();
                 if (elapsedTimeSeconds >= durations.get(randomIndex)) {
-                    poison.setLayoutY(getYPos());
                     poison.setLayoutX(getXPos() + 30);
-                    poison.setTranslateY(50.0);
                     poison.setFitWidth(40);
                     poison.setFitHeight(40);
-                    GameLogic.slideYPos(poison, 1, 0, 535);
-                    lastUpdate = currentTime;
-//                    randomIndex = GameLogic.randomIndex();
+                    GameLogic.slideYPos(poison, 1, poisonGhostImageView.getTranslateY() + 30, 535);
+                    lastShoot = currentTime;
                 }
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {

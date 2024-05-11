@@ -619,7 +619,6 @@ public class GameLogic {
         }
     }
     public static void slideYPos(ImageView imageView, double duration, double start, double ground) {
-        imageView.setVisible(true);
         TranslateTransition fallTransition = new TranslateTransition(Duration.seconds(duration), imageView);
         fallTransition.setFromY(start);
         fallTransition.setToY(ground);
@@ -629,6 +628,7 @@ public class GameLogic {
             imageView.setTranslateY(0.0);
             imageView.setVisible(false);
         });
+        imageView.setVisible(true);
         fallTransition.play();
     }
 

@@ -73,6 +73,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
                 int randomIndex = GameLogic.randomIndex();
                 if (elapsedTimeSeconds >= durations.get(randomIndex)) {
                     fireball.setLayoutX(getXPos() + 30);
+                    fireball.setTranslateY(attackGhostImageView.getLayoutY() + 20);
                     fireball.setFitWidth(40);
                     fireball.setFitHeight(40);
                     GameLogic.slideYPos(fireball, 1, attackGhostImageView.getTranslateY() + 20, 535);

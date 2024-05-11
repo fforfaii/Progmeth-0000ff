@@ -67,6 +67,23 @@ public class CaveMapPane extends AnchorPane {
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
             System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
+            enemies.add(new PoisonGhost(randomX, randomY));
+            setTopAnchor(enemies.get(i).getImageView(), 50.0);
+            enemies.get(i).runAnimation(this);
+            getChildren().add(enemies.get(i).getImageView());
+
+            if (enemies.get(i) instanceof AttackGhost){
+                getChildren().add(((AttackGhost) enemies.get(i)).getFireball());
+            }
+            if (enemies.get(i) instanceof PoisonGhost){
+                getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
+            }
+        }
+        for (int i = 3; i < 6; i++){
+            Random random = new Random();
+            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
             enemies.add(new AttackGhost(randomX, randomY));
             setTopAnchor(enemies.get(i).getImageView(), 50.0);
             enemies.get(i).runAnimation(this);
@@ -79,23 +96,6 @@ public class CaveMapPane extends AnchorPane {
                 getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
             }
         }
-//        for (int i = 3; i < 6; i++){
-//            Random random = new Random();
-//            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-//            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-//            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-//            enemies.add(new AttackGhost(randomX, randomY));
-//            setTopAnchor(enemies.get(i).getImageView(), 50.0);
-//            enemies.get(i).runAnimation(this);
-//            getChildren().add(enemies.get(i).getImageView());
-//
-//            if (enemies.get(i) instanceof AttackGhost){
-//                getChildren().add(((AttackGhost) enemies.get(i)).getFireBall());
-//            }
-//            if (enemies.get(i) instanceof PoisonGhost){
-//                getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
-//            }
-//        }
 //        for (int i = 6; i < 9; i++){
 //            Random random = new Random();
 //            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
@@ -107,7 +107,7 @@ public class CaveMapPane extends AnchorPane {
 //            getChildren().add(enemies.get(i).getImageView());
 //
 //            if (enemies.get(i) instanceof AttackGhost){
-//                getChildren().add(((AttackGhost) enemies.get(i)).getFireBall());
+//                getChildren().add(((AttackGhost) enemies.get(i)).getFireball());
 //            }
 //            if (enemies.get(i) instanceof PoisonGhost){
 //                getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
@@ -124,7 +124,7 @@ public class CaveMapPane extends AnchorPane {
 //            getChildren().add(enemies.get(i).getImageView());
 //
 //            if (enemies.get(i) instanceof AttackGhost){
-//                getChildren().add(((AttackGhost) enemies.get(i)).getFireBall());
+//                getChildren().add(((AttackGhost) enemies.get(i)).getFireball());
 //            }
 //            if (enemies.get(i) instanceof PoisonGhost){
 //                getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
@@ -141,7 +141,7 @@ public class CaveMapPane extends AnchorPane {
 //            getChildren().add(enemies.get(i).getImageView());
 //
 //            if (enemies.get(i) instanceof AttackGhost){
-//                getChildren().add(((AttackGhost) enemies.get(i)).getFireBall());
+//                getChildren().add(((AttackGhost) enemies.get(i)).getFireball());
 //            }
 //            if (enemies.get(i) instanceof PoisonGhost){
 //                getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());

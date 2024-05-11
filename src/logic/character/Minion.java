@@ -50,7 +50,7 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
                     GameLogic.slideXPos(minionImageView.getTranslateX(), minionImageView, 4, GameLogic.randXPos() / 1.2);
                     lastSlide = currentTime;
                 }
-                // Get Position & Set to Minions class
+                // Get Position & Set to class
                 setXPos(minionImageView.getTranslateX());
                 setYPos(minionImageView.getTranslateY());
 
