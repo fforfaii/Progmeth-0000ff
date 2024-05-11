@@ -67,7 +67,7 @@ public class CaveMapPane extends AnchorPane {
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
             System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            enemies.add(new SlowGhost(randomX, randomY));
+            enemies.add(new PoisonGhost(randomX, randomY));
             setTopAnchor(enemies.get(i).getImageView(), 50.0);
             enemies.get(i).runAnimation(this);
             getChildren().add(enemies.get(i).getImageView());

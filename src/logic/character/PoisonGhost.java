@@ -40,7 +40,6 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
     }
     //need to check if hit or not in the GameLogic.update()
     public void hitDamage(AnchorPane currentPane) {
-        System.out.println("Poison Hit");
         Punk.getInstance().setCanShoot(false);
         Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(5), event -> Punk.getInstance().setCanShoot(true)));
         cooldownTimer.play();

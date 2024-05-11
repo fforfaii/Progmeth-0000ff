@@ -434,7 +434,8 @@ public class GameLogic {
 
     //for PoisonGhost
     public static void checkPoisonHit(AnchorPane currentPane, ImageView poison, PoisonGhost poisonGhost) {
-        if (Punk.getInstance().isImmortalDelay()) {
+        if (Punk.getInstance().isPoisonDelay()) {
+            System.out.println("Still poison delay");
             return;
         }
         if (!Punk.getInstance().isCanHit()) {
@@ -459,8 +460,8 @@ public class GameLogic {
             poison.setTranslateY(poisonGhost.getYPos());
             poison.setTranslateX(poisonGhost.getXPos());
             poison.setVisible(false);
-            Punk.getInstance().setImmortalDelay(true);
-            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
+            Punk.getInstance().setPoisonDelay(true);
+            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setPoisonDelay(false)));
             delayTimer.play();
         }
     }

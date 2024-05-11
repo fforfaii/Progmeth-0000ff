@@ -33,6 +33,7 @@ public class Punk {
     private boolean immortalDelay;
     private boolean mindGhostDelay;
     private boolean slowGhostDelay;
+    private boolean poisonDelay;
     public Punk() {
         // always start at (0.0,453.0)
         setXPos(0); // ระยะห่างจากขอบซ้ายของ window
@@ -50,6 +51,7 @@ public class Punk {
         setShield(false);
         setMindGhostDelay(false);
         setSlowGhostDelay(false);
+        setPoisonDelay(false);
         punkImageView = new ImageView(new Image(ClassLoader.getSystemResource("Punk_idle.png").toString()));
         punkAnimation = new SpriteAnimation(punkImageView, Duration.millis(1000),4,4,0,0,48,48);
         runLeft = new Image(ClassLoader.getSystemResource("Punk_runleft.png").toString());
@@ -308,5 +310,13 @@ public class Punk {
 
     public void setSlowGhostDelay(boolean slowGhostDelay) {
         this.slowGhostDelay = slowGhostDelay;
+    }
+
+    public boolean isPoisonDelay() {
+        return poisonDelay;
+    }
+
+    public void setPoisonDelay(boolean poisonDelay) {
+        this.poisonDelay = poisonDelay;
     }
 }
