@@ -340,7 +340,7 @@ public class GameLogic {
 
     //for every type of enemy
     public static void checkGhostHit(AnchorPane currentPane, Enemy enemy, ImageView enemyimageview) {
-        Bounds GhostBounds = new BoundingBox(
+        Bounds ghostBounds = new BoundingBox(
                 enemyimageview.getBoundsInParent().getMinX(),
                 enemyimageview.getBoundsInParent().getMinY(),
                 enemyimageview.getBoundsInParent().getWidth(),
@@ -352,25 +352,25 @@ public class GameLogic {
                 20,
                 100
         );
-        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
-        playerRect.setFill(Color.TRANSPARENT);
-        playerRect.setStroke(Color.BLUE);
-        playerRect.setStrokeWidth(2);
-        currentPane.getChildren().add(playerRect);
+//        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
+//        playerRect.setFill(Color.TRANSPARENT);
+//        playerRect.setStroke(Color.BLUE);
+//        playerRect.setStrokeWidth(2);
+//        currentPane.getChildren().add(playerRect);
+//
+//        Rectangle ghostRect = new Rectangle(GhostBounds.getMinX(), GhostBounds.getMinY(), GhostBounds.getWidth(), GhostBounds.getHeight());
+//        ghostRect.setFill(Color.TRANSPARENT);
+//        ghostRect.setStroke(Color.RED);
+//        ghostRect.setStrokeWidth(2);
+//        currentPane.getChildren().add(ghostRect);
+//
+//        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
+//            currentPane.getChildren().remove(playerRect);
+//            currentPane.getChildren().remove(ghostRect);
+//        }));
+//        rectLast.play();
 
-        Rectangle ghostRect = new Rectangle(GhostBounds.getMinX(), GhostBounds.getMinY(), GhostBounds.getWidth(), GhostBounds.getHeight());
-        ghostRect.setFill(Color.TRANSPARENT);
-        ghostRect.setStroke(Color.RED);
-        ghostRect.setStrokeWidth(2);
-        currentPane.getChildren().add(ghostRect);
-
-        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
-            currentPane.getChildren().remove(playerRect);
-            currentPane.getChildren().remove(ghostRect);
-        }));
-        rectLast.play();
-
-        if (GhostBounds.intersects(mainCharBounds) && enemyimageview.isVisible()) {
+        if (ghostBounds.intersects(mainCharBounds) && enemyimageview.isVisible()) {
             System.out.println("Ghost hit detected");
             if (enemy instanceof Hitable) {
                 if (enemy instanceof Minion) {

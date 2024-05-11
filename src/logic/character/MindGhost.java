@@ -115,62 +115,6 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
         SequentialTransition sequentialTransition = new SequentialTransition(translateYTransitionDown, translateYTransitionUp);
         sequentialTransition.play();
     }
-//    //need to check if hit or not in the GameLogic.update()
-//    @Override
-//<<<<<<< HEAD
-//    public void hitDamage() {
-//        Node currentmap = Constant.getinstanceMap(GameLogic.getCurrentMap());
-//        Punk punk = Punk.getInstance();
-//
-//        Set<KeyCode> pressedKeys = new HashSet<>();
-//        currentmap.setOnKeyPressed(event -> {
-//            pressedKeys.add(event.getCode());
-//            Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(punk.getDelayShoot()), e -> punk.setCanShoot(true)));
-//
-//            if (pressedKeys.contains(KeyCode.A) && pressedKeys.contains(KeyCode.SPACE)) {
-//                // Move right and shoot
-//                if (punk.isCanShoot()){
-//                    punk.setXPos(punk.getPunkImageView().getLayoutX());
-//                    punk.shoot();
-//                    punk.setCanShoot(false);
-//                    delayShoot.play();
-//                }
-//                punk.runRight();
-//            } else if (pressedKeys.contains(KeyCode.D) && pressedKeys.contains(KeyCode.SPACE)){
-//                // Move left and shoot
-//                if (punk.isCanShoot()){
-//                    punk.setXPos(punk.getPunkImageView().getLayoutX());
-//                    punk.shoot();
-//                    punk.setCanShoot(false);
-//                    delayShoot.play();
-//                }
-//                punk.runLeft();
-//            } else if (pressedKeys.contains(KeyCode.A)) {
-//                // Move right
-//                punk.setXPos(punk.getPunkImageView().getLayoutX());
-//                System.out.println("XPos : punk.getXPos()");
-//                punk.runRight();
-//            } else if (pressedKeys.contains(KeyCode.D)){
-//                //Move Left
-//                punk.setXPos(punk.getPunkImageView().getLayoutX());
-//                System.out.println("XPos : punk.getXPos()");
-//                punk.runLeft();
-//            } else if (pressedKeys.contains(KeyCode.SPACE)) {
-//                // Shoot
-//                if (punk.isCanShoot()){
-//                    System.out.println("Boom!");
-//                    punk.setXPos(punk.getPunkImageView().getLayoutX());
-//                    punk.shoot();
-//                    punk.setCanShoot(false);
-//                    delayShoot.play();
-//                }
-//            }
-//        });
-//        currentmap.setOnKeyReleased(event -> {
-//            pressedKeys.remove(event.getCode());
-//            punk.setPunkAnimation(punk.getPunkIdle(), 4, 4, 48, 48);
-//        });
-//    }
     @Override
     public void hitDamage(AnchorPane currentPane) {
         if (Punk.getInstance().isMindGhostDelay()) {
@@ -184,66 +128,6 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
         }));
         effectDuration.play();
     }
-//||||||| 2d12347
-//    public void hitDamage() {
-//        Node currentmap = Constant.getinstanceMap(GameLogic.getCurrentMap());
-//        Punk punk = Punk.getInstance();
-//
-//        Set<KeyCode> pressedKeys = new HashSet<>();
-//        currentmap.setOnKeyPressed(event -> {
-//            pressedKeys.add(event.getCode());
-//            Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(punk.getDelayShoot()), e -> punk.setCanShoot(true)));
-//
-//            if (pressedKeys.contains(KeyCode.A) && pressedKeys.contains(KeyCode.SPACE)) {
-//                // Move right and shoot
-//                if (punk.isCanShoot()){
-//                    punk.setXPos(punk.getPunkImageView().getLayoutX());
-//                    punk.shoot();
-//                    punk.setCanShoot(false);
-//                    delayShoot.play();
-//                }
-//                punk.runRight();
-//            } else if (pressedKeys.contains(KeyCode.D) && pressedKeys.contains(KeyCode.SPACE)){
-//                // Move left and shoot
-//                if (punk.isCanShoot()){
-//                    punk.setXPos(punk.getPunkImageView().getLayoutX());
-//                    punk.shoot();
-//                    punk.setCanShoot(false);
-//                    delayShoot.play();
-//                }
-//                punk.runLeft();
-//            } else if (pressedKeys.contains(KeyCode.A)) {
-//                // Move right
-//                punk.setXPos(punk.getPunkImageView().getLayoutX());
-//                System.out.println("XPos : punk.getXPos()");
-//                punk.runRight();
-//            } else if (pressedKeys.contains(KeyCode.D)){
-//                //Move Left
-//                punk.setXPos(punk.getPunkImageView().getLayoutX());
-//                System.out.println("XPos : punk.getXPos()");
-//                punk.runLeft();
-//            } else if (pressedKeys.contains(KeyCode.SPACE)) {
-//                // Shoot
-//                if (punk.isCanShoot()){
-//                    System.out.println("Boom!");
-//                    punk.setXPos(punk.getPunkImageView().getLayoutX());
-//                    punk.shoot();
-//                    punk.setCanShoot(false);
-//                    delayShoot.play();
-//                }
-//            }
-//        });
-//        currentmap.setOnKeyReleased(event -> {
-//            pressedKeys.remove(event.getCode());
-//            punk.setPunkAnimation(punk.getPunkIdle(), 4, 4, 48, 48);
-//        });
-//=======
-//    public void hitDamage() {
-//        ((ForestMapPane) currentPane).setMindControl(true);
-//        Timeline disableMindControlTimer = new Timeline(new KeyFrame(Duration.seconds(4), e ->
-//                ((ForestMapPane) currentPane).setMindControl(false)));
-//        disableMindControlTimer.play();
-//>>>>>>> 38b75a3f4b6ea31eb30e132f1f71618ba33f4467
     @Override
     public int getHp() {
         return hp;
