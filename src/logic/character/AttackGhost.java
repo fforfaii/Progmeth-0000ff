@@ -20,7 +20,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
     private double yPos;
     private ImageView attackGhostImageView;
     private Animation attackghostAnimation;
-    private ImageView fireBall;
+    private ImageView fireball;
     public AttackGhost(double x, double y){
         setHp(3);
         setXPos(x);
@@ -28,15 +28,17 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
         attackGhostImageView = new ImageView(new Image(ClassLoader.getSystemResource("attackghost.png").toString()));
         attackghostAnimation = new SpriteAnimation(attackGhostImageView, Duration.millis(1000), 6, 6, 0, 0, 48, 48);
         attackghostAnimation.setCycleCount(Animation.INDEFINITE);
+        attackGhostImageView.setTranslateX(GameLogic.randXPos());
+        attackGhostImageView.setTranslateY(randYPos() / 1.8);
         attackGhostImageView.setFitWidth(80);
         attackGhostImageView.setFitHeight(80);
         attackghostAnimation.play();
 
         // Set FireBall
-        fireBall = new ImageView(new Image(ClassLoader.getSystemResource("fireball.gif").toString()));
-        fireBall.setRotate(90); // หมุนให้เป็นรูปแนวตั้ง
-        fireBall.setLayoutY(50.0);
-        fireBall.setVisible(false);
+        fireball = new ImageView(new Image(ClassLoader.getSystemResource("fireball.gif").toString()));
+        fireball.setRotate(90); // หมุนให้เป็นรูปแนวตั้ง
+        fireball.setLayoutY(50.0);
+        fireball.setVisible(false);
     }
     public void hitDamage(){
         Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
@@ -52,37 +54,36 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
 //        int randomIndex = GameLogic.randomIndex();
         AnimationTimer GhostAnimationTimer = new AnimationTimer() {
             private long startTime = System.nanoTime();
-            private long lastUpdate = 0;
+            private long lastShoot = 0;
             private long lastMove = 0;
-            private double randomStart = attackGhostImageView.getTranslateX();
 
             @Override
             public void handle(long currentTime) {
                 // Slide X axis
-                if (currentTime - lastMove >= 6_000_000_000L) {
-                    double newRandomStart = GameLogic.slideXPos(randomStart, attackGhostImageView, 3,getImageView().getFitWidth());
+                if (currentTime - lastMove >= 5_000_000_000L) {
+                    GameLogic.slideXPos(attackGhostImageView.getTranslateX(), attackGhostImageView, 3, GameLogic.randXPos() / 1.2);
                     lastMove = currentTime;
-                    randomStart = newRandomStart;
                 }
-                // Get Position & Set to Minions class
+                // Get Position & Set to class
                 setXPos(attackGhostImageView.getTranslateX());
                 setYPos(attackGhostImageView.getTranslateY());
+
                 // Release Power
-                double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
+                double elapsedTimeSeconds = (currentTime - lastShoot) / 1_000_000_000.0;
                 int randomIndex = GameLogic.randomIndex();
                 if (elapsedTimeSeconds >= durations.get(randomIndex)) {
-                    fireBall.setLayoutX(getXPos() + 30);
-                    fireBall.setTranslateY(50.0);
-                    fireBall.setFitWidth(40);
-                    fireBall.setFitHeight(40);
-                    GameLogic.slideYPos(fireBall, 1, 535);
-                    lastUpdate = currentTime;
-//                    randomIndex = GameLogic.randomIndex();
+                    fireball.setLayoutX(getXPos() + 30);
+                    fireball.setTranslateY(attackGhostImageView.getTranslateY() + 20);
+                    fireball.setVisible(false);
+                    fireball.setFitWidth(40);
+                    fireball.setFitHeight(40);
+                    GameLogic.slideYPos(fireball, 1, attackGhostImageView.getTranslateY() + 20, 535);
+                    lastShoot = currentTime;
                 }
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
-                    // Check fireBall hit
-                    GameLogic.checkFireballHit(currentPane, fireBall,getInstance());
+                    // Check fireball hit
+                    GameLogic.checkFireballHit(currentPane, fireball, getInstance());
                 }
             }
         };
@@ -126,8 +127,8 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
         this.yPos = yPos;
     }
     
-    public ImageView getFireBall(){
-        return fireBall;
+    public ImageView getFireball(){
+        return fireball;
     }
     public static AttackGhost getInstance() {
         if (instance == null) {

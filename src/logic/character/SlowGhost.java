@@ -30,6 +30,8 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
         slowGhostImageView = new ImageView(new Image(ClassLoader.getSystemResource("slowghost.png").toString()));
         slowGhostAnimation = new SpriteAnimation(slowGhostImageView,Duration.millis(1000),5,5,0,0,128,128);
         slowGhostAnimation.setCycleCount(Animation.INDEFINITE);
+        slowGhostImageView.setTranslateX(GameLogic.randXPos());
+        slowGhostImageView.setTranslateY(randYPos());
         slowGhostImageView.setFitWidth(80);
         slowGhostImageView.setFitHeight(80);
         slowGhostAnimation.play();
@@ -45,15 +47,16 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
         ArrayList<Integer> xPosDown = new ArrayList<>();
         AnimationTimer GhostAnimationTimer = new AnimationTimer() {
             private long startTime = System.nanoTime();
-            private long lastUpdate = 0;
+            private long lastSlide = 0;
+            private long lastDown = 0;
             @Override
             public void handle(long currentTime) {
                 // Slide X axis
-                if (currentTime - lastUpdate >= 6_000_000_000L) {
-                    GameLogic.slideXPos(slowGhostImageView.getTranslateX(), slowGhostImageView, 5,getImageView().getFitWidth());
-                    lastUpdate = currentTime;
+                if (currentTime - lastSlide >= 6_000_000_000L) {
+                    GameLogic.slideXPos(slowGhostImageView.getTranslateX(), slowGhostImageView, 3, GameLogic.randXPos() / 1.2);
+                    lastSlide = currentTime;
                 }
-                // Get Position & Set to Minions class
+                // Get Position & Set to class
                 setXPos(slowGhostImageView.getTranslateX());
                 setYPos(slowGhostImageView.getTranslateY());
 
@@ -66,10 +69,11 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
                 if (xPosDown.contains(stay)) {
                     // remove used xPos
                     xPosDown.remove(xPosDown.indexOf(stay));
+                    System.out.println("stay = " + stay + " go down !!!!!!!!");
 
-                    if (currentTime - lastUpdate >= 4_000_000_000L) {
+                    if (currentTime - lastDown >= 4_000_000_000L) {
                         goDown(slowGhostImageView);
-                        lastUpdate = currentTime;
+                        lastDown = currentTime;
                     }
                 }
 
@@ -113,11 +117,6 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
     public void setYPos(double yPos) {
         this.yPos = yPos;
     }
-//    public void effect(){
-//        Punk.getInstance().setSpeed(8);
-//        Timeline cooldownEffect = new Timeline(new KeyFrame(Duration.seconds(4), event -> Punk.getInstance().setSpeed(15)));
-//        cooldownEffect.play();
-//    }
 
     @Override
     public void noDecreaseHP() {
@@ -135,7 +134,7 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
     public void goDown(ImageView imageView) {
         // Move down
         TranslateTransition translateYTransitionDown = new TranslateTransition(Duration.seconds(2), imageView);
-        translateYTransitionDown.setFromY(0);
+        translateYTransitionDown.setFromY(imageView.getTranslateY());
         translateYTransitionDown.setToY(460);
         translateYTransitionDown.setCycleCount(1);
         translateYTransitionDown.setAutoReverse(true);
@@ -143,7 +142,9 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
         // Move up
         TranslateTransition translateYTransitionUp = new TranslateTransition(Duration.seconds(2), imageView);
         translateYTransitionUp.setFromY(460);
-        translateYTransitionUp.setToY(0);
+        randYPos();
+        translateYTransitionUp.setToY(randYPos());
+        imageView.setTranslateY(randYPos());
         translateYTransitionUp.setCycleCount(1);
         translateYTransitionUp.setAutoReverse(true);
         translateYTransitionUp.setDelay(Duration.seconds(0)); // No Delay before moving up

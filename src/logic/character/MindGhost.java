@@ -29,6 +29,8 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
         mindGhostImageView = new ImageView(new Image(ClassLoader.getSystemResource("mindghost.png").toString()));
         mindGhostAnimation = new SpriteAnimation(mindGhostImageView,Duration.millis(1000),6,6,0,0,48,48);
         mindGhostAnimation.setCycleCount(Animation.INDEFINITE);
+        mindGhostImageView.setTranslateX(GameLogic.randXPos());
+        mindGhostImageView.setTranslateY(randYPos());
         mindGhostImageView.setFitWidth(80);
         mindGhostImageView.setFitHeight(80);
         mindGhostAnimation.play();
@@ -37,15 +39,16 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
         ArrayList<Integer> xPosDown = new ArrayList<>();
         AnimationTimer GhostAnimationTimer = new AnimationTimer() {
             private long startTime = System.nanoTime();
-            private long lastUpdate = 0;
+            private long lastSlide = 0;
+            private long lastDown = 0;
             @Override
             public void handle(long currentTime) {
                 // Slide X axis
-                if (currentTime - lastUpdate >= 6_000_000_000L) {
-                    GameLogic.slideXPos(mindGhostImageView.getTranslateX(), mindGhostImageView, 5,getImageView().getFitWidth() + 10.0);
-                    lastUpdate = currentTime;
+                if (currentTime - lastSlide >= 4_000_000_000L) {
+                    GameLogic.slideXPos(mindGhostImageView.getTranslateX(), mindGhostImageView, 2, GameLogic.randXPos() / 1.2);
+                    lastSlide = currentTime;
                 }
-                // Get Position & Set to Minions class
+                // Get Position & Set to class
                 setXPos(mindGhostImageView.getTranslateX());
                 setYPos(mindGhostImageView.getTranslateY());
 
@@ -60,15 +63,15 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
                     xPosDown.remove(xPosDown.indexOf(stay));
                     System.out.println("stay = " + stay + " go down !!!!!!!!");
 
-                    if (currentTime - lastUpdate >= 4_000_000_000L) {
+                    if (currentTime - lastDown >= 4_000_000_000L) {
                         goDown(mindGhostImageView);
-                        lastUpdate = currentTime;
+                        lastDown = currentTime;
                     }
                 }
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check ghost hit
-                    GameLogic.checkGhostHit(currentPane, getInstance(),mindGhostImageView);
+                    GameLogic.checkGhostHit(currentPane, getInstance(), mindGhostImageView);
                 }
             }
         };
