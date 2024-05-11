@@ -20,6 +20,7 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
     private int hp;
     private double xPos;
     private double yPos;
+    private AnchorPane currentPane;
     private ImageView slowGhostImageView;
     private Animation slowGhostAnimation;
     public SlowGhost(double x, double y){
@@ -36,8 +37,8 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
     //need to check if hit or not in the GameLogic.update()
     @Override
     public void hitDamage(AnchorPane currentPane) {
-        Punk.getInstance().setSpeed(8);
-        Timeline cooldownEffect = new Timeline(new KeyFrame(Duration.seconds(4), event -> Punk.getInstance().setSpeed(15)));
+        Punk.getInstance().setSpeed(Punk.getInstance().getSpeed() - 7.5);
+        Timeline cooldownEffect = new Timeline(new KeyFrame(Duration.seconds(4), event -> Punk.getInstance().setSpeed(Punk.getInstance().getSpeed() + 7.5)));
         cooldownEffect.play();
     }
     public void runAnimation(AnchorPane currentPane){
@@ -149,5 +150,13 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
 
         SequentialTransition sequentialTransition = new SequentialTransition(translateYTransitionDown, translateYTransitionUp);
         sequentialTransition.play();
+    }
+
+    public AnchorPane getCurrentPane() {
+        return currentPane;
+    }
+
+    public void setCurrentPane(AnchorPane currentPane) {
+        this.currentPane = currentPane;
     }
 }

@@ -14,7 +14,7 @@ public class Punk {
     private int hp;
     private int score;
     private int atk;
-    private int speed;
+    private double speed;
     private double delayShoot;
     private double punkShotXPos;
     private double punkShotYPos;
@@ -32,6 +32,7 @@ public class Punk {
     private int scorePerCoin;
     private boolean immortalDelay;
     private boolean mindGhostDelay;
+    private boolean slowGhostDelay;
     public Punk() {
         // always start at (0.0,453.0)
         setXPos(0); // ระยะห่างจากขอบซ้ายของ window
@@ -40,7 +41,7 @@ public class Punk {
         setDead(false);
         setScore(0);
         setHp(3);
-        setSpeed(15);
+        setSpeed(15.0);
         setDelayShoot(5);
         setScorePerCoin(1);
         setImmortalDelay(false);
@@ -48,6 +49,7 @@ public class Punk {
         setCanShoot(true);
         setShield(false);
         setMindGhostDelay(false);
+        setSlowGhostDelay(false);
         punkImageView = new ImageView(new Image(ClassLoader.getSystemResource("Punk_idle.png").toString()));
         punkAnimation = new SpriteAnimation(punkImageView, Duration.millis(1000),4,4,0,0,48,48);
         runLeft = new Image(ClassLoader.getSystemResource("Punk_runleft.png").toString());
@@ -179,11 +181,11 @@ public class Punk {
         this.atk = atk;
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
-    public void setSpeed(int speed) {
+    public void setSpeed(double speed) {
         this.speed = Math.max(0, speed);
     }
     public double getDelayShoot() {
@@ -298,5 +300,13 @@ public class Punk {
 
     public void setMindGhostDelay(boolean mindGhostDelay) {
         this.mindGhostDelay = mindGhostDelay;
+    }
+
+    public boolean isSlowGhostDelay() {
+        return slowGhostDelay;
+    }
+
+    public void setSlowGhostDelay(boolean slowGhostDelay) {
+        this.slowGhostDelay = slowGhostDelay;
     }
 }

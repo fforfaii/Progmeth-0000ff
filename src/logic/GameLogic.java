@@ -20,6 +20,7 @@ import main.Main;
 import utils.Constant;
 
 import java.io.IOException;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -239,7 +240,7 @@ public class GameLogic {
                     lastUpdate = currentTime;
                     randomIndex = randomIndex();
 //                    randSkill = GameLogic.randomSkill();
-                    randSkill = "Shield";
+                    randSkill = "MoveFaster";
                     setSkillImage(skillImageView, randSkill);
                 }
                 checkSkillHit(this.toString(), skillImageView, randSkill, currentPane);
@@ -521,17 +522,24 @@ public class GameLogic {
                 if (enemy instanceof MindGhost) {
                     ((MindGhost) enemy).setCurrentPane(currentPane);
                     if (Punk.getInstance().isMindGhostDelay()){
-                        System.out.println("Still MindGhost delay");
+                        System.out.println("MindGhost delay");
+                        return;
                     }
-                    if (! Punk.getInstance().isMindGhostDelay()){
-                        ((MindGhost) enemy).hitDamage(currentPane);
-                        Punk.getInstance().setMindGhostDelay(true);
-                        Timeline mindGhostDelay = new Timeline(new KeyFrame(Duration.seconds(4.5), e -> Punk.getInstance().setMindGhostDelay(false)));
-                        mindGhostDelay.play();
-                    }
+                    ((MindGhost) enemy).hitDamage(currentPane);
+                    Punk.getInstance().setMindGhostDelay(true);
+                    Timeline mindGhostDelay = new Timeline(new KeyFrame(Duration.seconds(4.5), e -> Punk.getInstance().setMindGhostDelay(false)));
+                    mindGhostDelay.play();
                 }
                 if (enemy instanceof SlowGhost) {
+                    ((SlowGhost) enemy).setCurrentPane(currentPane);
+                    if (Punk.getInstance().isSlowGhostDelay()){
+                        System.out.println("SlowGhost delay");
+                        return;
+                    }
                     ((SlowGhost) enemy).hitDamage(currentPane);
+                    Punk.getInstance().setSlowGhostDelay(true);
+                    Timeline slowGhostDelay = new Timeline(new KeyFrame(Duration.seconds(4.5), e -> Punk.getInstance().setSlowGhostDelay(false)));
+                    slowGhostDelay.play();
                 }
             }
         }
