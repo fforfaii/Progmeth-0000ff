@@ -1,6 +1,7 @@
 package gui;
 
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
 import javafx.scene.image.Image;
@@ -11,6 +12,7 @@ import javafx.util.Duration;
 import logic.GameLogic;
 import logic.character.*;
 import main.Main;
+import sound.Playsound;
 import utils.Constant;
 
 import java.io.IOException;
@@ -25,10 +27,11 @@ public class CaveMapPane extends AnchorPane {
     private ScoreBoard scoreBoard;
     private ImageView skill;
     Punk punk;
-    ArrayList<Enemy> enemies;
-    public CaveMapPane(){
-        //Set Background and Ground
-        setBackground(new Background(GameLogic.getBGImage("BG_cave.jpg")));
+    public CaveMapPane() {
+        // Set BGsound
+        Playsound.CavemapBG.play();
+        // Set Ground
+        setBackground(new Background(GameLogic.getBGImage("BG_Cave.jpg")));
         ImageView groundImageView = GameLogic.getGroundImage("rock_ground_long.png");
         setTopAnchor(groundImageView,530.0);
 
@@ -165,6 +168,21 @@ public class CaveMapPane extends AnchorPane {
         pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                Playsound.CavemapBG.stop();
+                Playsound.exit.play();
+                GameLogic.setHighscoreEachMap(Constant.getIndexMap("CaveMap"),punk.getScore());
+                fadeExitPage();
+            }
+        });
+        pause.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Playsound.defaultBG.play();
+            }
+        });
+ 
+        // Set CoinFall
+        CoinFall();
                 GameLogic.setHighScoreEachMap(Constant.getIndexMap("CaveMap"), punk.getScore());
                 fadeExitPage();
             }

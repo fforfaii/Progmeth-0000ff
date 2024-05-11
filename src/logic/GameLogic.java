@@ -14,9 +14,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import logic.ability.Hitable;
+import logic.ability.Imperishable;
 import logic.character.*;
 import logic.skills.*;
 import main.Main;
+import sound.Playsound;
 import utils.Constant;
 
 import java.io.IOException;
@@ -70,7 +72,6 @@ public class GameLogic {
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
                 Punk.getInstance().runRight();
             } else if (isSpaceKeyPressed && Punk.getInstance().isCanShoot()){
-                System.out.println("Boom!");
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
                 Punk.getInstance().shoot();
                 Punk.getInstance().setCanShoot(false);
@@ -286,6 +287,7 @@ public class GameLogic {
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() - 5
         );
         if (coinBounds.intersects(mainCharBounds) && coinImage.isVisible() && coinImage.getTranslateY() >= Punk.getInstance().getYPos() - 30){
+            Playsound.getcoin.play();
             Punk.getInstance().setScore(Punk.getInstance().getScore() + Punk.getInstance().getScorePerCoin());
             coinImage.setTranslateY(0.0);
             coinImage.setVisible(false);
@@ -320,7 +322,7 @@ public class GameLogic {
 
         // If player can get skill
         if (coinBounds.intersects(mainCharBounds) && skillImage.isVisible() && skillImage.getTranslateY() >= Punk.getInstance().getYPos() - 30){
-            System.out.println("Skill Hit");
+            Playsound.skillhit.play();
             skillImage.setTranslateY(0.0);
             skillImage.setVisible(false);
             // Call effect skillname
@@ -436,6 +438,7 @@ public class GameLogic {
 
         if (fireballBounds.intersects(mainCharBounds) && fireball.isVisible()) {
             System.out.println("FireBall hit detected");
+            Playsound.ghostandfireballhit.play();
             if (Punk.getInstance().isShield()){
                 Shield.setIsHit(true);
                 return;
@@ -462,24 +465,6 @@ public class GameLogic {
                 20,
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() / 2
         );
-
-//        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
-//        playerRect.setFill(Color.TRANSPARENT);
-//        playerRect.setStroke(Color.BLUE);
-//        playerRect.setStrokeWidth(2);
-//        currentPane.getChildren().add(playerRect);
-//
-//        Rectangle ghostRect = new Rectangle(fireballBounds.getMinX(), fireballBounds.getMinY(), fireballBounds.getWidth(), fireballBounds.getHeight());
-//        ghostRect.setFill(Color.TRANSPARENT);
-//        ghostRect.setStroke(Color.RED);
-//        ghostRect.setStrokeWidth(2);
-//        currentPane.getChildren().add(ghostRect);
-//
-//        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
-//            currentPane.getChildren().remove(playerRect);
-//            currentPane.getChildren().remove(ghostRect);
-//        }));
-//        rectLast.play();
 
         if (fireballBounds.intersects(mainCharBounds) && poison.isVisible()) {
             System.out.println("Poison hit detected");
@@ -544,6 +529,7 @@ public class GameLogic {
 
         if (ghostBounds.intersects(mainCharBounds) && enemyimageview.isVisible()) {
             System.out.println("Ghost hit detected");
+            Playsound.ghostandfireballhit.play();
             if (enemy instanceof Hitable) {
                 if (enemy instanceof Minion) {
                     if (Punk.getInstance().isImmortalDelay()){
@@ -593,15 +579,17 @@ public class GameLogic {
             return;
         }
         if (Punk.getInstance().getHp() == 0) {
+            Playsound.stopAllmapBG();
+            Playsound.death.play();
             Punk.getInstance().setDead(true);
             setIsGameOver(true);
-            FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), currentPane);
+            FadeTransition fadeOut = new FadeTransition(Duration.seconds(3), currentPane);
             fadeOut.setFromValue(1.0);
             fadeOut.setToValue(0.0);
             fadeOut.setOnFinished(event -> {
                 try {
                     System.out.println("Game Over !");
-//                    GameLogic.setHighScoreEachMap(Constant.getIndexMap(getCurrentMap()),Punk.getInstance().getScore());
+                    Playsound.gameoverBG.play();
                     Main.getInstance().changeSceneJava(GameOverPane.getInstance());
                 } catch (IOException e) {
                     throw new RuntimeException(e);

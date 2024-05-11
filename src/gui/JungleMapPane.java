@@ -13,6 +13,7 @@ import logic.GameLogic;
 import logic.character.Enemy;
 import logic.character.Punk;
 import main.Main;
+import sound.Playsound;
 import utils.Constant;
 
 import java.io.IOException;
@@ -28,6 +29,9 @@ public class JungleMapPane extends AnchorPane {
     private ArrayList<Enemy> enemies;
     Punk punk;
     public JungleMapPane() {
+        // Set BGsound
+        Playsound.JunglemapBG.play();
+
         //Set Background and Ground
         setBackground(new Background(GameLogic.getBGImage("BG_jungle.jpg")));
         ImageView groundImageView = GameLogic.getGroundImage("glass_ground_long.png");
@@ -80,6 +84,18 @@ public class JungleMapPane extends AnchorPane {
         pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                Playsound.JunglemapBG.stop();
+                Playsound.exit.play();
+                GameLogic.setHighscoreEachMap(Constant.getIndexMap("JungleMap"),punk.getScore());
+                fadeExitPage();
+            }
+        });
+        pause.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Playsound.defaultBG.play();
+            }
+        });
                 GameLogic.setHighScoreEachMap(Constant.getIndexMap("JungleMap"),punk.getScore());
                 fadeExitPage();
             }

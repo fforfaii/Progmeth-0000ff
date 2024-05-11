@@ -11,6 +11,7 @@ import javafx.util.Duration;
 import logic.GameLogic;
 import logic.character.*;
 import main.Main;
+import sound.Playsound;
 import utils.Constant;
 
 import java.io.IOException;
@@ -27,7 +28,10 @@ public class ForestMapPane extends AnchorPane {
     Punk punk;
     ArrayList<Enemy> enemies;
     public ForestMapPane(){
-        //Set Background and Ground
+        // Set BGsound
+        Playsound.ForestmapBG.play();
+
+        // Set Background and Ground
         setBackground(new Background(GameLogic.getBGImage("BG_forest.jpg")));
         ImageView groundImageView = GameLogic.getGroundImage("rock_ground_long.png");
         setTopAnchor(groundImageView,530.0);
@@ -62,16 +66,16 @@ public class ForestMapPane extends AnchorPane {
 
         //Set enemies (ใช้เทสอยู่)
         enemies = new ArrayList<>();
-//        for (int i = 0; i < 3; i++){
-//            Random random = new Random();
-//            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-//            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-//            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-//            enemies.add(new Minion(randomX, randomY));
-//            setTopAnchor(enemies.get(i).getImageView(), 50.0);
-//            enemies.get(i).runAnimation(this);
-//            getChildren().add(enemies.get(i).getImageView());
-//        }
+        for (int i = 0; i < 3; i++){
+            Random random = new Random();
+            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
+            enemies.add(new Minion(randomX, randomY));
+            setTopAnchor(enemies.get(i).getImageView(), 50.0);
+            enemies.get(i).runAnimation(this);
+            getChildren().add(enemies.get(i).getImageView());
+        }
 //        for (int i = 3; i < 6; i++){
 //            Random random = new Random();
 //            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
@@ -85,7 +89,7 @@ public class ForestMapPane extends AnchorPane {
 //                getChildren().add(((AttackGhost) enemies.get(i)).getFireBall());
 //            }
 //        }
-        for (int i = 0; i < 15; i++){
+        for (int i = 3; i < 6; i++){
             Random random = new Random();
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
@@ -126,8 +130,16 @@ public class ForestMapPane extends AnchorPane {
         pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                GameLogic.setHighScoreEachMap(Constant.getIndexMap("ForestMap"), punk.getScore());
+                Playsound.ForestmapBG.stop();
+                Playsound.exit.play();
+                GameLogic.setHighscoreEachMap(Constant.getIndexMap("ForestMap"), punk.getScore());
                 fadeExitPage();
+            }
+        });
+        pause.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Playsound.defaultBG.play();
             }
         });
 

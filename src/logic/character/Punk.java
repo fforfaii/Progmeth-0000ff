@@ -6,6 +6,7 @@ import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import sound.Playsound;
 
 public class Punk {
     double xPos;
@@ -103,6 +104,7 @@ public class Punk {
         setPunkAnimation(runRight,6,6,48,48);
     }
     public void shoot(){
+        Playsound.Playershoot.play();
         getPunkImageView().setImage(getPunkGun());
         getPunkImageView().setViewport(new javafx.geometry.Rectangle2D(96, 0, 48, 48));
         // Set Boom when start Shooting
