@@ -2,8 +2,6 @@ package logic.character;
 
 import gui.SpriteAnimation;
 import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

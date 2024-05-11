@@ -1,7 +1,6 @@
 package logic.character;
 
 
-import gui.ForestMapPane;
 import gui.SpriteAnimation;
 import javafx.animation.*;
 import javafx.scene.image.Image;
@@ -11,7 +10,6 @@ import javafx.util.Duration;
 import logic.GameLogic;
 import logic.ability.GoDownable;
 import logic.ability.Hitable;
-import javafx.geometry.Rectangle2D;
 import logic.ability.Imperishable;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;

@@ -12,8 +12,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import logic.character.Punk;
 
-import java.util.ServiceConfigurationError;
-
 public class ScoreBoard extends HBox {
     private static ScoreBoard instance;
     public ScoreBoard(){

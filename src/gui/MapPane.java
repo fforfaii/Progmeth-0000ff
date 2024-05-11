@@ -135,11 +135,11 @@ public class MapPane extends VBox {
         }
         Text space1 = new Text(" ");
         space1.setFont(Font.font("Monospace", FontWeight.BOLD,8));
-        Text highscore = new Text("" + GameLogic.getHighscoreEachMap(mapName));
-        highscore.setFont(Font.font("Monospace", FontWeight.BOLD,16));
+        Text highScore = new Text("" + GameLogic.getHighScoreEachMap(mapName));
+        highScore.setFont(Font.font("Monospace", FontWeight.BOLD,16));
         Text space2 = new Text(" ");
         space2.setFont(Font.font("Monospace", FontWeight.BOLD,8));
-        vBox.getChildren().addAll(imageView,mapText,space1,highscore,space2);
+        vBox.getChildren().addAll(imageView,mapText,space1,highScore,space2);
 
         return vBox;
     }

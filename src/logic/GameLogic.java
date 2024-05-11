@@ -2,18 +2,14 @@ package logic;
 
 import gui.GameOverPane;
 import gui.HpBoard;
-import gui.MapPane;
 import gui.ScoreBoard;
 import javafx.animation.*;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import logic.ability.Hitable;
 import logic.character.*;
@@ -21,10 +17,7 @@ import logic.skills.*;
 import main.Main;
 import utils.Constant;
 
-import javax.swing.plaf.multi.MultiMenuItemUI;
 import java.io.IOException;
-import java.security.Key;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -356,12 +349,10 @@ public class GameLogic {
                             }
                         }
                         if (eachEnemy instanceof SlowGhost){
-                            ((SlowGhost) eachEnemy).noDecreaseHP(); // Undecrease SlowGhost HP (immortal)
+                            ((SlowGhost) eachEnemy).noDecreaseHP(); // UnDecrease SlowGhost HP (immortal)
                         }
                         if (eachEnemy instanceof MindGhost){
-                            ((MindGhost) eachEnemy).noDecreaseHP(); // Undecrease MindGhost HP (immortal)
-                            Punk.getInstance().setMindGhostDelay(true);
-                            Timeline mindGhostDelay = new Timeline(new KeyFrame(Duration.seconds(4), event -> Punk.getInstance().setMindGhostDelay(false)));
+                            ((MindGhost) eachEnemy).noDecreaseHP(); // UnDecrease MindGhost HP (immortal)
                         }
                         if (eachEnemy.getHp() == 0) {
                             currentPane.getChildren().remove(eachEnemy.getImageView());
@@ -457,9 +448,9 @@ public class GameLogic {
         );
         Bounds mainCharBounds = new BoundingBox(
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getMinX() + 20,
-                Punk.getInstance().getPunkImageView().getBoundsInParent().getMinY(),
+                Punk.getInstance().getPunkImageView().getBoundsInParent().getMinY() + 25,
                 20,
-                100
+                80
         );
 //        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
 //        playerRect.setFill(Color.TRANSPARENT);
@@ -467,7 +458,7 @@ public class GameLogic {
 //        playerRect.setStrokeWidth(2);
 //        currentPane.getChildren().add(playerRect);
 //
-//        Rectangle ghostRect = new Rectangle(GhostBounds.getMinX(), GhostBounds.getMinY(), GhostBounds.getWidth(), GhostBounds.getHeight());
+//        Rectangle ghostRect = new Rectangle(ghostBounds.getMinX(), ghostBounds.getMinY(), ghostBounds.getWidth(), ghostBounds.getHeight());
 //        ghostRect.setFill(Color.TRANSPARENT);
 //        ghostRect.setStroke(Color.RED);
 //        ghostRect.setStrokeWidth(2);
@@ -531,7 +522,7 @@ public class GameLogic {
             fadeOut.setOnFinished(event -> {
                 try {
                     System.out.println("Game Over !");
-//                    GameLogic.setHighscoreEachMap(Constant.getIndexMap(getCurrentMap()),Punk.getInstance().getScore());
+//                    GameLogic.setHighScoreEachMap(Constant.getIndexMap(getCurrentMap()),Punk.getInstance().getScore());
                     Main.getInstance().changeSceneJava(GameOverPane.getInstance());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -583,13 +574,11 @@ public class GameLogic {
         return newLastXPos;
     }
     public static double randXPos() {
-        double randXPos = ThreadLocalRandom.current().nextDouble(10, 1062);
-        return randXPos;
+        return ThreadLocalRandom.current().nextDouble(10, 1062);
     }
     public static int randomIndex() {
         Random random = new Random();
-        int randomIndex = random.nextInt(6);
-        return randomIndex;
+        return random.nextInt(6);
     }
     public static BackgroundImage getBGImage(String BGPath){
         String img_path = ClassLoader.getSystemResource(BGPath).toString();
@@ -624,11 +613,11 @@ public class GameLogic {
         currentMap = currentMapIn;
     }
 
-    public static void setHighscoreEachMap(int indexMap, int newscore) {
-        int oldscore = HighScore.get(indexMap);
-        if (newscore > oldscore) HighScore.set(indexMap, newscore);
+    public static void setHighScoreEachMap(int indexMap, int newscore) {
+        int oldScore = HighScore.get(indexMap);
+        if (newscore > oldScore) HighScore.set(indexMap, newscore);
     }
-    public static int getHighscoreEachMap(String mapname){
-        return HighScore.get(Constant.getIndexMap(mapname));
+    public static int getHighScoreEachMap(String mapName){
+        return HighScore.get(Constant.getIndexMap(mapName));
     }
 }

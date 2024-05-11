@@ -5,22 +5,17 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import logic.GameLogic;
-import logic.ability.Hitable;
 import logic.character.*;
-import logic.skills.FasterAttack;
 import main.Main;
 import utils.Constant;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
 public class ForestMapPane extends AnchorPane {
     private static ForestMapPane instance;
@@ -131,7 +126,7 @@ public class ForestMapPane extends AnchorPane {
         pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                GameLogic.setHighscoreEachMap(Constant.getIndexMap("ForestMap"), punk.getScore());
+                GameLogic.setHighScoreEachMap(Constant.getIndexMap("ForestMap"), punk.getScore());
                 fadeExitPage();
             }
         });

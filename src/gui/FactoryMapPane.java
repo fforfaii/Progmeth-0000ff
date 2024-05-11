@@ -5,7 +5,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
@@ -18,7 +17,6 @@ import utils.Constant;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class FactoryMapPane extends AnchorPane {
     private static FactoryMapPane instance;
@@ -83,7 +81,7 @@ public class FactoryMapPane extends AnchorPane {
         pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                GameLogic.setHighscoreEachMap(Constant.getIndexMap("FactoryMap"),punk.getScore());
+                GameLogic.setHighScoreEachMap(Constant.getIndexMap("FactoryMap"),punk.getScore());
                 fadeExitPage();
             }
         });
