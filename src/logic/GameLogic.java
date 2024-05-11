@@ -178,11 +178,11 @@ public class GameLogic {
     public static void setSkillImage(ImageView skillImageView, String skillName) {
         // Set icon that fall down
         switch (skillName) {
-            case "Shield":
-                skillImageView.setImage(new Image(ClassLoader.getSystemResource("shield.png").toString()));
-                skillImageView.setFitHeight(30);
-                skillImageView.setFitWidth(30);
-                break;
+//            case "Shield":
+//                skillImageView.setImage(new Image(ClassLoader.getSystemResource("shield.png").toString()));
+//                skillImageView.setFitHeight(30);
+//                skillImageView.setFitWidth(30);
+//                break;
             case "ExtraScore":
                 skillImageView.setImage(new Image(ClassLoader.getSystemResource("extrascore.png").toString()));
                 skillImageView.setFitHeight(35);
@@ -323,9 +323,6 @@ public class GameLogic {
             skillImage.setVisible(false);
             // Call effect skillname
             switch (skillName) {
-                case "Shield":
-                    Shield.effect();
-                    break;
                 case "ExtraScore":
                     ExtraScore.effect(map);
                     break;
@@ -435,10 +432,6 @@ public class GameLogic {
         if (fireballBounds.intersects(mainCharBounds) && fireball.isVisible() || currentPane.getChildren().contains(attackGhost)) {
             System.out.println("FireBall hit detected");
             PlaySound.ghostAndFireballHit.play();
-            if (Punk.getInstance().isShield()){
-                Shield.setIsHit(true);
-                return;
-            }
             attackGhost.hitDamage();
             fireball.setTranslateY(0.0);
             fireball.setVisible(false);
@@ -487,10 +480,6 @@ public class GameLogic {
                 System.out.println("Still poison delay");
                 return;
             }
-            if (Punk.getInstance().isShield()){
-                Shield.setIsHit(true);
-                return;
-            }
             poisonGhost.hitDamage(currentPane);
             // set position of poison at the same as PoisonGhost
             poison.setTranslateY(poisonGhost.getYPos());
@@ -519,11 +508,6 @@ public class GameLogic {
         if (!Punk.getInstance().isCanHit()) {
             return;
         }
-        if (Punk.getInstance().isShield()){
-            Shield.setIsHit(true);
-            return;
-        }
-
 //        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
 //        playerRect.setFill(Color.TRANSPARENT);
 //        playerRect.setStroke(Color.BLUE);

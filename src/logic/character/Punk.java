@@ -22,7 +22,6 @@ public class Punk {
     private boolean isDead;
     private boolean canHit;
     private boolean canShoot;
-    private boolean isShield;
     private ImageView punkImageView; //mainChar
     private Animation punkAnimation; //mainAni
     private Image runLeft; //runLeft
@@ -49,7 +48,6 @@ public class Punk {
         setImmortalDelay(false);
         setCanHit(true);
         setCanShoot(true);
-        setShield(false);
         setMindGhostDelay(false);
         setSlowGhostDelay(false);
         setPoisonDelay(false);
@@ -289,15 +287,6 @@ public class Punk {
     public void setCanShoot(boolean canShoot) {
         this.canShoot = canShoot;
     }
-
-    public boolean isShield() {
-        return isShield;
-    }
-
-    public void setShield(boolean shield) {
-        isShield = shield;
-    }
-
     public boolean isMindGhostDelay() {
         return mindGhostDelay;
     }
