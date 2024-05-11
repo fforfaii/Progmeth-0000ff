@@ -13,6 +13,7 @@ import javafx.util.Duration;
 import logic.GameLogic;
 import logic.character.Punk;
 import main.Main;
+import sound.Playsound;
 import utils.Constant;
 
 import java.io.IOException;
@@ -32,6 +33,9 @@ public class FactoryMapPane extends AnchorPane {
     private int addScore = 1;
     Punk punk;
     public FactoryMapPane() {
+        // Set BGsound
+        Playsound.FactorymapBG.play();
+
         //Set Background and Ground
         setBackground(new Background(GameLogic.getBGImage("BG_factory.png")));
         ImageView groundImageView = GameLogic.getGroundImage("factory_ground.png");
@@ -81,8 +85,16 @@ public class FactoryMapPane extends AnchorPane {
         pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                Playsound.FactorymapBG.stop();
+                Playsound.exit.play();
                 GameLogic.setHighscoreEachMap(Constant.getIndexMap("FactoryMap"),punk.getScore());
                 fadeExitPage();
+            }
+        });
+        pause.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Playsound.defaultBG.play();
             }
         });
 

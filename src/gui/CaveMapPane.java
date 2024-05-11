@@ -1,6 +1,7 @@
 package gui;
 
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
 import javafx.scene.image.Image;
@@ -18,6 +19,7 @@ import logic.character.AttackGhost;
 import logic.character.Minion;
 import logic.character.Punk;
 import main.Main;
+import sound.Playsound;
 import utils.Constant;
 
 import java.io.IOException;
@@ -53,6 +55,8 @@ public class CaveMapPane extends AnchorPane {
     Minion minion;
     AttackGhost attackGhost;
     public CaveMapPane() {
+        // Set BGsound
+        Playsound.CavemapBG.play();
         // Set Ground
         setBackground(new Background(GameLogic.getBGImage("BG_Cave.jpg")));
         ImageView groundImageView = GameLogic.getGroundImage("rock_ground_long.png");
@@ -150,11 +154,18 @@ public class CaveMapPane extends AnchorPane {
         pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                Playsound.CavemapBG.stop();
+                Playsound.exit.play();
                 GameLogic.setHighscoreEachMap(Constant.getIndexMap("CaveMap"),punk.getScore());
                 fadeExitPage();
             }
         });
-
+        pause.setOnMouseReleased(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Playsound.defaultBG.play();
+            }
+        });
         // Keyboard Input
         this.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
