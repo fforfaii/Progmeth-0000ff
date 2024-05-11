@@ -22,7 +22,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
     private Animation attackghostAnimation;
     private ImageView fireBall;
     public AttackGhost(double x, double y){
-        setHp(1);
+        setHp(3);
         setXPos(x);
         setYPos(y);
         attackGhostImageView = new ImageView(new Image(ClassLoader.getSystemResource("attackghost.png").toString()));
@@ -101,7 +101,13 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
 
     @Override
     public void setHp(int hp) {
-        this.hp = hp;
+        if (hp<0) {
+            this.hp = 0;
+        } else if (hp>3) {
+            this.hp = 3;
+        } else {
+            this.hp = hp;
+        }
     }
 
     public double getXPos() {

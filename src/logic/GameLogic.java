@@ -12,6 +12,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import logic.ability.Hitable;
 import logic.character.*;
@@ -261,7 +263,18 @@ public class GameLogic {
                     Bounds punkShotBounds = Punk.getInstance().getPunkShot().getBoundsInParent();
                     Bounds GhostBounds = eachEnemy.getImageView().getBoundsInParent();
                     if (punkShotBounds.intersects(GhostBounds) && Punk.getInstance().getPunkShot().isVisible()){
+                        Punk.getInstance().getPunkShot().setVisible(false);
                         eachEnemy.setHp(eachEnemy.getHp() - 1); // Decrease Ghost HP when hit
+                        if (eachEnemy instanceof Minion || eachEnemy instanceof AttackGhost) {
+                            switch (eachEnemy.getHp()){
+                                case 2:
+                                    eachEnemy.getImageView().setOpacity(0.7);
+                                    break;
+                                case 1:
+                                    eachEnemy.getImageView().setOpacity(0.3);
+                                    break;
+                            }
+                        }
                         if (eachEnemy instanceof SlowGhost){
                             ((SlowGhost) eachEnemy).noDecreaseHP(); // Undecrease SlowGhost HP (immortal)
                         }
@@ -336,6 +349,7 @@ public class GameLogic {
                 20,
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() / 2
         );
+
         if (FireballBounds.intersects(mainCharBounds) && poison.isVisible()) {
             System.out.println("Poison hit detected");
             if (Punk.getInstance().isShield()){
