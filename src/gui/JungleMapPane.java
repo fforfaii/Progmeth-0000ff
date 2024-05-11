@@ -13,7 +13,7 @@ import logic.GameLogic;
 import logic.character.Enemy;
 import logic.character.Punk;
 import main.Main;
-import sound.Playsound;
+import sound.PlaySound;
 import utils.Constant;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class JungleMapPane extends AnchorPane {
     Punk punk;
     public JungleMapPane() {
         // Set BGsound
-        Playsound.JunglemapBG.play();
+        PlaySound.jungleMapBG.play();
 
         //Set Background and Ground
         setBackground(new Background(GameLogic.getBGImage("BG_jungle.jpg")));
@@ -84,8 +84,8 @@ public class JungleMapPane extends AnchorPane {
         pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                Playsound.JunglemapBG.stop();
-                Playsound.exit.play();
+                PlaySound.jungleMapBG.stop();
+                PlaySound.exit.play();
                 GameLogic.setHighScoreEachMap(Constant.getIndexMap("JungleMap"),punk.getScore());
                 fadeExitPage();
             }
@@ -93,7 +93,7 @@ public class JungleMapPane extends AnchorPane {
         pause.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                Playsound.defaultBG.play();
+                PlaySound.defaultBG.play();
             }
         });
 

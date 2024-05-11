@@ -11,7 +11,7 @@ import javafx.util.Duration;
 import logic.GameLogic;
 import logic.character.*;
 import main.Main;
-import sound.Playsound;
+import sound.PlaySound;
 import utils.Constant;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class ForestMapPane extends AnchorPane {
     ArrayList<Enemy> enemies;
     public ForestMapPane(){
         // Set BGsound
-        Playsound.ForestmapBG.play();
+        PlaySound.forestMapBG.play();
 
         // Set Background and Ground
         setBackground(new Background(GameLogic.getBGImage("BG_forest.jpg")));
@@ -130,8 +130,8 @@ public class ForestMapPane extends AnchorPane {
         pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                Playsound.ForestmapBG.stop();
-                Playsound.exit.play();
+                PlaySound.forestMapBG.stop();
+                PlaySound.exit.play();
                 GameLogic.setHighScoreEachMap(Constant.getIndexMap("ForestMap"), punk.getScore());
                 fadeExitPage();
             }
@@ -139,7 +139,7 @@ public class ForestMapPane extends AnchorPane {
         pause.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                Playsound.defaultBG.play();
+                PlaySound.defaultBG.play();
             }
         });
 

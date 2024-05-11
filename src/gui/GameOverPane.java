@@ -16,7 +16,7 @@ import javafx.scene.text.Text;
 import logic.GameLogic;
 import logic.character.Punk;
 import main.Main;
-import sound.Playsound;
+import sound.PlaySound;
 import utils.Constant;
 
 
@@ -27,7 +27,7 @@ public class GameOverPane extends StackPane {
     Punk player;
     VBox allElements;
     public GameOverPane() {
-        Playsound.gameoverBG.play();
+        PlaySound.gameOverBG.play();
         player = Punk.getInstance();
         setBackground(new Background(GameLogic.getBGImage("BG_end.gif")));
         
@@ -52,8 +52,8 @@ public class GameOverPane extends StackPane {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    Playsound.gameoverBG.stop();
-                    Playsound.defaultBG.play();
+                    PlaySound.gameOverBG.stop();
+                    PlaySound.defaultBG.play();
                     GameLogic.setHighScoreEachMap(Constant.getIndexMap(GameLogic.getCurrentMap()),player.getScore());
                     Main.getInstance().changeSceneJava(new MapPane());
                 } catch (IOException e) {

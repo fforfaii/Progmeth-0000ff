@@ -10,19 +10,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import logic.ability.Hitable;
-import logic.ability.Imperishable;
 import logic.character.*;
 import logic.skills.*;
 import main.Main;
-import sound.Playsound;
+import sound.PlaySound;
 import utils.Constant;
 
 import java.io.IOException;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -287,7 +283,7 @@ public class GameLogic {
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() - 5
         );
         if (coinBounds.intersects(mainCharBounds) && coinImage.isVisible() && coinImage.getTranslateY() >= Punk.getInstance().getYPos() - 30){
-            Playsound.getcoin.play();
+            PlaySound.getCoin.play();
             Punk.getInstance().setScore(Punk.getInstance().getScore() + Punk.getInstance().getScorePerCoin());
             coinImage.setTranslateY(0.0);
             coinImage.setVisible(false);
@@ -322,7 +318,7 @@ public class GameLogic {
 
         // If player can get skill
         if (coinBounds.intersects(mainCharBounds) && skillImage.isVisible() && skillImage.getTranslateY() >= Punk.getInstance().getYPos() - 30){
-            Playsound.skillhit.play();
+            PlaySound.skillHit.play();
             skillImage.setTranslateY(0.0);
             skillImage.setVisible(false);
             // Call effect skillname
@@ -407,7 +403,7 @@ public class GameLogic {
     }
     //for AttackGhost
     public static void checkFireballHit(AnchorPane currentPane, ImageView fireball, AttackGhost attackGhost) {
-        if (Punk.getInstance().isImmortalDelay() || ! Punk.getInstance().isCanHit() || ! currentPane.getChildren().contains(attackGhost)) {
+        if (Punk.getInstance().isImmortalDelay() || ! Punk.getInstance().isCanHit()) {
             return;
         }
         Bounds fireballBounds = fireball.getBoundsInParent();
@@ -436,9 +432,9 @@ public class GameLogic {
 //        }));
 //        rectLast.play();
 
-        if (fireballBounds.intersects(mainCharBounds) && fireball.isVisible()) {
+        if (fireballBounds.intersects(mainCharBounds) && fireball.isVisible() || currentPane.getChildren().contains(attackGhost)) {
             System.out.println("FireBall hit detected");
-            Playsound.ghostandfireballhit.play();
+            PlaySound.ghostAndFireballHit.play();
             if (Punk.getInstance().isShield()){
                 Shield.setIsHit(true);
                 return;
@@ -466,8 +462,27 @@ public class GameLogic {
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() / 2
         );
 
+//        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
+//        playerRect.setFill(Color.TRANSPARENT);
+//        playerRect.setStroke(Color.BLUE);
+//        playerRect.setStrokeWidth(2);
+//        currentPane.getChildren().add(playerRect);
+//
+//        Rectangle ghostRect = new Rectangle(fireballBounds.getMinX(), fireballBounds.getMinY(), fireballBounds.getWidth(), fireballBounds.getHeight());
+//        ghostRect.setFill(Color.TRANSPARENT);
+//        ghostRect.setStroke(Color.RED);
+//        ghostRect.setStrokeWidth(2);
+//        currentPane.getChildren().add(ghostRect);
+//
+//        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
+//            currentPane.getChildren().remove(playerRect);
+//            currentPane.getChildren().remove(ghostRect);
+//        }));
+//        rectLast.play();
+
         if (fireballBounds.intersects(mainCharBounds) && poison.isVisible()) {
             System.out.println("Poison hit detected");
+            PlaySound.poisonHit.play();
             if (Punk.getInstance().isPoisonDelay()) {
                 System.out.println("Still poison delay");
                 return;
@@ -529,7 +544,7 @@ public class GameLogic {
 
         if (ghostBounds.intersects(mainCharBounds) && enemyimageview.isVisible()) {
             System.out.println("Ghost hit detected");
-            Playsound.ghostandfireballhit.play();
+            PlaySound.ghostAndFireballHit.play();
             if (enemy instanceof Hitable) {
                 if (enemy instanceof Minion) {
                     if (Punk.getInstance().isImmortalDelay()){
@@ -579,8 +594,8 @@ public class GameLogic {
             return;
         }
         if (Punk.getInstance().getHp() == 0) {
-            Playsound.stopAllmapBG();
-            Playsound.death.play();
+            PlaySound.stopAllmapBG();
+            PlaySound.death.play();
             Punk.getInstance().setDead(true);
             setIsGameOver(true);
             FadeTransition fadeOut = new FadeTransition(Duration.seconds(3), currentPane);
@@ -589,7 +604,7 @@ public class GameLogic {
             fadeOut.setOnFinished(event -> {
                 try {
                     System.out.println("Game Over !");
-                    Playsound.gameoverBG.play();
+                    PlaySound.gameOverBG.play();
                     Main.getInstance().changeSceneJava(GameOverPane.getInstance());
                 } catch (IOException e) {
                     throw new RuntimeException(e);

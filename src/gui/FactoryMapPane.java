@@ -13,7 +13,7 @@ import logic.GameLogic;
 import logic.character.Enemy;
 import logic.character.Punk;
 import main.Main;
-import sound.Playsound;
+import sound.PlaySound;
 import utils.Constant;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class FactoryMapPane extends AnchorPane {
     Punk punk;
     public FactoryMapPane() {
         // Set BGsound
-        Playsound.FactorymapBG.play();
+        PlaySound.factoryMapBG.play();
 
         //Set Background and Ground
         setBackground(new Background(GameLogic.getBGImage("BG_factory.png")));
@@ -85,8 +85,8 @@ public class FactoryMapPane extends AnchorPane {
         pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                Playsound.FactorymapBG.stop();
-                Playsound.exit.play();
+                PlaySound.factoryMapBG.stop();
+                PlaySound.exit.play();
                 GameLogic.setHighScoreEachMap(Constant.getIndexMap("FactoryMap"),punk.getScore());
                 fadeExitPage();
             }
@@ -94,7 +94,7 @@ public class FactoryMapPane extends AnchorPane {
         pause.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                Playsound.defaultBG.play();
+                PlaySound.defaultBG.play();
             }
         });
 

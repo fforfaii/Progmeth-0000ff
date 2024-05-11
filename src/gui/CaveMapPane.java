@@ -1,7 +1,6 @@
 package gui;
 
 import javafx.animation.*;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
 import javafx.scene.image.Image;
@@ -12,7 +11,7 @@ import javafx.util.Duration;
 import logic.GameLogic;
 import logic.character.*;
 import main.Main;
-import sound.Playsound;
+import sound.PlaySound;
 import utils.Constant;
 
 import java.io.IOException;
@@ -30,7 +29,7 @@ public class CaveMapPane extends AnchorPane {
     Punk punk;
     public CaveMapPane() {
         // Set BGsound
-        Playsound.CavemapBG.play();
+        PlaySound.caveMapBG.play();
         // Set Ground
         setBackground(new Background(GameLogic.getBGImage("BG_Cave.jpg")));
         ImageView groundImageView = GameLogic.getGroundImage("rock_ground_long.png");
@@ -66,12 +65,12 @@ public class CaveMapPane extends AnchorPane {
 
         //Set enemies
         enemies = new ArrayList<>();
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 4; i++){
             Random random = new Random();
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
             System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            enemies.add(new PoisonGhost(randomX, randomY));
+            enemies.add(new Minion(randomX, randomY));
             setTopAnchor(enemies.get(i).getImageView(), 50.0);
             enemies.get(i).runAnimation(this);
             getChildren().add(enemies.get(i).getImageView());
@@ -83,7 +82,7 @@ public class CaveMapPane extends AnchorPane {
                 getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
             }
         }
-        for (int i = 3; i < 6; i++){
+        for (int i = 4; i < 8; i++){
             Random random = new Random();
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
@@ -100,57 +99,57 @@ public class CaveMapPane extends AnchorPane {
                 getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
             }
         }
-//        for (int i = 6; i < 9; i++){
-//            Random random = new Random();
-//            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-//            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-//            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-//            enemies.add(new SlowGhost(randomX, randomY));
-//            setTopAnchor(enemies.get(i).getImageView(), 50.0);
-//            enemies.get(i).runAnimation(this);
-//            getChildren().add(enemies.get(i).getImageView());
-//
-//            if (enemies.get(i) instanceof AttackGhost){
-//                getChildren().add(((AttackGhost) enemies.get(i)).getFireball());
-//            }
-//            if (enemies.get(i) instanceof PoisonGhost){
-//                getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
-//            }
-//        }
-//        for (int i = 9; i < 12; i++){
-//            Random random = new Random();
-//            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-//            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-//            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-//            enemies.add(new MindGhost(randomX, randomY));
-//            setTopAnchor(enemies.get(i).getImageView(), 50.0);
-//            enemies.get(i).runAnimation(this);
-//            getChildren().add(enemies.get(i).getImageView());
-//
-//            if (enemies.get(i) instanceof AttackGhost){
-//                getChildren().add(((AttackGhost) enemies.get(i)).getFireball());
-//            }
-//            if (enemies.get(i) instanceof PoisonGhost){
-//                getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
-//            }
-//        }
-//        for (int i = 12; i < 15; i++){
-//            Random random = new Random();
-//            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-//            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-//            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-//            enemies.add(new PoisonGhost(randomX, randomY));
-//            setTopAnchor(enemies.get(i).getImageView(), 50.0);
-//            enemies.get(i).runAnimation(this);
-//            getChildren().add(enemies.get(i).getImageView());
-//
-//            if (enemies.get(i) instanceof AttackGhost){
-//                getChildren().add(((AttackGhost) enemies.get(i)).getFireball());
-//            }
-//            if (enemies.get(i) instanceof PoisonGhost){
-//                getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
-//            }
-//        }
+        for (int i = 8; i < 12; i++){
+            Random random = new Random();
+            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
+            enemies.add(new SlowGhost(randomX, randomY));
+            setTopAnchor(enemies.get(i).getImageView(), 50.0);
+            enemies.get(i).runAnimation(this);
+            getChildren().add(enemies.get(i).getImageView());
+
+            if (enemies.get(i) instanceof AttackGhost){
+                getChildren().add(((AttackGhost) enemies.get(i)).getFireball());
+            }
+            if (enemies.get(i) instanceof PoisonGhost){
+                getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
+            }
+        }
+        for (int i = 12; i < 16; i++){
+            Random random = new Random();
+            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
+            enemies.add(new MindGhost(randomX, randomY));
+            setTopAnchor(enemies.get(i).getImageView(), 50.0);
+            enemies.get(i).runAnimation(this);
+            getChildren().add(enemies.get(i).getImageView());
+
+            if (enemies.get(i) instanceof AttackGhost){
+                getChildren().add(((AttackGhost) enemies.get(i)).getFireball());
+            }
+            if (enemies.get(i) instanceof PoisonGhost){
+                getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
+            }
+        }
+        for (int i = 16; i < 20; i++){
+            Random random = new Random();
+            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
+            enemies.add(new PoisonGhost(randomX, randomY));
+            setTopAnchor(enemies.get(i).getImageView(), 50.0);
+            enemies.get(i).runAnimation(this);
+            getChildren().add(enemies.get(i).getImageView());
+
+            if (enemies.get(i) instanceof AttackGhost){
+                getChildren().add(((AttackGhost) enemies.get(i)).getFireball());
+            }
+            if (enemies.get(i) instanceof PoisonGhost){
+                getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
+            }
+        }
 
         //Set skills
         skill = new ImageView();
@@ -169,8 +168,8 @@ public class CaveMapPane extends AnchorPane {
         pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                Playsound.CavemapBG.stop();
-                Playsound.exit.play();
+                PlaySound.caveMapBG.stop();
+                PlaySound.exit.play();
                 GameLogic.setHighScoreEachMap(Constant.getIndexMap("CaveMap"),punk.getScore());
                 fadeExitPage();
             }
@@ -178,7 +177,7 @@ public class CaveMapPane extends AnchorPane {
         pause.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                Playsound.defaultBG.play();
+                PlaySound.defaultBG.play();
             }
         });
 

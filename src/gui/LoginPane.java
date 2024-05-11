@@ -8,13 +8,12 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.image.Image;
-import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.TextField;
 import main.Main;
-import sound.Playsound;
+import sound.PlaySound;
 
 import java.io.IOException;
 
@@ -24,7 +23,7 @@ public class LoginPane extends GridPane {
 //    private static Playsound BGSound;
 
     private LoginPane() {
-        Playsound.defaultBG.play();
+        PlaySound.defaultBG.play();
 
         setBGImage();
         setAlignment(Pos.CENTER);

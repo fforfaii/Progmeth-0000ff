@@ -14,7 +14,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import logic.GameLogic;
 import main.Main;
-import sound.Playsound;
+import sound.PlaySound;
 
 import java.io.IOException;
 
@@ -50,7 +50,7 @@ public class MapPane extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    Playsound.defaultBG.stop();
+                    PlaySound.defaultBG.stop();
                     GameLogic.setCurrentMap("CaveMap");
                     Main.getInstance().changeSceneJava(new CaveMapPane());
                 } catch (IOException e) {
@@ -62,7 +62,7 @@ public class MapPane extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    Playsound.defaultBG.stop();
+                    PlaySound.defaultBG.stop();
                     GameLogic.setCurrentMap("ForestMap");
                     Main.getInstance().changeSceneJava(new ForestMapPane());
                 } catch (IOException e) {
@@ -74,7 +74,7 @@ public class MapPane extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    Playsound.defaultBG.stop();
+                    PlaySound.defaultBG.stop();
                     GameLogic.setCurrentMap("FactoryMap");
                     Main.getInstance().changeSceneJava(new FactoryMapPane());
                 } catch (IOException e) {
@@ -86,7 +86,7 @@ public class MapPane extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    Playsound.defaultBG.stop();
+                    PlaySound.defaultBG.stop();
                     GameLogic.setCurrentMap("JungleMap");
                     Main.getInstance().changeSceneJava(new JungleMapPane());
                 } catch (IOException e) {
