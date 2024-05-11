@@ -116,20 +116,24 @@ public class MapPane extends VBox {
         ImageView imageView = new ImageView(img);
         imageView.setFitHeight(200);
         imageView.setFitWidth(150);
-        Button mapText = new Button(mapName);
+        Button mapText = new Button();
         mapText.setFont(Font.font("Monospace", FontWeight.BOLD,20));
         mapText.setTextFill(Color.rgb(0,51,102));
         mapText.setPrefWidth(150);
         switch (mapName) {
             case "CaveMap":
+                mapText.setText("Cave");
                 MapBTN1 = mapText;
                 break;
             case "ForestMap":
+                mapText.setText("Forest");
                 MapBTN2 = mapText;
             case "FactoryMap":
+                mapText.setText("Factory");
                 MapBTN3 = mapText;
                 break;
             case "JungleMap":
+                mapText.setText("Jungle");
                 MapBTN4 = mapText;
             default: break;
         }

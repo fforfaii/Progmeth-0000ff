@@ -191,7 +191,7 @@ public class Punk {
     }
 
     public void setDelayShoot(double delayShoot) {
-        this.delayShoot = delayShoot;
+        this.delayShoot = Math.max(0, delayShoot);
     }
 
     public double getPunkShotXPos() {

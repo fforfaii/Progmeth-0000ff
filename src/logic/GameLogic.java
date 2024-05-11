@@ -10,6 +10,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import logic.ability.Hitable;
 import logic.character.*;
@@ -210,7 +212,7 @@ public class GameLogic {
                 break;
         }
     }
-    public static void skillFall(ImageView skillImageView) {
+    public static void skillFall(ImageView skillImageView, AnchorPane currentPane) {
         // Set falldown movement
         Random random = new Random();
         ArrayList<Double> durations = new ArrayList<>();
@@ -223,7 +225,8 @@ public class GameLogic {
         randomIndex = randomIndex(); // for getting duration
         AnimationTimer FallDown = new AnimationTimer() {
             private long lastUpdate = 0;
-            private String randSkill = GameLogic.randomSkill();
+//            private String randSkill = randomSkill();
+            private String randSkill;
             @Override
             public void handle(long currentTime) {
                 double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
@@ -235,10 +238,11 @@ public class GameLogic {
                     GameLogic.slideYPos(skillImageView, 2.0, 525);
                     lastUpdate = currentTime;
                     randomIndex = randomIndex();
-                    randSkill = GameLogic.randomSkill();
+//                    randSkill = GameLogic.randomSkill();
+                    randSkill = "Shield";
                     setSkillImage(skillImageView, randSkill);
                 }
-                GameLogic.checkSkillHit(this.toString(), skillImageView, randSkill);
+                checkSkillHit(this.toString(), skillImageView, randSkill, currentPane);
             }
         };
         FallDown.start();
@@ -287,7 +291,7 @@ public class GameLogic {
             ScoreBoard.getInstance().setScoreboard();
         }
     }
-    public static void checkSkillHit(String map, ImageView skillImage,String skillname) {
+    public static void checkSkillHit(String map, ImageView skillImage,String skillName, AnchorPane currentPane) {
         Bounds coinBounds = skillImage.getBoundsInParent();
         Bounds mainCharBounds = new BoundingBox(
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getMinX() + 20,
@@ -295,12 +299,31 @@ public class GameLogic {
                 20,
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() - 5
         );
+//        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
+//        playerRect.setFill(Color.TRANSPARENT);
+//        playerRect.setStroke(Color.BLUE);
+//        playerRect.setStrokeWidth(2);
+//        currentPane.getChildren().add(playerRect);
+//
+//        Rectangle ghostRect = new Rectangle(coinBounds.getMinX(), coinBounds.getMinY(), coinBounds.getWidth(), coinBounds.getHeight());
+//        ghostRect.setFill(Color.TRANSPARENT);
+//        ghostRect.setStroke(Color.RED);
+//        ghostRect.setStrokeWidth(2);
+//        currentPane.getChildren().add(ghostRect);
+//
+//        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
+//            currentPane.getChildren().remove(playerRect);
+//            currentPane.getChildren().remove(ghostRect);
+//        }));
+//        rectLast.play();
+
         // If player can get skill
         if (coinBounds.intersects(mainCharBounds) && skillImage.isVisible() && skillImage.getTranslateY() >= Punk.getInstance().getYPos() - 30){
+            System.out.println("Skill Hit");
             skillImage.setTranslateY(0.0);
             skillImage.setVisible(false);
             // Call effect skillname
-            switch (skillname) {
+            switch (skillName) {
                 case "Shield":
                     Shield.effect();
                     break;
@@ -317,6 +340,9 @@ public class GameLogic {
                     MoveFaster.effect();
                     break;
                 case "Disappear":
+                    if (! Punk.getInstance().isCanHit()){
+                        Disappear.getTimeline().stop();
+                    }
                     Disappear.effect();
                     break;
                 case "FasterAttack":
@@ -337,7 +363,7 @@ public class GameLogic {
                     Bounds GhostBounds = eachEnemy.getImageView().getBoundsInParent();
                     if (punkShotBounds.intersects(GhostBounds) && Punk.getInstance().getPunkShot().isVisible()){
                         Punk.getInstance().getPunkShot().setVisible(false);
-                        eachEnemy.setHp(eachEnemy.getHp() - 1); // Decrease Ghost HP when hit
+                        eachEnemy.setHp(eachEnemy.getHp() - Punk.getInstance().getAtk()); // Decrease Ghost HP when hit
                         if (eachEnemy instanceof Minion || eachEnemy instanceof AttackGhost) {
                             switch (eachEnemy.getHp()){
                                 case 2:
@@ -452,6 +478,14 @@ public class GameLogic {
                 20,
                 80
         );
+        if (!Punk.getInstance().isCanHit()) {
+            return;
+        }
+        if (Punk.getInstance().isShield()){
+            Shield.setIsHit(true);
+            return;
+        }
+
 //        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
 //        playerRect.setFill(Color.TRANSPARENT);
 //        playerRect.setStroke(Color.BLUE);
