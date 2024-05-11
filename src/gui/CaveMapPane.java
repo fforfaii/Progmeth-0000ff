@@ -21,7 +21,7 @@ import java.util.Random;
 public class CaveMapPane extends AnchorPane {
     private static CaveMapPane instance;
     private ImageView coin;
-    private ImageView pause;
+    private ImageView exit;
     private HpBoard hpBoard;
     private ScoreBoard scoreBoard;
     private ImageView skill;
@@ -159,13 +159,13 @@ public class CaveMapPane extends AnchorPane {
         GameLogic.skillFall(skill, this);
 
         // Set exit Button
-        pause = new ImageView(new Image(ClassLoader.getSystemResource("exit.png").toString()));
-        pause.setFitWidth(110);
-        pause.setFitHeight(44);
-        setBottomAnchor(pause, 10.0);
-        setRightAnchor(pause, 10.0);
-        getChildren().add(pause);
-        pause.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        exit = new ImageView(new Image(ClassLoader.getSystemResource("exit.png").toString()));
+        exit.setFitWidth(110);
+        exit.setFitHeight(44);
+        setBottomAnchor(exit, 10.0);
+        setRightAnchor(exit, 10.0);
+        getChildren().add(exit);
+        exit.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 PlaySound.caveMapBG.stop();
@@ -174,7 +174,7 @@ public class CaveMapPane extends AnchorPane {
                 fadeExitPage();
             }
         });
-        pause.setOnMouseReleased(new EventHandler<MouseEvent>() {
+        exit.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 PlaySound.defaultBG.play();
