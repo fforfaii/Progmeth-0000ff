@@ -95,7 +95,7 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
                     poison.setTranslateY(50.0);
                     poison.setFitWidth(40);
                     poison.setFitHeight(40);
-                    GameLogic.slideYPos(poison, 1, 535);
+                    GameLogic.slideYPos(poison, 1, 0, 535);
                     lastUpdate = currentTime;
 //                    randomIndex = GameLogic.randomIndex();
                 }

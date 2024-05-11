@@ -236,11 +236,11 @@ public class GameLogic {
                     skillImageView.setTranslateY(0.0);
                     skillImageView.setFitWidth(40);
                     skillImageView.setFitHeight(40);
-                    GameLogic.slideYPos(skillImageView, 2.0, 525);
+                    GameLogic.slideYPos(skillImageView, 2.0, 0, 525);
                     lastUpdate = currentTime;
                     randomIndex = randomIndex();
-//                    randSkill = GameLogic.randomSkill();
-                    randSkill = "ExtraDamage";
+                    randSkill = GameLogic.randomSkill();
+//                    randSkill = "Shield";
                     setSkillImage(skillImageView, randSkill);
                 }
                 checkSkillHit(this.toString(), skillImageView, randSkill, currentPane);
@@ -268,7 +268,7 @@ public class GameLogic {
                     coin.setTranslateY(0.0);
                     coin.setFitWidth(30);
                     coin.setFitHeight(30);
-                    slideYPos(coin, 1.5, 535);
+                    slideYPos(coin, 1.5, 0, 535);
                     lastUpdate = currentTime;
                     randomIndex = randomIndex();
                 }
@@ -385,8 +385,8 @@ public class GameLogic {
                             currentPane.getChildren().remove(eachEnemy.getImageView());
                             if (eachEnemy instanceof AttackGhost){
                                 // Get AttackGhost's Fireball out !
-                                ((AttackGhost) eachEnemy).getFireBall().setVisible(false);
-                                currentPane.getChildren().remove(((AttackGhost) eachEnemy).getFireBall());
+                                ((AttackGhost) eachEnemy).getFireball().setVisible(false);
+                                currentPane.getChildren().remove(((AttackGhost) eachEnemy).getFireball());
                             }
                             if (eachEnemy instanceof PoisonGhost){
                                 // Get PoisonGhost's Poison out !
@@ -618,10 +618,10 @@ public class GameLogic {
             HpBoard.getInstance().getChildren().add(hp);
         }
     }
-    public static void slideYPos(ImageView imageView, double duration, int ground) {
+    public static void slideYPos(ImageView imageView, double duration, double start, double ground) {
         imageView.setVisible(true);
         TranslateTransition fallTransition = new TranslateTransition(Duration.seconds(duration), imageView);
-        fallTransition.setFromY(0);
+        fallTransition.setFromY(start);
         fallTransition.setToY(ground);
         fallTransition.setCycleCount(1);
 
@@ -653,7 +653,7 @@ public class GameLogic {
         return newLastXPos;
     }
     public static double randXPos() {
-        return ThreadLocalRandom.current().nextDouble(10, 1062);
+        return ThreadLocalRandom.current().nextDouble(10, 1040);
     }
     public static int randomIndex() {
         Random random = new Random();
