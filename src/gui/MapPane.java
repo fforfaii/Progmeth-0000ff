@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -24,6 +25,7 @@ public class MapPane extends VBox {
     Button MapBTN4;
     private static MapPane instance;
     public MapPane() {
+        instance = this;
         setBGImage();
         setAlignment(Pos.CENTER);
         setSpacing(25);
@@ -88,7 +90,21 @@ public class MapPane extends VBox {
             }
         });
 
-        getChildren().addAll(welcome,hBox);
+        // Set AboutGame button
+        Button aboutGame = new Button("About Game");
+        aboutGame.setFont(Font.font("Monospace", FontWeight.BOLD,15));
+        aboutGame.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                try {
+                    Main.getInstance().changeSceneJava(AboutGamePane.getInstance());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        getChildren().addAll(welcome,hBox,aboutGame);
     }
 
     public VBox setMap(String mapImage,String mapName) {

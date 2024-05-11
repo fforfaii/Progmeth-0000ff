@@ -53,7 +53,6 @@ public class CaveMapPane extends AnchorPane {
     Minion minion;
     AttackGhost attackGhost;
     public CaveMapPane() {
-
         // Set Ground
         setBackground(new Background(GameLogic.getBGImage("BG_Cave.jpg")));
         ImageView groundImageView = GameLogic.getGroundImage("rock_ground_long.png");

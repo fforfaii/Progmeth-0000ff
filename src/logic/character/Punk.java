@@ -33,6 +33,7 @@ public class Punk {
     private ImageView punkShot; //Boom
     private int scorePerCoin;
     private boolean immortalDelay;
+    private boolean mindGhostDelay;
     public Punk() {
         // always start at (0.0,453.0)
         setXPos(0); // ระยะห่างจากขอบซ้ายของ window
@@ -42,12 +43,13 @@ public class Punk {
         setScore(0);
         setHp(3);
         setSpeed(15);
-        setDelayShoot(3);
+        setDelayShoot(5);
         setScorePerCoin(1);
         setImmortalDelay(false);
         setCanHit(true);
         setCanShoot(true);
         setShield(false);
+        setMindGhostDelay(false);
         punkImageView = new ImageView(new Image(ClassLoader.getSystemResource("Punk_idle.png").toString()));
         punkAnimation = new SpriteAnimation(punkImageView, Duration.millis(1000),4,4,0,0,48,48);
         runLeft = new Image(ClassLoader.getSystemResource("Punk_runleft.png").toString());
@@ -59,6 +61,15 @@ public class Punk {
         punkShot.setFitHeight(72);
         punkShot.setVisible(false);
         instance = this;
+    }
+    public ImageView getShotImageView() {
+        return punkShot;
+    }
+    public void setShotImageView(String picname) {
+        punkShot.setImage(new Image(ClassLoader.getSystemResource(picname).toString()));
+        punkShot.setFitWidth(12);
+        punkShot.setFitHeight(72);
+        punkShot.setVisible(false);
     }
     public void initPunkAnimation(){
         punkAnimation.setCycleCount(Animation.INDEFINITE);
@@ -281,5 +292,13 @@ public class Punk {
 
     public void setShield(boolean shield) {
         isShield = shield;
+    }
+
+    public boolean isMindGhostDelay() {
+        return mindGhostDelay;
+    }
+
+    public void setMindGhostDelay(boolean mindGhostDelay) {
+        this.mindGhostDelay = mindGhostDelay;
     }
 }

@@ -8,8 +8,9 @@ import java.util.Random;
 
 public abstract class Enemy { //template for every enemy
     int hp;
-    public abstract void hitDamage();
-//    public abstract void effect();
+//    public abstract void hitDamage();
+    private double xPos;
+    private double yPos;
     public abstract void runAnimation(AnchorPane currentPane);
     public abstract ImageView getImageView();
     public static double randYPos(){
@@ -21,5 +22,21 @@ public abstract class Enemy { //template for every enemy
     }
     public int getHp(){
         return hp;
+    }
+
+    public double getXPos() {
+        return xPos;
+    }
+
+    public void setXPos(double xPos) {
+        this.xPos = xPos;
+    }
+
+    public double getYPos() {
+        return yPos;
+    }
+
+    public void setYPos(double yPos) {
+        this.yPos = yPos;
     }
 }

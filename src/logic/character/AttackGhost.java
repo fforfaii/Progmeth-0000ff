@@ -22,7 +22,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
     private Animation attackghostAnimation;
     private ImageView fireBall;
     public AttackGhost(double x, double y){
-        setHp(1);
+        setHp(3);
         setXPos(x);
         setYPos(y);
         attackGhostImageView = new ImageView(new Image(ClassLoader.getSystemResource("attackghost.png").toString()));
@@ -75,14 +75,14 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
                     fireBall.setTranslateY(50.0);
                     fireBall.setFitWidth(40);
                     fireBall.setFitHeight(40);
-                    GameLogic.slideYPos(fireBall, 1);
+                    GameLogic.slideYPos(fireBall, 1, 535);
                     lastUpdate = currentTime;
 //                    randomIndex = GameLogic.randomIndex();
                 }
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check fireBall hit
-                    GameLogic.checkFireballHit(currentPane, fireBall);
+                    GameLogic.checkFireballHit(currentPane, fireBall,getInstance());
                 }
             }
         };
@@ -94,8 +94,6 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
         return attackGhostImageView;
     }
 
-    public void effect(){}
-
     @Override
     public int getHp() {
         return hp;
@@ -103,7 +101,13 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
 
     @Override
     public void setHp(int hp) {
-        this.hp = hp;
+        if (hp<0) {
+            this.hp = 0;
+        } else if (hp>3) {
+            this.hp = 3;
+        } else {
+            this.hp = hp;
+        }
     }
 
     public double getXPos() {

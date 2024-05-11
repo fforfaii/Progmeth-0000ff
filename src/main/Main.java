@@ -1,9 +1,7 @@
 package main;
 
+import gui.*;
 import gui.GameOverPane;
-import gui.LoginPane;
-import gui.GameOverPane;
-import gui.MapPane;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,7 +17,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         this.stage = stage;
         instance = this;
-        this.root = LoginPane.getInstance();
+        this.root = MapPane.getInstance();
         Scene scene = new Scene(root,1152,648);
         stage.setScene(scene);
         stage.setTitle("Ready Set RUN!");

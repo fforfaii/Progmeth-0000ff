@@ -25,7 +25,7 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
     private Animation minionAnimation;
 
     public Minion(double x, double y){
-        setHp(1);
+        setHp(3);
         setXPos(x);
         setYPos(y);
         minionImageView = new ImageView(new Image(ClassLoader.getSystemResource("minion.png").toString()));
@@ -70,7 +70,7 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check ghost hit
-                    GameLogic.checkGhostHit(currentPane, getInstance());
+                    GameLogic.checkGhostHit(currentPane, getInstance(), minionImageView);
                 }
             }
         };
@@ -91,7 +91,13 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
 
     @Override
     public void setHp(int hp) {
-        this.hp = hp;
+        if (hp<0) {
+            this.hp = 0;
+        } else if (hp>3) {
+            this.hp = 3;
+        } else {
+            this.hp = hp;
+        }
     }
 
     public double getXPos() {
@@ -110,7 +116,7 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
         this.yPos = yPos;
     }
     @Override
-    public void hitDamage() {
+    public void hitDamage(AnchorPane currentPane) {
         Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
     }
     @Override

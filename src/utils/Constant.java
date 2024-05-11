@@ -18,8 +18,7 @@ public class Constant {
         skillsname.add("Heal");
         skillsname.add("MoveFaster");
         skillsname.add("Disappear");
-//        skillsname.add("DamageFaster");
-//        skillsname.add("WideDamage");
+        skillsname.add("FasterAttack");
     }
 
     public static Constant getInstance() {
@@ -47,17 +46,17 @@ public class Constant {
         }
     }
 
-    public static Node getinstanceMap(String mapname) {
-        switch (mapname) {
-            case "CaveMap":
-                return CaveMapPane.getInstance();
-            case "ForestMap":
-                return ForestMapPane.getInstance();
-            case "FactoryMap":
-                return FactoryMapPane.getInstance();
-            case "JungleMap":
-                return JungleMapPane.getInstance();
-            default: return LoginPane.getInstance();
-        }
-    }
+//    public static Node getinstanceMap(String mapname) {
+//        switch (mapname) {
+//            case "CaveMap":
+//                return CaveMapPane.getInstance();
+//            case "ForestMap":
+//                return ForestMapPane.getInstance();
+//            case "FactoryMap":
+//                return FactoryMapPane.getInstance();
+//            case "JungleMap":
+//                return JungleMapPane.getInstance();
+//            default: return LoginPane.getInstance();
+//        }
+//    }
 }
