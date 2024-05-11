@@ -75,7 +75,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
                     fireBall.setTranslateY(50.0);
                     fireBall.setFitWidth(40);
                     fireBall.setFitHeight(40);
-                    GameLogic.slideYPos(fireBall, 1);
+                    GameLogic.slideYPos(fireBall, 1, 535);
                     lastUpdate = currentTime;
 //                    randomIndex = GameLogic.randomIndex();
                 }

@@ -11,7 +11,6 @@ public abstract class Enemy { //template for every enemy
 //    public abstract void hitDamage();
     private double xPos;
     private double yPos;
-//    public abstract void effect();
     public abstract void runAnimation(AnchorPane currentPane);
     public abstract ImageView getImageView();
     public static double randYPos(){

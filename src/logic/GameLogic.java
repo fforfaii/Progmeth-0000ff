@@ -33,13 +33,14 @@ import java.util.concurrent.ThreadLocalRandom;
 public class GameLogic {
     private static final ArrayList<Integer> HighScore = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
     private static String currentMap;
+    private static int randomIndex;
     private static boolean splashDelay = false;
     private static boolean isGameOver = false;
     private static boolean isLeftKeyPressed = false;
     private static boolean isRightKeyPressed = false;
     private static boolean isSpaceKeyPressed = false;
     private static Timeline continuousMovement = new Timeline();
-    private static Timeline reverseContinuousMovement = new Timeline();;
+    private static Timeline reverseContinuousMovement = new Timeline();
 
     public static void getPlayerInput(AnchorPane currentPane) {
 
@@ -181,6 +182,116 @@ public class GameLogic {
         int randomIndex = random.nextInt(Skills.size());
         return Skills.get(randomIndex);
     }
+    public static void setSkillImage(ImageView skillImageView, String skillName) {
+        // Set icon that fall down
+        switch (skillName) {
+            case "Shield":
+                skillImageView.setImage(new Image(ClassLoader.getSystemResource("shield.png").toString()));
+                skillImageView.setFitHeight(30);
+                skillImageView.setFitWidth(30);
+                break;
+            case "ExtraScore":
+                skillImageView.setImage(new Image(ClassLoader.getSystemResource("extrascore.png").toString()));
+                skillImageView.setFitHeight(35);
+                skillImageView.setFitWidth(35);
+                break;
+            case "ExtraDamage":
+                skillImageView.setImage(new Image(ClassLoader.getSystemResource("extradamage.png").toString()));
+                skillImageView.setFitHeight(50);
+                skillImageView.setFitWidth(50);
+                break;
+            case "Heal":
+                skillImageView.setImage(new Image(ClassLoader.getSystemResource("heal.png").toString()));
+                skillImageView.setFitHeight(50);
+                skillImageView.setFitWidth(50);
+                break;
+            case "MoveFaster":
+                skillImageView.setImage(new Image(ClassLoader.getSystemResource("movefaster.png").toString()));
+                skillImageView.setFitHeight(50);
+                skillImageView.setFitWidth(50);
+                break;
+            case "Disappear":
+                skillImageView.setImage(new Image(ClassLoader.getSystemResource("disappear.png").toString()));
+                skillImageView.setFitHeight(65);
+                skillImageView.setFitWidth(65);
+                break;
+        }
+    }
+    public static void skillFall(ImageView skillImageView) {
+        // Set falldown movement
+        Random random = new Random();
+        ArrayList<Double> durations = new ArrayList<>();
+        durations.add(3.0);
+        durations.add(3.5);
+        durations.add(4.0);
+        durations.add(4.5);
+        durations.add(2.0);
+        durations.add(2.5);
+        randomIndex = randomIndex(); // for getting duration
+        AnimationTimer FallDown = new AnimationTimer() {
+            private long lastUpdate = 0;
+            private String randSkill = GameLogic.randomSkill();
+            @Override
+            public void handle(long currentTime) {
+                double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
+                if (elapsedTimeSeconds >= durations.get(randomIndex)) {
+                    skillImageView.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
+                    skillImageView.setTranslateY(0.0);
+                    skillImageView.setFitWidth(40);
+                    skillImageView.setFitHeight(40);
+                    GameLogic.slideYPos(skillImageView, 2.0, 525);
+                    lastUpdate = currentTime;
+                    randomIndex = randomIndex();
+                    randSkill = GameLogic.randomSkill();
+                    setSkillImage(skillImageView, randSkill);
+                }
+                GameLogic.checkSkillHit(this.toString(), skillImageView, randSkill);
+            }
+        };
+        FallDown.start();
+    }
+    public static void coinFall(ImageView coin){
+        Random random = new Random();
+        ArrayList<Double> durations = new ArrayList<>();
+        durations.add(3.0);
+        durations.add(3.5);
+        durations.add(4.0);
+        durations.add(4.5);
+        durations.add(2.0);
+        durations.add(2.5);
+        randomIndex = randomIndex();
+        AnimationTimer fallDown = new AnimationTimer() {
+            private long lastUpdate = 0;
+            @Override
+            public void handle(long currentTime) {
+                double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
+                if (elapsedTimeSeconds >= durations.get(randomIndex)) {
+                    coin.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
+                    coin.setTranslateY(0.0);
+                    coin.setFitWidth(30);
+                    coin.setFitHeight(30);
+                    slideYPos(coin, 1.5, 535);
+                    lastUpdate = currentTime;
+                    randomIndex = randomIndex();
+                }
+                GameLogic.checkCoinHit(coin);
+            }
+        };
+        fallDown.start();
+    }
+//    public static void slideCoin(ImageView coinImage) {
+//        coinImage.setVisible(true);
+//        TranslateTransition fallTransition = new TranslateTransition(Duration.seconds(1.5), coinImage);
+//        fallTransition.setFromY(0);
+//        fallTransition.setToY(545);
+//        fallTransition.setCycleCount(1);
+//
+//        fallTransition.setOnFinished(event -> {
+//            coinImage.setTranslateY(0.0);
+//            coinImage.setVisible(false);
+//        });
+//        fallTransition.play();
+//    }
     public static void checkCoinHit(ImageView coinImage) {
         Bounds coinBounds = coinImage.getBoundsInParent();
         Bounds mainCharBounds = new BoundingBox(
@@ -450,11 +561,11 @@ public class GameLogic {
             HpBoard.getInstance().getChildren().add(hp);
         }
     }
-    public static void slideYPos(ImageView imageView, int duration) {
+    public static void slideYPos(ImageView imageView, double duration, int ground) {
         imageView.setVisible(true);
         TranslateTransition fallTransition = new TranslateTransition(Duration.seconds(duration), imageView);
         fallTransition.setFromY(0);
-        fallTransition.setToY(545);
+        fallTransition.setToY(ground);
         fallTransition.setCycleCount(1);
 
         fallTransition.setOnFinished(event -> {
