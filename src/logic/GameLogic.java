@@ -38,7 +38,7 @@ public class GameLogic {
     private static Timeline reverseContinuousMovement = new Timeline(new KeyFrame(Duration.seconds(3), e -> System.out.println("YAY from reverse")));;
 
     public static void getPlayerInput(AnchorPane currentPane) {
-        Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), e -> Punk.getInstance().setCanShoot(true)));
+
 
         continuousMovement = new Timeline(new KeyFrame(Duration.millis(50), e -> {
             if (isLeftKeyPressed && isSpaceKeyPressed) {
@@ -48,6 +48,7 @@ public class GameLogic {
                 if (Punk.getInstance().isCanShoot()){
                     Punk.getInstance().shoot();
                     Punk.getInstance().setCanShoot(false);
+                    Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), event -> Punk.getInstance().setCanShoot(true)));
                     delayShoot.play();
                 }
             } else if (isRightKeyPressed && isSpaceKeyPressed) {
@@ -57,6 +58,7 @@ public class GameLogic {
                 if (Punk.getInstance().isCanShoot()){
                     Punk.getInstance().shoot();
                     Punk.getInstance().setCanShoot(false);
+                    Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), event -> Punk.getInstance().setCanShoot(true)));
                     delayShoot.play();
                 }
             } else if (isLeftKeyPressed) {
@@ -74,6 +76,7 @@ public class GameLogic {
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
                 Punk.getInstance().shoot();
                 Punk.getInstance().setCanShoot(false);
+                Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), event -> Punk.getInstance().setCanShoot(true)));
                 delayShoot.play();
             }
         }));
