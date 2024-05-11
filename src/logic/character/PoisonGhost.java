@@ -80,6 +80,8 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
                 int randomIndex = GameLogic.randomIndex();
                 if (elapsedTimeSeconds >= durations.get(randomIndex)) {
                     poison.setLayoutX(getXPos() + 30);
+                    poison.setTranslateY(poisonGhostImageView.getTranslateY() + 20);
+                    poison.setVisible(false);
                     poison.setFitWidth(40);
                     poison.setFitHeight(40);
                     GameLogic.slideYPos(poison, 1, poisonGhostImageView.getTranslateY() + 30, 535);
