@@ -17,7 +17,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         this.stage = stage;
         instance = this;
-        this.root = LoginPane.getInstance();
+        this.root = MapPane.getInstance();
         Scene scene = new Scene(root,1152,648);
         stage.setScene(scene);
         stage.setTitle("Ready Set RUN!");

@@ -43,7 +43,7 @@ public class Punk {
         setScore(0);
         setHp(3);
         setSpeed(15);
-        setDelayShoot(0.5);
+        setDelayShoot(5);
         setScorePerCoin(1);
         setImmortalDelay(false);
         setCanHit(true);
