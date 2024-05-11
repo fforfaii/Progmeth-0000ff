@@ -7,8 +7,8 @@ import logic.character.Punk;
 
 public class MoveFaster {
     public static void effect(){
-        Punk.getInstance().setSpeed(Punk.getInstance().getSpeed() + 10);
-        Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(5), event -> Punk.getInstance().setSpeed(15)));
+        Punk.getInstance().setSpeed(Punk.getInstance().getSpeed() + 15);
+        Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(5), event -> Punk.getInstance().setSpeed(Punk.getInstance().getSpeed() - 15)));
         cooldownTimer.play();
     }
 }
