@@ -25,6 +25,7 @@ public class MapPane extends VBox {
     Button MapBTN4;
     private static MapPane instance;
     public MapPane() {
+        instance = this;
         setBGImage();
         setAlignment(Pos.CENTER);
         setSpacing(25);
