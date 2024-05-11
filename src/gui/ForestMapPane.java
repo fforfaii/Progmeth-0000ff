@@ -116,8 +116,6 @@ public class ForestMapPane extends AnchorPane {
             enemies.get(i).runAnimation(this);
             getChildren().add(enemies.get(i).getImageView());
         }
-        System.out.println("Call FasterAttack effect");
-        FasterAttack.effect();
 
         // Set exit Button
         pause = new ImageView(new Image(ClassLoader.getSystemResource("exit.png").toString()));
