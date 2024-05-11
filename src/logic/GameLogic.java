@@ -279,19 +279,6 @@ public class GameLogic {
         };
         fallDown.start();
     }
-//    public static void slideCoin(ImageView coinImage) {
-//        coinImage.setVisible(true);
-//        TranslateTransition fallTransition = new TranslateTransition(Duration.seconds(1.5), coinImage);
-//        fallTransition.setFromY(0);
-//        fallTransition.setToY(545);
-//        fallTransition.setCycleCount(1);
-//
-//        fallTransition.setOnFinished(event -> {
-//            coinImage.setTranslateY(0.0);
-//            coinImage.setVisible(false);
-//        });
-//        fallTransition.play();
-//    }
     public static void checkCoinHit(ImageView coinImage) {
         Bounds coinBounds = coinImage.getBoundsInParent();
         Bounds mainCharBounds = new BoundingBox(
