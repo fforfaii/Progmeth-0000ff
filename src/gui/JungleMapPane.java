@@ -206,6 +206,11 @@ public class JungleMapPane extends AnchorPane {
                 skill.setFitHeight(65);
                 skill.setFitWidth(65);
                 break;
+            case "FasterAttack":
+                skill.setImage(new Image(ClassLoader.getSystemResource("fasterattack.png").toString()));
+                skill.setFitHeight(40.32);
+                skill.setFitWidth(71.75);
+                break;
         }
     }
     public void skillFall(ImageView skillimageview) {

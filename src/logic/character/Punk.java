@@ -62,6 +62,15 @@ public class Punk {
         punkShot.setVisible(false);
         instance = this;
     }
+    public ImageView getShotImageView() {
+        return punkShot;
+    }
+    public void setShotImageView(String picname) {
+        punkShot.setImage(new Image(ClassLoader.getSystemResource(picname).toString()));
+        punkShot.setFitWidth(12);
+        punkShot.setFitHeight(72);
+        punkShot.setVisible(false);
+    }
     public void initPunkAnimation(){
         punkAnimation.setCycleCount(Animation.INDEFINITE);
         punkImageView.setFitWidth(100);

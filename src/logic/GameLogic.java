@@ -241,6 +241,9 @@ public class GameLogic {
                 case "Disappear":
                     Disappear.effect();
                     break;
+                case "FasterAttack":
+                    FasterAttack.effect();
+                    break;
             }
         }
     }
@@ -460,7 +463,7 @@ public class GameLogic {
         }
     }
     public static void addHeart() {
-        if (HpBoard.getInstance().getChildren().size() <= 3){
+        if (HpBoard.getInstance().getChildren().size() < 3){
             ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
             hp.setFitHeight(20);
             hp.setFitWidth(25);

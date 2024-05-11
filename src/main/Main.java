@@ -1,9 +1,7 @@
 package main;
 
+import gui.*;
 import gui.GameOverPane;
-import gui.LoginPane;
-import gui.GameOverPane;
-import gui.MapPane;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

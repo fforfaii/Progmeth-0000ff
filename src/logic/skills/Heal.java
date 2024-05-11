@@ -1,5 +1,6 @@
 package logic.skills;
 
+import gui.HpBoard;
 import logic.GameLogic;
 import logic.character.Punk;
 

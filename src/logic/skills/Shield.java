@@ -20,11 +20,9 @@ public class Shield {
             @Override
             public void handle(long now) {
                 if (IsHit()){
-                    Punk.getInstance().getPunkImageView().setOpacity(1.0);
                     Punk.getInstance().setShield(false);
                     stop();
                 }else {
-                    Punk.getInstance().getPunkImageView().setOpacity(0.5);
                     // Blink every 0.5 seconds
                     if (now - startTime > 200_000_000) {
                         isVisible = !isVisible;
