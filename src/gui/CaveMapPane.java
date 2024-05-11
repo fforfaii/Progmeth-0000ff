@@ -67,10 +67,14 @@ public class CaveMapPane extends AnchorPane {
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
             System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            enemies.add(new MindGhost(randomX, randomY));
+            enemies.add(new Minion(randomX, randomY));
             setTopAnchor(enemies.get(i).getImageView(), 50.0);
             enemies.get(i).runAnimation(this);
             getChildren().add(enemies.get(i).getImageView());
+
+            if (enemies.get(i) instanceof AttackGhost){
+                getChildren().add(((AttackGhost) enemies.get(i)).getFireBall());
+            }
             if (enemies.get(i) instanceof PoisonGhost){
                 getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
             }
@@ -80,7 +84,7 @@ public class CaveMapPane extends AnchorPane {
         GameLogic.setSkillImage(skill, GameLogic.randomSkill());
         skill.setVisible(false);
         getChildren().add(skill);
-        GameLogic.skillFall(skill);
+        GameLogic.skillFall(skill, this);
 
         // Set exit Button
         pause = new ImageView(new Image(ClassLoader.getSystemResource("exit.png").toString()));

@@ -68,7 +68,7 @@ public class JungleMapPane extends AnchorPane {
         GameLogic.setSkillImage(skill, GameLogic.randomSkill());
         skill.setVisible(false);
         getChildren().add(skill);
-        GameLogic.skillFall(skill);
+        GameLogic.skillFall(skill, this);
 
         // Set exit Button
         pause = new ImageView(new Image(ClassLoader.getSystemResource("exit.png").toString()));

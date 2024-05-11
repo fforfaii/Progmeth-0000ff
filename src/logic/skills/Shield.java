@@ -12,8 +12,7 @@ public class Shield {
 
     public static void effect(){
         Punk.getInstance().setShield(true);
-
-        AnimationTimer shielTimer = new AnimationTimer() {
+        AnimationTimer shieldTimer = new AnimationTimer() {
             private long startTime = 0;
             private boolean isVisible = true; // Track image visibility
 
@@ -24,7 +23,7 @@ public class Shield {
                     stop();
                 }else {
                     // Blink every 0.5 seconds
-                    if (now - startTime > 200_000_000) {
+                    if (now - startTime > 500_000_000) {
                         isVisible = !isVisible;
                         Punk.getInstance().getPunkImageView().setVisible(isVisible);
                         startTime = now;
@@ -32,7 +31,7 @@ public class Shield {
                 }
             }
         };
-        shielTimer.start();
+        shieldTimer.start();
     }
 
     public static boolean IsHit() {
