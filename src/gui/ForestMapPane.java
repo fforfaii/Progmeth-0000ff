@@ -93,12 +93,12 @@ public class ForestMapPane extends AnchorPane {
 //                getChildren().add(((AttackGhost) enemies.get(i)).getFireBall());
 //            }
 //        }
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 15; i++){
             Random random = new Random();
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
             System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            enemies.add(new PoisonGhost(randomX, randomY));
+            enemies.add(new MindGhost(randomX, randomY));
             setTopAnchor(enemies.get(i).getImageView(), 50.0);
             enemies.get(i).runAnimation(this);
             getChildren().add(enemies.get(i).getImageView());
@@ -106,16 +106,16 @@ public class ForestMapPane extends AnchorPane {
                 getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
             }
         }
-        for (int i = 3; i < 7; i++) {
-            Random random = new Random();
-            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-            System.out.println("RanX : "+ randomX +", RandY: "+randomY);
-            enemies.add(new MindGhost(randomX, randomY));
-            setTopAnchor(enemies.get(i).getImageView(), 50.0);
-            enemies.get(i).runAnimation(this);
-            getChildren().add(enemies.get(i).getImageView());
-        }
+//        for (int i = 3; i < 7; i++) {
+//            Random random = new Random();
+//            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+//            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+//            System.out.println("RanX : "+ randomX +", RandY: "+randomY);
+//            enemies.add(new MindGhost(randomX, randomY));
+//            setTopAnchor(enemies.get(i).getImageView(), 50.0);
+//            enemies.get(i).runAnimation(this);
+//            getChildren().add(enemies.get(i).getImageView());
+//        }
 
         // Set exit Button
         pause = new ImageView(new Image(ClassLoader.getSystemResource("exit.png").toString()));

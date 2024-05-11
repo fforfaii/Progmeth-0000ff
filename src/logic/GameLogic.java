@@ -12,6 +12,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import logic.ability.Hitable;
 import logic.character.*;
@@ -19,7 +21,9 @@ import logic.skills.*;
 import main.Main;
 import utils.Constant;
 
+import javax.swing.plaf.multi.MultiMenuItemUI;
 import java.io.IOException;
+import java.security.Key;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,8 +38,8 @@ public class GameLogic {
     private static boolean isLeftKeyPressed = false;
     private static boolean isRightKeyPressed = false;
     private static boolean isSpaceKeyPressed = false;
-    private static Timeline continuousMovement = new Timeline(new KeyFrame(Duration.seconds(3), e -> System.out.println("YAY from normal")));
-    private static Timeline reverseContinuousMovement = new Timeline(new KeyFrame(Duration.seconds(3), e -> System.out.println("YAY from reverse")));;
+    private static Timeline continuousMovement = new Timeline();
+    private static Timeline reverseContinuousMovement = new Timeline();;
 
     public static void getPlayerInput(AnchorPane currentPane) {
 
@@ -63,12 +67,10 @@ public class GameLogic {
                 }
             } else if (isLeftKeyPressed) {
                 // Move left
-                System.out.println("Normal Click");
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
                 Punk.getInstance().runLeft();
             } else if (isRightKeyPressed) {
                 // Move right
-                System.out.println("Normal Click");
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
                 Punk.getInstance().runRight();
             } else if (isSpaceKeyPressed && Punk.getInstance().isCanShoot()){
@@ -108,44 +110,42 @@ public class GameLogic {
         continuousMovement.play();
     }
     public static void reversePlayerInput(AnchorPane currentPane) {
-        Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), e -> Punk.getInstance().setCanShoot(true)));
 
-        reverseContinuousMovement = new Timeline(new KeyFrame(Duration.millis(50), e -> {
+        reverseContinuousMovement = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             if (isRightKeyPressed && isSpaceKeyPressed) {
                 // Move left and shoot
-                System.out.println("Reverse Clicked");
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
                 Punk.getInstance().runLeft();
                 if (Punk.getInstance().isCanShoot()){
                     Punk.getInstance().shoot();
                     Punk.getInstance().setCanShoot(false);
+                    Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), e -> Punk.getInstance().setCanShoot(true)));
                     delayShoot.play();
                 }
             } else if (isLeftKeyPressed && isSpaceKeyPressed) {
                 // Move right and shoot
-                System.out.println("Reverse Clicked");
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
                 Punk.getInstance().runRight();
                 if (Punk.getInstance().isCanShoot()){
                     Punk.getInstance().shoot();
                     Punk.getInstance().setCanShoot(false);
+                    Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), e -> Punk.getInstance().setCanShoot(true)));
                     delayShoot.play();
                 }
             } else if (isRightKeyPressed) {
                 // Move left
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
-                System.out.println("Reverse Clicked");
                 Punk.getInstance().runLeft();
             } else if (isLeftKeyPressed) {
                 // Move right
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
-                System.out.println("Reverse Clicked");
                 Punk.getInstance().runRight();
             } else if (isSpaceKeyPressed && Punk.getInstance().isCanShoot()){
                 System.out.println("Boom!");
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
                 Punk.getInstance().shoot();
                 Punk.getInstance().setCanShoot(false);
+                Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), e -> Punk.getInstance().setCanShoot(true)));
                 delayShoot.play();
             }
         }));
@@ -175,21 +175,6 @@ public class GameLogic {
         });
 
         reverseContinuousMovement.play();
-    }
-    public static String getCurrentMap() {
-        return currentMap;
-    }
-
-    public static void setCurrentMap(String currentMapIn) {
-        currentMap = currentMapIn;
-    }
-
-    public static void setHighscoreEachMap(int indexMap, int newscore) {
-        int oldscore = HighScore.get(indexMap);
-        if (newscore > oldscore) HighScore.set(indexMap, newscore);
-    }
-    public static int getHighscoreEachMap(String mapname){
-        return HighScore.get(Constant.getIndexMap(mapname));
     }
     public static String randomSkill() {
         ArrayList<String> Skills = Constant.getInstance().getSkillsname();
@@ -355,9 +340,6 @@ public class GameLogic {
 
     //for every type of enemy
     public static void checkGhostHit(AnchorPane currentPane, Enemy enemy, ImageView enemyimageview) {
-        if (Punk.getInstance().isImmortalDelay()){
-            return;
-        }
         Bounds GhostBounds = new BoundingBox(
                 enemyimageview.getBoundsInParent().getMinX(),
                 enemyimageview.getBoundsInParent().getMinY(),
@@ -370,70 +352,54 @@ public class GameLogic {
                 20,
                 100
         );
+        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
+        playerRect.setFill(Color.TRANSPARENT);
+        playerRect.setStroke(Color.BLUE);
+        playerRect.setStrokeWidth(2);
+        currentPane.getChildren().add(playerRect);
+
+        Rectangle ghostRect = new Rectangle(GhostBounds.getMinX(), GhostBounds.getMinY(), GhostBounds.getWidth(), GhostBounds.getHeight());
+        ghostRect.setFill(Color.TRANSPARENT);
+        ghostRect.setStroke(Color.RED);
+        ghostRect.setStrokeWidth(2);
+        currentPane.getChildren().add(ghostRect);
+
+        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
+            currentPane.getChildren().remove(playerRect);
+            currentPane.getChildren().remove(ghostRect);
+        }));
+        rectLast.play();
+
         if (GhostBounds.intersects(mainCharBounds) && enemyimageview.isVisible()) {
             System.out.println("Ghost hit detected");
-//<<<<<<< HEAD
-//            if (enemy instanceof Hitable) {
-//                if (enemy instanceof Minion) {
-//                    enemy.hitDamage();
-////                    Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
-//                    deleteHeart(currentPane);
-//                }
-//                if (enemy instanceof MindGhost) {
-//                    ((MindGhost) enemy).setCurrentPane(currentPane);
-//                    enemy.hitDamage();
-//                    Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(4), event -> {
-//                            ((MindGhost) enemy).BacktoNormal();
-//                    }));
-//                    cooldownTimer.play();
-//                }
-//                if (enemy instanceof SlowGhost) {
-//                    enemy.hitDamage();
-//                }
-//            }
-//            Punk.getInstance().setImmortalDelay(true);
-//            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
-//            delayTimer.play();
-//||||||| 2d12347
-//            if (enemy instanceof Hitable) {
-//                if (enemy instanceof Minion) {
-//                    enemy.hitDamage();
-////                    Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
-//                    deleteHeart(currentPane);
-//                }
-//                if (enemy instanceof MindGhost) {
-//                    ((MindGhost) enemy).setCurrentPane(currentPane);
-//                    enemy.hitDamage();
-//                    Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(4), event -> {
-//                            ((MindGhost) enemy).BacktoNormal();
-//                    }));
-//                    cooldownTimer.play();
-//                }
-//                if (enemy instanceof SlowGhost) {
-//                    enemy.hitDamage();
-//                }
-//            }
-//            Punk.getInstance().setImmortalDelay(true);
-//            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
-//            delayTimer.play();
-//=======
             if (enemy instanceof Hitable) {
                 if (enemy instanceof Minion) {
+                    if (Punk.getInstance().isImmortalDelay()){
+                        System.out.println("Immortal Delay");
+                        return;
+                    }
                     ((Minion) enemy).hitDamage(currentPane);
-//                    Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
                     deleteHeart(currentPane);
+                    Punk.getInstance().setImmortalDelay(true);
+                    Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
+                    delayTimer.play();
                 }
                 if (enemy instanceof MindGhost) {
                     ((MindGhost) enemy).setCurrentPane(currentPane);
-                    ((MindGhost) enemy).hitDamage(currentPane);
+                    if (Punk.getInstance().isMindGhostDelay()){
+                        System.out.println("Still MindGhost delay");
+                    }
+                    if (! Punk.getInstance().isMindGhostDelay()){
+                        ((MindGhost) enemy).hitDamage(currentPane);
+                        Punk.getInstance().setMindGhostDelay(true);
+                        Timeline mindGhostDelay = new Timeline(new KeyFrame(Duration.seconds(4.5), e -> Punk.getInstance().setMindGhostDelay(false)));
+                        mindGhostDelay.play();
+                    }
                 }
                 if (enemy instanceof SlowGhost) {
                     ((SlowGhost) enemy).hitDamage(currentPane);
                 }
             }
-            Punk.getInstance().setImmortalDelay(true);
-            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> Punk.getInstance().setImmortalDelay(false)));
-            delayTimer.play();
         }
     }
     public static void deleteHeart(AnchorPane currentPane) {
@@ -540,5 +506,20 @@ public class GameLogic {
 
     public static Timeline getReverseContinuousMovement() {
         return reverseContinuousMovement;
+    }
+    public static String getCurrentMap() {
+        return currentMap;
+    }
+
+    public static void setCurrentMap(String currentMapIn) {
+        currentMap = currentMapIn;
+    }
+
+    public static void setHighscoreEachMap(int indexMap, int newscore) {
+        int oldscore = HighScore.get(indexMap);
+        if (newscore > oldscore) HighScore.set(indexMap, newscore);
+    }
+    public static int getHighscoreEachMap(String mapname){
+        return HighScore.get(Constant.getIndexMap(mapname));
     }
 }
