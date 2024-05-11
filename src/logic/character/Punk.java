@@ -2,8 +2,6 @@ package logic.character;
 
 import gui.SpriteAnimation;
 import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,7 +15,7 @@ public class Punk {
     private int hp;
     private int score;
     private int atk;
-    private int speed;
+    private double speed;
     private double delayShoot;
     private double punkShotXPos;
     private double punkShotYPos;
@@ -35,6 +33,8 @@ public class Punk {
     private int scorePerCoin;
     private boolean immortalDelay;
     private boolean mindGhostDelay;
+    private boolean slowGhostDelay;
+    private boolean poisonDelay;
     public Punk() {
         // always start at (0.0,453.0)
         setXPos(0); // ระยะห่างจากขอบซ้ายของ window
@@ -43,14 +43,16 @@ public class Punk {
         setDead(false);
         setScore(0);
         setHp(3);
-        setSpeed(15);
-        setDelayShoot(5);
+        setSpeed(15.0);
+        setDelayShoot(5.0);
         setScorePerCoin(1);
         setImmortalDelay(false);
         setCanHit(true);
         setCanShoot(true);
         setShield(false);
         setMindGhostDelay(false);
+        setSlowGhostDelay(false);
+        setPoisonDelay(false);
         punkImageView = new ImageView(new Image(ClassLoader.getSystemResource("Punk_idle.png").toString()));
         punkAnimation = new SpriteAnimation(punkImageView, Duration.millis(1000),4,4,0,0,48,48);
         runLeft = new Image(ClassLoader.getSystemResource("Punk_runleft.png").toString());
@@ -183,11 +185,11 @@ public class Punk {
         this.atk = atk;
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
-    public void setSpeed(int speed) {
+    public void setSpeed(double speed) {
         this.speed = Math.max(0, speed);
     }
     public double getDelayShoot() {
@@ -195,7 +197,7 @@ public class Punk {
     }
 
     public void setDelayShoot(double delayShoot) {
-        this.delayShoot = delayShoot;
+        this.delayShoot = Math.max(0, delayShoot);
     }
 
     public double getPunkShotXPos() {
@@ -302,5 +304,21 @@ public class Punk {
 
     public void setMindGhostDelay(boolean mindGhostDelay) {
         this.mindGhostDelay = mindGhostDelay;
+    }
+
+    public boolean isSlowGhostDelay() {
+        return slowGhostDelay;
+    }
+
+    public void setSlowGhostDelay(boolean slowGhostDelay) {
+        this.slowGhostDelay = slowGhostDelay;
+    }
+
+    public boolean isPoisonDelay() {
+        return poisonDelay;
+    }
+
+    public void setPoisonDelay(boolean poisonDelay) {
+        this.poisonDelay = poisonDelay;
     }
 }

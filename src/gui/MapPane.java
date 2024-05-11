@@ -121,30 +121,34 @@ public class MapPane extends VBox {
         ImageView imageView = new ImageView(img);
         imageView.setFitHeight(200);
         imageView.setFitWidth(150);
-        Button mapText = new Button(mapName);
+        Button mapText = new Button();
         mapText.setFont(Font.font("Monospace", FontWeight.BOLD,20));
         mapText.setTextFill(Color.rgb(0,51,102));
         mapText.setPrefWidth(150);
         switch (mapName) {
             case "CaveMap":
+                mapText.setText("Cave");
                 MapBTN1 = mapText;
                 break;
             case "ForestMap":
+                mapText.setText("Forest");
                 MapBTN2 = mapText;
             case "FactoryMap":
+                mapText.setText("Factory");
                 MapBTN3 = mapText;
                 break;
             case "JungleMap":
+                mapText.setText("Jungle");
                 MapBTN4 = mapText;
             default: break;
         }
         Text space1 = new Text(" ");
         space1.setFont(Font.font("Monospace", FontWeight.BOLD,8));
-        Text highscore = new Text("" + GameLogic.getHighscoreEachMap(mapName));
-        highscore.setFont(Font.font("Monospace", FontWeight.BOLD,16));
+        Text highScore = new Text("" + GameLogic.getHighScoreEachMap(mapName));
+        highScore.setFont(Font.font("Monospace", FontWeight.BOLD,16));
         Text space2 = new Text(" ");
         space2.setFont(Font.font("Monospace", FontWeight.BOLD,8));
-        vBox.getChildren().addAll(imageView,mapText,space1,highscore,space2);
+        vBox.getChildren().addAll(imageView,mapText,space1,highScore,space2);
 
         return vBox;
     }

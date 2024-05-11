@@ -31,6 +31,8 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
         minionImageView = new ImageView(new Image(ClassLoader.getSystemResource("minion.png").toString()));
         minionAnimation = new SpriteAnimation(minionImageView,Duration.millis(1000),6,6,0,0,48,48);
         minionAnimation.setCycleCount(Animation.INDEFINITE);
+        minionImageView.setTranslateX(GameLogic.randXPos());
+        minionImageView.setTranslateY(randYPos());
         minionImageView.setFitHeight(80);
         minionImageView.setFitWidth(80);
         minionAnimation.play();
@@ -39,15 +41,16 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
         ArrayList<Integer> xPosDown = new ArrayList<>();
         AnimationTimer GhostAnimationTimer = new AnimationTimer() {
             private long startTime = System.nanoTime();
-            private long lastUpdate = 0;
+            private long lastSlide = 0;
+            private long lastDown = 0;
             @Override
             public void handle(long currentTime) {
                 // Slide X axis
-                if (currentTime - lastUpdate >= 6_000_000_000L) {
-                    GameLogic.slideXPos(minionImageView.getTranslateX(), minionImageView, 4,getImageView().getFitWidth());
-                    lastUpdate = currentTime;
+                if (currentTime - lastSlide >= 7_000_000_000L) {
+                    GameLogic.slideXPos(minionImageView.getTranslateX(), minionImageView, 4, GameLogic.randXPos() / 1.2);
+                    lastSlide = currentTime;
                 }
-                // Get Position & Set to Minions class
+                // Get Position & Set to class
                 setXPos(minionImageView.getTranslateX());
                 setYPos(minionImageView.getTranslateY());
 
@@ -62,9 +65,9 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
                     xPosDown.remove(xPosDown.indexOf(stay));
                     System.out.println("stay = " + stay + " go down !!!!!!!!");
 
-                    if (currentTime - lastUpdate >= 4_000_000_000L) {
+                    if (currentTime - lastDown >= 4_000_000_000L) {
                         goDown(minionImageView);
-                        lastUpdate = currentTime;
+                        lastDown = currentTime;
                     }
                 }
 
@@ -75,6 +78,32 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
             }
         };
         GhostAnimationTimer.start();
+    }
+    @Override
+    public void hitDamage(AnchorPane currentPane) {
+        Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
+    }
+    @Override
+    public void goDown(ImageView imageView) {
+        // Move down
+        TranslateTransition translateYTransitionDown = new TranslateTransition(Duration.seconds(2), imageView);
+        translateYTransitionDown.setFromY(imageView.getTranslateY());
+        translateYTransitionDown.setToY(460);
+        translateYTransitionDown.setCycleCount(1);
+        translateYTransitionDown.setAutoReverse(true);
+
+        // Move up
+        TranslateTransition translateYTransitionUp = new TranslateTransition(Duration.seconds(2), imageView);
+        translateYTransitionUp.setFromY(460);
+        randYPos();
+        translateYTransitionUp.setToY(randYPos());
+        imageView.setTranslateY(randYPos());
+        translateYTransitionUp.setCycleCount(1);
+        translateYTransitionUp.setAutoReverse(true);
+        translateYTransitionUp.setDelay(Duration.seconds(0)); // No Delay before moving up
+
+        SequentialTransition sequentialTransition = new SequentialTransition(translateYTransitionDown, translateYTransitionUp);
+        sequentialTransition.play();
     }
     public ImageView getImageView() {
         return minionImageView;
@@ -114,32 +143,6 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
 
     public void setYPos(double yPos) {
         this.yPos = yPos;
-    }
-    @Override
-    public void hitDamage(AnchorPane currentPane) {
-        Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
-    }
-    @Override
-    public void goDown(ImageView imageView) {
-        // Move down
-        TranslateTransition translateYTransitionDown = new TranslateTransition(Duration.seconds(2), imageView);
-        translateYTransitionDown.setFromY(imageView.getTranslateY());
-        translateYTransitionDown.setToY(460);
-        translateYTransitionDown.setCycleCount(1);
-        translateYTransitionDown.setAutoReverse(true);
-
-        // Move up
-        TranslateTransition translateYTransitionUp = new TranslateTransition(Duration.seconds(2), imageView);
-        translateYTransitionUp.setFromY(460);
-        randYPos();
-        translateYTransitionUp.setToY(randYPos());
-        imageView.setTranslateY(randYPos());
-        translateYTransitionUp.setCycleCount(1);
-        translateYTransitionUp.setAutoReverse(true);
-        translateYTransitionUp.setDelay(Duration.seconds(0)); // No Delay before moving up
-
-        SequentialTransition sequentialTransition = new SequentialTransition(translateYTransitionDown, translateYTransitionUp);
-        sequentialTransition.play();
     }
 
     public static Minion getInstance() {

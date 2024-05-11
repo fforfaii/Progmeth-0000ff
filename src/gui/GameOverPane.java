@@ -6,7 +6,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -36,11 +35,11 @@ public class GameOverPane extends StackPane {
         allElements.setAlignment(Pos.TOP_CENTER);
         allElements.setSpacing(12.0);
 
-        ImageView gameover = new ImageView(ClassLoader.getSystemResource("gameover.gif").toString());
-        gameover.setFitWidth(400);
-        gameover.setFitHeight(400);
-        gameover.setViewport(new Rectangle2D(0, 50, gameover.getFitWidth(), gameover.getFitHeight()-100));
-        VBox.setMargin(gameover, new Insets(0, 70, 0, 0));
+        ImageView gameOver = new ImageView(ClassLoader.getSystemResource("gameover.gif").toString());
+        gameOver.setFitWidth(400);
+        gameOver.setFitHeight(400);
+        gameOver.setViewport(new Rectangle2D(0, 50, gameOver.getFitWidth(), gameOver.getFitHeight()-100));
+        VBox.setMargin(gameOver, new Insets(0, 70, 0, 0));
 
         Text scoreText = new Text("Your Score is " + player.getScore() + " !");
         scoreText.setFont(Font.font("Monospace", FontWeight.EXTRA_BOLD, 40));
@@ -64,7 +63,7 @@ public class GameOverPane extends StackPane {
         });
 
 
-        allElements.getChildren().addAll(gameover,scoreText,menu);
+        allElements.getChildren().addAll(gameOver,scoreText,menu);
 
         getChildren().add(allElements);
     }

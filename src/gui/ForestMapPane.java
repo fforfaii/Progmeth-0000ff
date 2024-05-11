@@ -5,23 +5,18 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.util.Duration;
 import logic.GameLogic;
-import logic.ability.Hitable;
 import logic.character.*;
-import logic.skills.FasterAttack;
 import main.Main;
 import sound.Playsound;
 import utils.Constant;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
 public class ForestMapPane extends AnchorPane {
     private static ForestMapPane instance;
@@ -29,10 +24,7 @@ public class ForestMapPane extends AnchorPane {
     private ImageView pause;
     private HpBoard hpBoard;
     private ScoreBoard scoreBoard;
-    int randomIndex;
-    private boolean isMindControl; // for MindGhost
-//    private boolean canShoot; --> set in Punk instead set in here
-    private int addScore = 1;
+    private ImageView skill;
     Punk punk;
     ArrayList<Enemy> enemies;
     public ForestMapPane(){
@@ -56,7 +48,7 @@ public class ForestMapPane extends AnchorPane {
         coin = new ImageView(new Image(ClassLoader.getSystemResource("coin.png").toString()));
         coin.setVisible(false);
         getChildren().add(coin);
-        coinFall();
+        GameLogic.coinFall(coin);
 
         // Set hpBoard and scoreBoard
         hpBoard = HpBoard.getInstance();
@@ -102,7 +94,7 @@ public class ForestMapPane extends AnchorPane {
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
             System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            enemies.add(new PoisonGhost(randomX, randomY));
+            enemies.add(new MindGhost(randomX, randomY));
             setTopAnchor(enemies.get(i).getImageView(), 50.0);
             enemies.get(i).runAnimation(this);
             getChildren().add(enemies.get(i).getImageView());
@@ -119,11 +111,14 @@ public class ForestMapPane extends AnchorPane {
 //            setTopAnchor(enemies.get(i).getImageView(), 50.0);
 //            enemies.get(i).runAnimation(this);
 //            getChildren().add(enemies.get(i).getImageView());
-
 //        }
 
-//        System.out.println("Call FasterAttack effect");
-//        FasterAttack.effect();
+        //Set skills
+        skill = new ImageView();
+        GameLogic.setSkillImage(skill, GameLogic.randomSkill());
+        skill.setVisible(false);
+        getChildren().add(skill);
+        GameLogic.skillFall(skill, this);
 
         // Set exit Button
         pause = new ImageView(new Image(ClassLoader.getSystemResource("exit.png").toString()));
@@ -165,75 +160,9 @@ public class ForestMapPane extends AnchorPane {
         });
         fadeOut.play();
     }
-
     @Override
     public String toString() {
         return "ForestMap";
-    }
-
-    public int getAddScore() {
-        return addScore;
-    }
-
-    public void setAddScore(int addScore) {
-        this.addScore = addScore;
-    }
-
-    public boolean isMindControl() {
-        return isMindControl;
-    }
-
-    public void setMindControl(boolean mindControl) {
-        isMindControl = mindControl;
-    }
-
-    public int randomIndex() {
-        Random random = new Random();
-        return random.nextInt(6);
-    }
-    public void coinFall() {
-        Random random = new Random();
-        ArrayList<Double> durations = new ArrayList<>();
-        durations.add(3.0);
-        durations.add(3.5);
-        durations.add(4.0);
-        durations.add(4.5);
-        durations.add(2.0);
-        durations.add(2.5);
-        randomIndex = randomIndex();
-        AnimationTimer FallDown = new AnimationTimer() {
-            private long lastUpdate = 0;
-            @Override
-            public void handle(long currentTime) {
-                double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
-                System.out.println("playerScore = " + punk.getScore() + " fall : " + coin.getTranslateY());
-                System.out.println("playerHp = " + punk.getHp());
-                if (elapsedTimeSeconds >= durations.get(randomIndex)) {
-                    coin.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
-                    coin.setTranslateY(0.0);
-                    coin.setFitWidth(30);
-                    coin.setFitHeight(30);
-                    slideCoin(coin);
-                    lastUpdate = currentTime;
-                    randomIndex = randomIndex();
-                }
-                GameLogic.checkCoinHit(coin);
-            }
-        };
-        FallDown.start();
-    }
-    public void slideCoin(ImageView coinImage) {
-        coinImage.setVisible(true);
-        TranslateTransition fallTransition = new TranslateTransition(Duration.seconds(1.5), coin);
-        fallTransition.setFromY(0);
-        fallTransition.setToY(545);
-        fallTransition.setCycleCount(1);
-
-        fallTransition.setOnFinished(event -> {
-            coinImage.setTranslateY(0.0);
-            coinImage.setVisible(false);
-        });
-        fallTransition.play();
     }
     public static ForestMapPane getInstance() {
         if (instance == null) {
