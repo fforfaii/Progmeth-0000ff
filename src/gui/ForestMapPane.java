@@ -132,7 +132,7 @@ public class ForestMapPane extends AnchorPane {
             public void handle(MouseEvent mouseEvent) {
                 Playsound.ForestmapBG.stop();
                 Playsound.exit.play();
-                GameLogic.setHighscoreEachMap(Constant.getIndexMap("ForestMap"), punk.getScore());
+                GameLogic.setHighScoreEachMap(Constant.getIndexMap("ForestMap"), punk.getScore());
                 fadeExitPage();
             }
         });

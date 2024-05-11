@@ -54,7 +54,7 @@ public class GameOverPane extends StackPane {
                 try {
                     Playsound.gameoverBG.stop();
                     Playsound.defaultBG.play();
-                    GameLogic.setHighscoreEachMap(Constant.getIndexMap(GameLogic.getCurrentMap()),player.getScore());
+                    GameLogic.setHighScoreEachMap(Constant.getIndexMap(GameLogic.getCurrentMap()),player.getScore());
                     Main.getInstance().changeSceneJava(new MapPane());
                 } catch (IOException e) {
                     throw new RuntimeException(e);

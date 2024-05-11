@@ -86,7 +86,7 @@ public class JungleMapPane extends AnchorPane {
             public void handle(MouseEvent mouseEvent) {
                 Playsound.JunglemapBG.stop();
                 Playsound.exit.play();
-                GameLogic.setHighscoreEachMap(Constant.getIndexMap("JungleMap"),punk.getScore());
+                GameLogic.setHighScoreEachMap(Constant.getIndexMap("JungleMap"),punk.getScore());
                 fadeExitPage();
             }
         });
@@ -96,10 +96,9 @@ public class JungleMapPane extends AnchorPane {
                 Playsound.defaultBG.play();
             }
         });
-                GameLogic.setHighScoreEachMap(Constant.getIndexMap("JungleMap"),punk.getScore());
-                fadeExitPage();
-            }
-        });
+
+        //update game
+        GameLogic.checkPunkShotHit(this, enemies);
     }
 
     private void fadeExitPage() {

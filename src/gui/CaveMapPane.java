@@ -26,6 +26,7 @@ public class CaveMapPane extends AnchorPane {
     private HpBoard hpBoard;
     private ScoreBoard scoreBoard;
     private ImageView skill;
+    private ArrayList<Enemy> enemies;
     Punk punk;
     public CaveMapPane() {
         // Set BGsound
@@ -170,7 +171,7 @@ public class CaveMapPane extends AnchorPane {
             public void handle(MouseEvent mouseEvent) {
                 Playsound.CavemapBG.stop();
                 Playsound.exit.play();
-                GameLogic.setHighscoreEachMap(Constant.getIndexMap("CaveMap"),punk.getScore());
+                GameLogic.setHighScoreEachMap(Constant.getIndexMap("CaveMap"),punk.getScore());
                 fadeExitPage();
             }
         });
@@ -178,13 +179,6 @@ public class CaveMapPane extends AnchorPane {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 Playsound.defaultBG.play();
-            }
-        });
- 
-        // Set CoinFall
-        CoinFall();
-                GameLogic.setHighScoreEachMap(Constant.getIndexMap("CaveMap"), punk.getScore());
-                fadeExitPage();
             }
         });
 

@@ -87,7 +87,7 @@ public class FactoryMapPane extends AnchorPane {
             public void handle(MouseEvent mouseEvent) {
                 Playsound.FactorymapBG.stop();
                 Playsound.exit.play();
-                GameLogic.setHighscoreEachMap(Constant.getIndexMap("FactoryMap"),punk.getScore());
+                GameLogic.setHighScoreEachMap(Constant.getIndexMap("FactoryMap"),punk.getScore());
                 fadeExitPage();
             }
         });
