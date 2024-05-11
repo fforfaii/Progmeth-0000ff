@@ -10,6 +10,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import logic.ability.Hitable;
 import logic.character.*;
@@ -400,10 +402,14 @@ public class GameLogic {
     }
     //for AttackGhost
     public static void checkFireballHit(AnchorPane currentPane, ImageView fireball, AttackGhost attackGhost) {
-        if (Punk.getInstance().isImmortalDelay() || ! Punk.getInstance().isCanHit()) {
+        if (Punk.getInstance().isImmortalDelay()) {
             return;
         }
-        Bounds fireballBounds = fireball.getBoundsInParent();
+        Bounds fireballBounds = new BoundingBox(fireball.getBoundsInParent().getMinX(),
+                fireball.getBoundsInParent().getMinY() + 10,
+                fireball.getBoundsInParent().getWidth() - 15,
+                fireball.getBoundsInParent().getHeight() - 5
+        );
         Bounds mainCharBounds = new BoundingBox(
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getMinX() + 20,
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getMinY() + 22,
@@ -429,7 +435,7 @@ public class GameLogic {
 //        }));
 //        rectLast.play();
 
-        if (fireballBounds.intersects(mainCharBounds) && fireball.isVisible() || currentPane.getChildren().contains(attackGhost)) {
+        if (fireballBounds.intersects(mainCharBounds) && fireball.isVisible() && currentPane.getChildren().contains(attackGhost)) {
             System.out.println("FireBall hit detected");
             PlaySound.ghostAndFireballHit.play();
             attackGhost.hitDamage();
