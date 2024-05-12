@@ -44,7 +44,7 @@ public class PlaySound {
         jungleMapBG.setVolume(0.5);
 
         skillHit = new AudioClip(ClassLoader.getSystemResource("skillhit.wav").toString());
-        exit = new AudioClip(ClassLoader.getSystemResource("aboutgame.mp4").toString());
+        exit = new AudioClip(ClassLoader.getSystemResource("exit.mp4").toString());
         getCoin = new AudioClip(ClassLoader.getSystemResource("getcoin.mp3").toString());
         death = new AudioClip(ClassLoader.getSystemResource("death.mp3").toString());
         gameOverBG = new AudioClip(ClassLoader.getSystemResource("gameover.mp3").toString());

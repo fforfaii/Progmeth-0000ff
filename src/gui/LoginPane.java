@@ -20,7 +20,6 @@ import java.io.IOException;
 public class LoginPane extends GridPane {
     private static LoginPane instance;
     public static String playerName = "";
-//    private static Playsound BGSound;
 
     private LoginPane() {
         PlaySound.defaultBG.play();
