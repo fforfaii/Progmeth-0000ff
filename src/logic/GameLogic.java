@@ -555,7 +555,7 @@ public class GameLogic {
             currentPane.getChildren().remove(ghostRect);
         }));
         rectLast.play();
-        System.out.println("Punk speed: "+Punk.getInstance().getSpeed());
+        System.out.println("Punk speed : "+Punk.getInstance().getSpeed());
         if (ghostBounds.intersects(mainCharBounds) && currentPane.getChildren().contains(enemy.getImageView())) {
             System.out.println("Ghost hit detected");
             if (enemy instanceof Hitable) {
