@@ -12,7 +12,6 @@ public class Constant {
     public Constant() {
         // Set skillsname ArrayList
         skillsname = new ArrayList<>();
-//        skillsname.add("Shield");
         skillsname.add("ExtraScore");
         skillsname.add("ExtraDamage");
         skillsname.add("Heal");

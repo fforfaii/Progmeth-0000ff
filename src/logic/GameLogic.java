@@ -205,11 +205,6 @@ public class GameLogic {
     public static void setSkillImage(ImageView skillImageView, String skillName) {
         // Set icon that fall down
         switch (skillName) {
-//            case "Shield":
-//                skillImageView.setImage(new Image(ClassLoader.getSystemResource("shield.png").toString()));
-//                skillImageView.setFitHeight(30);
-//                skillImageView.setFitWidth(30);
-//                break;
             case "ExtraScore":
                 skillImageView.setImage(new Image(ClassLoader.getSystemResource("extrascore.png").toString()));
                 skillImageView.setFitHeight(35);
@@ -487,24 +482,6 @@ public class GameLogic {
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() / 2
         );
 
-//        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
-//        playerRect.setFill(Color.TRANSPARENT);
-//        playerRect.setStroke(Color.BLUE);
-//        playerRect.setStrokeWidth(2);
-//        currentPane.getChildren().add(playerRect);
-//
-//        Rectangle ghostRect = new Rectangle(poisonBounds.getMinX(), poisonBounds.getMinY(), poisonBounds.getWidth(), poisonBounds.getHeight());
-//        ghostRect.setFill(Color.TRANSPARENT);
-//        ghostRect.setStroke(Color.RED);
-//        ghostRect.setStrokeWidth(2);
-//        currentPane.getChildren().add(ghostRect);
-//
-//        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
-//            currentPane.getChildren().remove(playerRect);
-//            currentPane.getChildren().remove(ghostRect);
-//        }));
-//        rectLast.play();
-
         if (poisonBounds.intersects(mainCharBounds) && currentPane.getChildren().contains(poisonGhost.getImageView())) {
             System.out.println("Poison hit detected");
             if (Punk.getInstance().isPoisonDelay()) {
@@ -516,7 +493,16 @@ public class GameLogic {
             // set position of poison at the same as PoisonGhost
             poison.setVisible(false);
             Punk.getInstance().setPoisonDelay(true);
-            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(10.1), event -> Punk.getInstance().setPoisonDelay(false)));
+            Timeline timeline = new Timeline(
+                    new KeyFrame(Duration.seconds(0.2), e -> Punk.getInstance().getPunkImageView().setVisible(!Punk.getInstance().getPunkImageView().isVisible()))
+            );
+            timeline.setCycleCount(Animation.INDEFINITE); // Set the animation to repeat indefinitely
+            timeline.play();
+            Timeline delayTimer = new Timeline(new KeyFrame(Duration.seconds(10.1), event -> {
+                Punk.getInstance().setPoisonDelay(false);
+                timeline.stop();
+                Punk.getInstance().getPunkImageView().setVisible(true);
+            }));
             delayTimer.play();
         }
     }
