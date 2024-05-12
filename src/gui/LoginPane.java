@@ -29,11 +29,11 @@ public class LoginPane extends GridPane {
         setVgap(10);
 
         // Set Game's Logo
-        Image image = new Image(ClassLoader.getSystemResource("logo.png").toString());
-        ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(300);
-        imageView.setFitWidth(400);
-        GridPane.setConstraints(imageView, 0, 0);
+        Image logoImage = new Image(ClassLoader.getSystemResource("logo.png").toString());
+        ImageView logoImageView = new ImageView(logoImage);
+        logoImageView.setFitHeight(300);
+        logoImageView.setFitWidth(400);
+        GridPane.setConstraints(logoImageView, 0, 0);
 
         // Set Text Field
         TextField nameField = new TextField();
@@ -71,7 +71,7 @@ public class LoginPane extends GridPane {
 
         // Set playerName variable
         setPlayerName(nameField.getText());
-        getChildren().addAll(imageView, nameField, joinBtn);
+        getChildren().addAll(logoImageView, nameField, joinBtn);
     }
 
     public void setBGImage() {
