@@ -137,9 +137,6 @@ public class PoisonGhost extends Enemy { //if punk get poison: cannot attack for
     public AnimationTimer getAnimationTimer() {
         return ghostAnimationTimer;
     }
-    public Animation getAnimation(){
-        return poisonGhostAnimation;
-    }
     public static PoisonGhost getInstance() {
         if (instance == null) {
             instance = new PoisonGhost(10.0, 10.0);
