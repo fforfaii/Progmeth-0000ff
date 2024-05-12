@@ -18,9 +18,9 @@ import java.io.IOException;
 
 public class AboutGamePane extends AnchorPane {
     private static AboutGamePane instance;
-    VBox contentVBox;
-    Button gotoMap;
-    VBox contents;
+    private VBox contentVBox;
+    private Button gotoMap;
+    private VBox contents;
     public AboutGamePane() {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setPrefHeight(648);

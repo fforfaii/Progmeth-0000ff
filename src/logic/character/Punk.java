@@ -9,8 +9,8 @@ import javafx.util.Duration;
 import sound.PlaySound;
 
 public class Punk {
-    double xPos;
-    double yPos;
+    private double xPos;
+    private double yPos;
     private static Punk instance;
     private int hp;
     private int score;

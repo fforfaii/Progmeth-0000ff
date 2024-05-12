@@ -8,7 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import java.util.Random;
 
 public abstract class Enemy { //template for every enemy
-    int hp;
+    private int hp;
     private double xPos;
     private double yPos;
     public abstract void runAnimation(AnchorPane currentPane, Enemy enemy);

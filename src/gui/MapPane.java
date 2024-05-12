@@ -19,11 +19,11 @@ import sound.PlaySound;
 import java.io.IOException;
 
 public class MapPane extends VBox {
-    Text welcome;
-    Button MapBTN1;
-    Button MapBTN2;
-    Button MapBTN3;
-    Button MapBTN4;
+    private Text welcome;
+    private Button MapBTN1;
+    private Button MapBTN2;
+    private Button MapBTN3;
+    private Button MapBTN4;
     private static MapPane instance;
     public MapPane() {
         instance = this;
