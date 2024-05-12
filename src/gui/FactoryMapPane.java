@@ -10,14 +10,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.util.Duration;
 import logic.GameLogic;
-import logic.character.Enemy;
-import logic.character.Punk;
+import logic.character.*;
 import main.Main;
 import sound.PlaySound;
 import utils.Constant;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class FactoryMapPane extends AnchorPane {
     private static FactoryMapPane instance;
@@ -26,7 +26,6 @@ public class FactoryMapPane extends AnchorPane {
     private ImageView skill;
     private HpBoard hpBoard;
     private ScoreBoard scoreBoard;
-    private ArrayList<Enemy> enemies;
     Punk punk;
     public FactoryMapPane() {
         // Set BGsound
@@ -51,13 +50,15 @@ public class FactoryMapPane extends AnchorPane {
         getChildren().add(coin);
         GameLogic.coinFall(coin);
 
-        // Set hpBoard & scoreBoard
+        // Set hpBoard and scoreBoard
         hpBoard = HpBoard.getInstance();
+        HpBoard.updateHpBoard();
         hpBoard.setAlignment(Pos.CENTER_LEFT);
         setTopAnchor(hpBoard,10.0);
         setLeftAnchor(hpBoard,15.0);
 
         scoreBoard = ScoreBoard.getInstance();
+        scoreBoard.setScoreboard();
         setRightAnchor(scoreBoard,20.0);
         setTopAnchor(scoreBoard,8.0);
         getChildren().addAll(hpBoard, scoreBoard);
@@ -66,7 +67,24 @@ public class FactoryMapPane extends AnchorPane {
         GameLogic.getPlayerInput(this);
 
         //Set enemies
-        enemies = new ArrayList<>();
+        GameLogic.getEnemies().clear();
+        for (int i = 0; i < 3; i++){
+            Random random = new Random();
+            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
+            GameLogic.getEnemies().add(new Minion(randomX, randomY));
+            setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
+            GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
+            getChildren().add(GameLogic.getEnemies().get(i).getImageView());
+
+            if (GameLogic.getEnemies().get(i) instanceof AttackGhost){
+                getChildren().add(((AttackGhost) GameLogic.getEnemies().get(i)).getFireball());
+            }
+            if (GameLogic.getEnemies().get(i) instanceof PoisonGhost){
+                getChildren().add(((PoisonGhost) GameLogic.getEnemies().get(i)).getPoison());
+            }
+        }
 
         // Set skills
         skill = new ImageView();
@@ -99,7 +117,9 @@ public class FactoryMapPane extends AnchorPane {
         });
 
         //update game
-        GameLogic.checkPunkShotHit(this, enemies);
+        GameLogic.setIsGameOver(false);
+        GameLogic.updateGame(this);
+
     }
 
     private void fadeExitPage() {
@@ -109,6 +129,11 @@ public class FactoryMapPane extends AnchorPane {
         fadeOut.setOnFinished(event -> {
             try {
                 System.out.println("Exit !");
+                PlaySound.stopAllmapBG();
+                PlaySound.death.play();
+                Punk.getInstance().setDead(true);
+                GameLogic.setIsGameOver(true);
+                GameLogic.updateGame(this);
                 Main.getInstance().changeSceneJava(new MapPane());
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -185,17 +210,6 @@ public class FactoryMapPane extends AnchorPane {
 //        };
 //        FallDown.start();
 //    }
-    public double getXPos(ImageView imageView) {
-        return imageView.getTranslateX();
-    }
-    public double getYPos(ImageView imageView) {
-        return imageView.getTranslateY();
-    }
-
-    public ArrayList<Enemy> getEnemies() {
-        return enemies;
-    }
-
     @Override
     public String toString() {
         return "FactoryMap";

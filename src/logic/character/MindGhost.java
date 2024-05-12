@@ -22,6 +22,7 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
     private ImageView mindGhostImageView;
     private Animation mindGhostAnimation;
     private AnchorPane currentPane;
+    private AnimationTimer ghostAnimationTimer;
     public MindGhost(double x, double y){
         setHp(1);
         setXPos(x);
@@ -35,17 +36,18 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
         mindGhostImageView.setFitHeight(80);
         mindGhostAnimation.play();
     }
-    public void runAnimation(AnchorPane currentPane){
+    public void runAnimation(AnchorPane currentPane, Enemy enemy) {
         ArrayList<Integer> xPosDown = new ArrayList<>();
-        AnimationTimer GhostAnimationTimer = new AnimationTimer() {
+        ghostAnimationTimer = new AnimationTimer() {
             private long startTime = System.nanoTime();
             private long lastSlide = 0;
             private long lastDown = 0;
             @Override
             public void handle(long currentTime) {
                 // Slide X axis
-                if (currentTime - lastSlide >= 4_000_000_000L) {
-                    GameLogic.slideXPos(mindGhostImageView.getTranslateX(), mindGhostImageView, 2, GameLogic.randXPos() / 1.2);
+                System.out.println("MindGhostTimer Running");
+                if (currentTime - lastSlide >= 7_000_000_000L) {
+                    GameLogic.slideXPos(mindGhostImageView.getTranslateX(), mindGhostImageView, 4, GameLogic.randXPos() / 1.2);
                     lastSlide = currentTime;
                 }
                 // Get Position & Set to class
@@ -71,11 +73,11 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check ghost hit
-                    GameLogic.checkGhostHit(currentPane, getInstance(), mindGhostImageView);
+                    GameLogic.checkGhostHit(currentPane, enemy, mindGhostImageView);
                 }
             }
         };
-        GhostAnimationTimer.start();
+        ghostAnimationTimer.start();
     }
 
     @Override
@@ -98,7 +100,7 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
     public void goDown(ImageView imageView) {
         // Move down
         TranslateTransition translateYTransitionDown = new TranslateTransition(Duration.seconds(2), imageView);
-        translateYTransitionDown.setFromY(0);
+        translateYTransitionDown.setFromY(imageView.getTranslateY());
         translateYTransitionDown.setToY(460);
         translateYTransitionDown.setCycleCount(1);
         translateYTransitionDown.setAutoReverse(true);
@@ -106,7 +108,9 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
         // Move up
         TranslateTransition translateYTransitionUp = new TranslateTransition(Duration.seconds(2), imageView);
         translateYTransitionUp.setFromY(460);
-        translateYTransitionUp.setToY(0);
+        randYPos();
+        translateYTransitionUp.setToY(randYPos());
+        imageView.setTranslateY(randYPos());
         translateYTransitionUp.setCycleCount(1);
         translateYTransitionUp.setAutoReverse(true);
         translateYTransitionUp.setDelay(Duration.seconds(0)); // No Delay before moving up
@@ -159,6 +163,11 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
 
     public void setCurrentPane(AnchorPane currentPane) {
         this.currentPane = currentPane;
+    }
+
+    @Override
+    public AnimationTimer getAnimationTimer() {
+        return ghostAnimationTimer;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package logic.character;
 
 
+import javafx.animation.AnimationTimer;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
@@ -10,7 +11,8 @@ public abstract class Enemy { //template for every enemy
     int hp;
     private double xPos;
     private double yPos;
-    public abstract void runAnimation(AnchorPane currentPane);
+    public abstract void runAnimation(AnchorPane currentPane, Enemy enemy);
+    public abstract AnimationTimer getAnimationTimer();
     public abstract ImageView getImageView();
     public static double randYPos(){
         Random random = new Random();

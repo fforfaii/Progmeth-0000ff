@@ -23,6 +23,7 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
     private AnchorPane currentPane;
     private ImageView slowGhostImageView;
     private Animation slowGhostAnimation;
+    private AnimationTimer ghostAnimationTimer;
     public SlowGhost(double x, double y){
         setHp(1);
         setXPos(x);
@@ -43,15 +44,16 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
         Timeline cooldownEffect = new Timeline(new KeyFrame(Duration.seconds(4), event -> Punk.getInstance().setSpeed(Punk.getInstance().getSpeed() + 7.5)));
         cooldownEffect.play();
     }
-    public void runAnimation(AnchorPane currentPane){
+    public void runAnimation(AnchorPane currentPane, Enemy enemy){
         ArrayList<Integer> xPosDown = new ArrayList<>();
-        AnimationTimer GhostAnimationTimer = new AnimationTimer() {
+        ghostAnimationTimer = new AnimationTimer() {
             private long startTime = System.nanoTime();
             private long lastSlide = 0;
             private long lastDown = 0;
             @Override
             public void handle(long currentTime) {
                 // Slide X axis
+                System.out.println("SlowGhostTimer Running");
                 if (currentTime - lastSlide >= 6_000_000_000L) {
                     GameLogic.slideXPos(slowGhostImageView.getTranslateX(), slowGhostImageView, 3, GameLogic.randXPos() / 1.2);
                     lastSlide = currentTime;
@@ -79,11 +81,11 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check ghost hit
-                    GameLogic.checkGhostHit(currentPane, getInstance(), slowGhostImageView);
+                    GameLogic.checkGhostHit(currentPane, enemy, slowGhostImageView);
                 }
             }
         };
-        GhostAnimationTimer.start();
+        ghostAnimationTimer.start();
     }
 
     @Override
@@ -159,5 +161,10 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
 
     public void setCurrentPane(AnchorPane currentPane) {
         this.currentPane = currentPane;
+    }
+
+    @Override
+    public AnimationTimer getAnimationTimer() {
+        return null;
     }
 }

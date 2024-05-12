@@ -21,6 +21,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
     private ImageView attackGhostImageView;
     private Animation attackghostAnimation;
     private ImageView fireball;
+    private AnimationTimer ghostAnimationTimer;
     public AttackGhost(double x, double y){
         setHp(3);
         setXPos(x);
@@ -43,7 +44,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
     public void hitDamage(){
         Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
     }
-    public void runAnimation(AnchorPane currentPane) {
+    public void runAnimation(AnchorPane currentPane, Enemy enemy) {
         ArrayList<Double> durations = new ArrayList<>();
         durations.add(2.0);
         durations.add(3.0);
@@ -52,7 +53,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
         durations.add(2.5);
         durations.add(4.0);
 //        int randomIndex = GameLogic.randomIndex();
-        AnimationTimer GhostAnimationTimer = new AnimationTimer() {
+        ghostAnimationTimer = new AnimationTimer() {
             private long startTime = System.nanoTime();
             private long lastShoot = 0;
             private long lastMove = 0;
@@ -60,6 +61,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
             @Override
             public void handle(long currentTime) {
                 // Slide X axis
+                System.out.println("AttackGhostTimer Running");
                 if (currentTime - lastMove >= 5_000_000_000L) {
                     GameLogic.slideXPos(attackGhostImageView.getTranslateX(), attackGhostImageView, 3, GameLogic.randXPos() / 1.2);
                     lastMove = currentTime;
@@ -83,11 +85,11 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check fireball hit
-                    GameLogic.checkFireballHit(currentPane, fireball, getInstance());
+                    GameLogic.checkFireballHit(currentPane, fireball, (AttackGhost) enemy);
                 }
             }
         };
-        GhostAnimationTimer.start();
+        ghostAnimationTimer.start();
     }
 
     @Override
@@ -130,6 +132,12 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
     public ImageView getFireball(){
         return fireball;
     }
+
+    @Override
+    public AnimationTimer getAnimationTimer() {
+        return ghostAnimationTimer;
+    }
+
     public static AttackGhost getInstance() {
         if (instance == null) {
             instance = new AttackGhost(10.0, 10.0);
