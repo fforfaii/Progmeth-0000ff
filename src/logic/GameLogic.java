@@ -28,7 +28,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GameLogic {
-    private static final ArrayList<Integer> HighScore = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
+    private static final ArrayList<Integer> HIGHSCORE = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
     private static String currentMap;
     private static int randomIndex;
     private static boolean splashDelay = false;
@@ -69,6 +69,7 @@ public class GameLogic {
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
                 Punk.getInstance().runLeft();
                 if (Punk.getInstance().isCanShoot()){
+                    PlaySound.playerShoot.play();
                     Punk.getInstance().shoot();
                     Punk.getInstance().setCanShoot(false);
                     Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), event -> Punk.getInstance().setCanShoot(true)));
@@ -79,6 +80,7 @@ public class GameLogic {
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
                 Punk.getInstance().runRight();
                 if (Punk.getInstance().isCanShoot()){
+                    PlaySound.playerShoot.play();
                     Punk.getInstance().shoot();
                     Punk.getInstance().setCanShoot(false);
                     Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), event -> Punk.getInstance().setCanShoot(true)));
@@ -553,7 +555,7 @@ public class GameLogic {
             currentPane.getChildren().remove(ghostRect);
         }));
         rectLast.play();
-        System.out.println("Punk speed: "+Punk.getInstance().getSpeed());
+        System.out.println("Punk speed : "+Punk.getInstance().getSpeed());
         if (ghostBounds.intersects(mainCharBounds) && currentPane.getChildren().contains(enemy.getImageView())) {
             System.out.println("Ghost hit detected");
             if (enemy instanceof Hitable) {
@@ -708,11 +710,11 @@ public class GameLogic {
     }
 
     public static void setHighScoreEachMap(int indexMap, int newscore) {
-        int oldScore = HighScore.get(indexMap);
-        if (newscore > oldScore) HighScore.set(indexMap, newscore);
+        int oldScore = HIGHSCORE.get(indexMap);
+        if (newscore > oldScore) HIGHSCORE.set(indexMap, newscore);
     }
     public static int getHighScoreEachMap(String mapName){
-        return HighScore.get(Constant.getIndexMap(mapName));
+        return HIGHSCORE.get(Constant.getIndexMap(mapName));
     }
     public static ArrayList<Enemy> getEnemies() {
         return enemies;
