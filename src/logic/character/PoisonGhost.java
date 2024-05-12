@@ -19,15 +19,16 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
     private double xPos;
     private double yPos;
     private ImageView poisonGhostImageView;
-//    private Animation poisonGhostAnimation;
+    private Animation poisonGhostAnimation;
     private ImageView poison;
+    private AnimationTimer ghostAnimationTimer;
     public PoisonGhost(double x, double y){
         setHp(1);
         setXPos(x);
         setYPos(y);
         poisonGhostImageView = new ImageView(new Image(ClassLoader.getSystemResource("poisonghost.gif").toString()));
-//        poisonGhostAnimation = new SpriteAnimation(poisonGhostImageView, Duration.millis(1000), 6, 6, 0, 0, 48, 48);
-//        poisonGhostAnimation.setCycleCount(Animation.INDEFINITE);
+        poisonGhostAnimation = new SpriteAnimation(poisonGhostImageView, Duration.millis(1000), 6, 6, 0, 0, 48, 48);
+        poisonGhostAnimation.setCycleCount(Animation.INDEFINITE);
         poisonGhostImageView.setFitWidth(80);
         poisonGhostImageView.setFitHeight(80);
         poisonGhostImageView.setTranslateX(GameLogic.randXPos());
@@ -59,7 +60,7 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
         durations.add(2.5);
         durations.add(4.0);
 //        int randomIndex = GameLogic.randomIndex();
-        AnimationTimer GhostAnimationTimer = new AnimationTimer() {
+        ghostAnimationTimer = new AnimationTimer() {
             private long startTime = System.nanoTime();
             private long lastShoot = 0;
             private long lastMove = 0;
@@ -67,6 +68,7 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
             @Override
             public void handle(long currentTime) {
                 // Slide X axis
+                System.out.println("PoisonGhostTimer Running");
                 if (currentTime - lastMove >= 5_000_000_000L) {
                     GameLogic.slideXPos(poisonGhostImageView.getTranslateX(), poisonGhostImageView, 3, GameLogic.randXPos() / 1.2);
                     lastMove = currentTime;
@@ -94,7 +96,7 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
                 }
             }
         };
-        GhostAnimationTimer.start();
+        ghostAnimationTimer.start();
     }
 
     @Override
@@ -152,6 +154,13 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
         sequentialTransition.play();
     }
 
+    @Override
+    public AnimationTimer getAnimationTimer() {
+        return ghostAnimationTimer;
+    }
+    public Animation getAnimation(){
+        return poisonGhostAnimation;
+    }
     public static PoisonGhost getInstance() {
         if (instance == null) {
             instance = new PoisonGhost(10.0, 10.0);

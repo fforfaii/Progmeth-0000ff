@@ -133,6 +133,7 @@ public class MapPane extends VBox {
             case "ForestMap":
                 mapText.setText("Forest");
                 MapBTN2 = mapText;
+                break;
             case "FactoryMap":
                 mapText.setText("Factory");
                 MapBTN3 = mapText;

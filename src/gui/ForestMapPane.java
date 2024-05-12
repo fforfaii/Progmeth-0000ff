@@ -26,7 +26,6 @@ public class ForestMapPane extends AnchorPane {
     private ScoreBoard scoreBoard;
     private ImageView skill;
     Punk punk;
-    ArrayList<Enemy> enemies;
     public ForestMapPane(){
         // Set BGsound
         PlaySound.forestMapBG.play();
@@ -52,11 +51,13 @@ public class ForestMapPane extends AnchorPane {
 
         // Set hpBoard and scoreBoard
         hpBoard = HpBoard.getInstance();
+        HpBoard.updateHpBoard();
         hpBoard.setAlignment(Pos.CENTER_LEFT);
         setTopAnchor(hpBoard,10.0);
         setLeftAnchor(hpBoard,15.0);
 
         scoreBoard = ScoreBoard.getInstance();
+        scoreBoard.setScoreboard();
         setRightAnchor(scoreBoard,20.0);
         setTopAnchor(scoreBoard,8.0);
         getChildren().addAll(hpBoard, scoreBoard);
@@ -64,17 +65,24 @@ public class ForestMapPane extends AnchorPane {
         //Event Handler for KeyPressed
         GameLogic.getPlayerInput(this);
 
-        //Set enemies (ใช้เทสอยู่)
-        enemies = new ArrayList<>();
+        //Set enemies
+        GameLogic.getEnemies().clear();
         for (int i = 0; i < 3; i++){
             Random random = new Random();
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
             System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            enemies.add(new Minion(randomX, randomY));
-            setTopAnchor(enemies.get(i).getImageView(), 50.0);
-            enemies.get(i).runAnimation(this, enemies.get(i));
-            getChildren().add(enemies.get(i).getImageView());
+            GameLogic.getEnemies().add(new AttackGhost(randomX, randomY));
+            setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
+            GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
+            getChildren().add(GameLogic.getEnemies().get(i).getImageView());
+
+            if (GameLogic.getEnemies().get(i) instanceof AttackGhost){
+                getChildren().add(((AttackGhost) GameLogic.getEnemies().get(i)).getFireball());
+            }
+            if (GameLogic.getEnemies().get(i) instanceof PoisonGhost){
+                getChildren().add(((PoisonGhost) GameLogic.getEnemies().get(i)).getPoison());
+            }
         }
 
         //Set skills
@@ -108,7 +116,8 @@ public class ForestMapPane extends AnchorPane {
         });
 
         //update game
-        GameLogic.checkPunkShotHit(this, enemies);
+        GameLogic.setIsGameOver(false);
+        GameLogic.updateGame(this);
     }
     private void fadeExitPage() {
         FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), this);
@@ -117,6 +126,11 @@ public class ForestMapPane extends AnchorPane {
         fadeOut.setOnFinished(event -> {
             try {
                 System.out.println("Exit !");
+                PlaySound.stopAllmapBG();
+                PlaySound.death.play();
+                Punk.getInstance().setDead(true);
+                GameLogic.setIsGameOver(true);
+                GameLogic.updateGame(this);
                 Main.getInstance().changeSceneJava(new MapPane());
             } catch (IOException e) {
                 throw new RuntimeException(e);

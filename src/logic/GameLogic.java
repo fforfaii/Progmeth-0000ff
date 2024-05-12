@@ -21,6 +21,7 @@ import sound.PlaySound;
 import utils.Constant;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -37,6 +38,28 @@ public class GameLogic {
     private static boolean isSpaceKeyPressed = false;
     private static Timeline continuousMovement = new Timeline();
     private static Timeline reverseContinuousMovement = new Timeline();
+    private static AnimationTimer skillFallAnimation;
+    private static AnimationTimer coinFallAnimation;
+    private static AnimationTimer checkPunkShotHitAnimation;
+    private static ArrayList<Enemy> enemies =  new ArrayList<>();
+
+    public static void updateGame(AnchorPane currentPane){
+        System.out.println("Score : "+Punk.getInstance().getScore());
+        if (isGameOver){
+            for (int i = 0; i < enemies.size(); i++){
+                enemies.get(i).getAnimationTimer().stop();
+            }
+            coinFallAnimation.stop();
+            skillFallAnimation.stop();
+            continuousMovement.stop();
+            reverseContinuousMovement.stop();
+            checkPunkShotHitAnimation.stop();
+            return;
+        }
+        checkPunkShotHit(currentPane, enemies);
+        ScoreBoard.getInstance().setScoreboard();
+        HpBoard.updateHpBoard();
+    }
 
     public static void getPlayerInput(AnchorPane currentPane) {
 
@@ -223,7 +246,7 @@ public class GameLogic {
         durations.add(2.0);
         durations.add(2.5);
         randomIndex = randomIndex(); // for getting duration
-        AnimationTimer FallDown = new AnimationTimer() {
+        skillFallAnimation = new AnimationTimer() {
             private long lastUpdate = 0;
 //            private String randSkill = randomSkill();
             private String randSkill;
@@ -245,7 +268,7 @@ public class GameLogic {
                 checkSkillHit(this.toString(), skillImageView, randSkill, currentPane);
             }
         };
-        FallDown.start();
+        skillFallAnimation.start();
     }
     public static void coinFall(ImageView coin){
         Random random = new Random();
@@ -257,10 +280,11 @@ public class GameLogic {
         durations.add(2.0);
         durations.add(2.5);
         randomIndex = randomIndex();
-        AnimationTimer fallDown = new AnimationTimer() {
+        coinFallAnimation = new AnimationTimer() {
             private long lastUpdate = 0;
             @Override
             public void handle(long currentTime) {
+                System.out.println("CoinTimer Running");
                 double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
                 if (elapsedTimeSeconds >= durations.get(randomIndex)) {
                     coin.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
@@ -274,7 +298,7 @@ public class GameLogic {
                 GameLogic.checkCoinHit(coin);
             }
         };
-        fallDown.start();
+        coinFallAnimation.start();
     }
     public static void checkCoinHit(ImageView coinImage) {
         Bounds coinBounds = coinImage.getBoundsInParent();
@@ -350,9 +374,10 @@ public class GameLogic {
         }
     }
     public static void checkPunkShotHit(AnchorPane currentPane, ArrayList<Enemy> enemies) {
-        AnimationTimer checkHit = new AnimationTimer() {
+        checkPunkShotHitAnimation = new AnimationTimer() {
             @Override
             public void handle(long currentTime) {
+                System.out.println("checkPunkShotHitTimer Running");
                 for (Enemy eachEnemy: enemies){
                     if (splashDelay){
                         return;
@@ -398,11 +423,11 @@ public class GameLogic {
                 }
             }
         };
-        checkHit.start();
+        checkPunkShotHitAnimation.start();
     }
     //for AttackGhost
     public static void checkFireballHit(AnchorPane currentPane, ImageView fireball, AttackGhost attackGhost) {
-        if (Punk.getInstance().isImmortalDelay() || Punk.getInstance().isCanHit()) {
+        if (Punk.getInstance().isImmortalDelay() || ! Punk.getInstance().isCanHit()) {
             return;
         }
         Bounds fireballBounds = new BoundingBox(fireball.getBoundsInParent().getMinX(),
@@ -508,7 +533,7 @@ public class GameLogic {
                 20,
                 80
         );
-        if (!Punk.getInstance().isCanHit()) {
+        if (! Punk.getInstance().isCanHit()) {
             return;
         }
 //        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
@@ -528,7 +553,7 @@ public class GameLogic {
 //            currentPane.getChildren().remove(ghostRect);
 //        }));
 //        rectLast.play();
-
+        System.out.println("Punk speed: "+Punk.getInstance().getSpeed());
         if (ghostBounds.intersects(mainCharBounds) && enemyimageview.isVisible()) {
             System.out.println("Ghost hit detected");
             if (enemy instanceof Hitable) {
@@ -579,14 +604,12 @@ public class GameLogic {
         if (Punk.getInstance().isDead()){
             return;
         }
-        if (isGameOver()){
-            return;
-        }
         if (Punk.getInstance().getHp() == 0) {
             PlaySound.stopAllmapBG();
             PlaySound.death.play();
             Punk.getInstance().setDead(true);
             setIsGameOver(true);
+            updateGame(currentPane);
             FadeTransition fadeOut = new FadeTransition(Duration.seconds(3), currentPane);
             fadeOut.setFromValue(1.0);
             fadeOut.setToValue(0.0);
@@ -594,7 +617,7 @@ public class GameLogic {
                 try {
                     System.out.println("Game Over !");
                     PlaySound.gameOverBG.play();
-                    Main.getInstance().changeSceneJava(GameOverPane.getInstance());
+                    Main.getInstance().changeSceneJava(new GameOverPane());
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -690,5 +713,8 @@ public class GameLogic {
     }
     public static int getHighScoreEachMap(String mapName){
         return HighScore.get(Constant.getIndexMap(mapName));
+    }
+    public static ArrayList<Enemy> getEnemies() {
+        return enemies;
     }
 }

@@ -23,6 +23,7 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
     private double yPos;
     private ImageView minionImageView;
     private Animation minionAnimation;
+    private AnimationTimer ghostAnimationTimer;
 
     public Minion(double x, double y){
         setHp(3);
@@ -39,13 +40,14 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
     }
     public void runAnimation(AnchorPane currentPane, Enemy enemy) {
         ArrayList<Integer> xPosDown = new ArrayList<>();
-        AnimationTimer GhostAnimationTimer = new AnimationTimer() {
+        ghostAnimationTimer = new AnimationTimer() {
             private long startTime = System.nanoTime();
             private long lastSlide = 0;
             private long lastDown = 0;
             @Override
             public void handle(long currentTime) {
                 // Slide X axis
+                System.out.println("MinionTimer Running");
                 if (currentTime - lastSlide >= 7_000_000_000L) {
                     GameLogic.slideXPos(minionImageView.getTranslateX(), minionImageView, 4, GameLogic.randXPos() / 1.2);
                     lastSlide = currentTime;
@@ -77,7 +79,7 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
                 }
             }
         };
-        GhostAnimationTimer.start();
+        ghostAnimationTimer.start();
     }
     @Override
     public void hitDamage(AnchorPane currentPane) {
@@ -143,6 +145,10 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
 
     public void setYPos(double yPos) {
         this.yPos = yPos;
+    }
+
+    public AnimationTimer getAnimationTimer() {
+        return ghostAnimationTimer;
     }
 
     public static Minion getInstance() {
