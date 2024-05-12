@@ -13,7 +13,7 @@ import logic.ability.GoDownable;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class PoisonGhost extends Enemy implements GoDownable { //if punk get poison: cannot attack for 3 secs
+public class PoisonGhost extends Enemy { //if punk get poison: cannot attack for 3 secs
     private static PoisonGhost instance;
     private int hp;
     private double xPos;
@@ -131,27 +131,6 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
 
     public ImageView getPoison() {
         return poison;
-    }
-
-    @Override
-    public void goDown(ImageView imageView) {
-        // Move down
-        TranslateTransition translateYTransitionDown = new TranslateTransition(Duration.seconds(2), imageView);
-        translateYTransitionDown.setFromY(0);
-        translateYTransitionDown.setToY(460);
-        translateYTransitionDown.setCycleCount(1);
-        translateYTransitionDown.setAutoReverse(true);
-
-        // Move up
-        TranslateTransition translateYTransitionUp = new TranslateTransition(Duration.seconds(2), imageView);
-        translateYTransitionUp.setFromY(460);
-        translateYTransitionUp.setToY(0);
-        translateYTransitionUp.setCycleCount(1);
-        translateYTransitionUp.setAutoReverse(true);
-        translateYTransitionUp.setDelay(Duration.seconds(0)); // No Delay before moving up
-
-        SequentialTransition sequentialTransition = new SequentialTransition(translateYTransitionDown, translateYTransitionUp);
-        sequentialTransition.play();
     }
 
     @Override
