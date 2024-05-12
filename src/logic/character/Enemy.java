@@ -10,7 +10,7 @@ public abstract class Enemy { //template for every enemy
     int hp;
     private double xPos;
     private double yPos;
-    public abstract void runAnimation(AnchorPane currentPane);
+    public abstract void runAnimation(AnchorPane currentPane, Enemy enemy);
     public abstract ImageView getImageView();
     public static double randYPos(){
         Random random = new Random();

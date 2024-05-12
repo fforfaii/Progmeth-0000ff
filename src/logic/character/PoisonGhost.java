@@ -42,15 +42,15 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
         poison.setTranslateY(poisonGhostImageView.getTranslateY());
         poison.setLayoutX(getXPos());
         poison.setVisible(false);
+        instance = this;
     }
     //need to check if hit or not in the GameLogic.update()
     public void hitDamage(AnchorPane currentPane) {
         Punk.getInstance().setCanShoot(false);
-        Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(5), event -> Punk.getInstance().setCanShoot(true)));
+        Timeline cooldownTimer = new Timeline(new KeyFrame(Duration.seconds(10), event -> Punk.getInstance().setCanShoot(true)));
         cooldownTimer.play();
     }
-    public void runAnimation(AnchorPane currentPane){
-        ArrayList<Integer> xPosDown = new ArrayList<>();
+    public void runAnimation(AnchorPane currentPane, Enemy enemy){
         ArrayList<Double> durations = new ArrayList<>();
         durations.add(2.0);
         durations.add(3.0);
@@ -67,8 +67,8 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
             @Override
             public void handle(long currentTime) {
                 // Slide X axis
-                if (currentTime - lastMove >= 10_000_000_000L) {
-                    GameLogic.slideXPos(poisonGhostImageView.getTranslateX(), poisonGhostImageView, 5, GameLogic.randXPos() / 1.2);
+                if (currentTime - lastMove >= 5_000_000_000L) {
+                    GameLogic.slideXPos(poisonGhostImageView.getTranslateX(), poisonGhostImageView, 3, GameLogic.randXPos() / 1.2);
                     lastMove = currentTime;
                 }
                 // Get Position & Set to class
@@ -84,13 +84,13 @@ public class PoisonGhost extends Enemy implements GoDownable { //if punk get poi
                     poison.setVisible(false);
                     poison.setFitWidth(40);
                     poison.setFitHeight(40);
-                    GameLogic.slideYPos(poison, 1, poisonGhostImageView.getTranslateY() + 30, 535);
+                    GameLogic.slideYPos(poison, 1, poisonGhostImageView.getTranslateY() + 20, 535);
                     lastShoot = currentTime;
                 }
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check poison hit
-                    GameLogic.checkPoisonHit(currentPane, poison, getInstance());
+                    GameLogic.checkPoisonHit(currentPane, poison, (PoisonGhost) enemy);
                 }
             }
         };

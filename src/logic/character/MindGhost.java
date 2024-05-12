@@ -35,7 +35,7 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
         mindGhostImageView.setFitHeight(80);
         mindGhostAnimation.play();
     }
-    public void runAnimation(AnchorPane currentPane){
+    public void runAnimation(AnchorPane currentPane, Enemy enemy){
         ArrayList<Integer> xPosDown = new ArrayList<>();
         AnimationTimer GhostAnimationTimer = new AnimationTimer() {
             private long startTime = System.nanoTime();
@@ -71,7 +71,7 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check ghost hit
-                    GameLogic.checkGhostHit(currentPane, getInstance(), mindGhostImageView);
+                    GameLogic.checkGhostHit(currentPane, enemy, mindGhostImageView);
                 }
             }
         };

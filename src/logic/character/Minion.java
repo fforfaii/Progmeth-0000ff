@@ -37,7 +37,7 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
         minionImageView.setFitWidth(80);
         minionAnimation.play();
     }
-    public void runAnimation(AnchorPane currentPane) {
+    public void runAnimation(AnchorPane currentPane, Enemy enemy) {
         ArrayList<Integer> xPosDown = new ArrayList<>();
         AnimationTimer GhostAnimationTimer = new AnimationTimer() {
             private long startTime = System.nanoTime();
@@ -73,8 +73,7 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check ghost hit
-                    GameLogic.checkGhostHit(currentPane, getInstance(), minionImageView);
-                    System.out.println("Player Hp : " + Punk.getInstance().getHp());
+                    GameLogic.checkGhostHit(currentPane, enemy, minionImageView);
                 }
             }
         };

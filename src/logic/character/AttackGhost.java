@@ -43,7 +43,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
     public void hitDamage(){
         Punk.getInstance().setHp(Punk.getInstance().getHp() - 1);
     }
-    public void runAnimation(AnchorPane currentPane) {
+    public void runAnimation(AnchorPane currentPane, Enemy enemy) {
         ArrayList<Double> durations = new ArrayList<>();
         durations.add(2.0);
         durations.add(3.0);
@@ -83,7 +83,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check fireball hit
-                    GameLogic.checkFireballHit(currentPane, fireball, getInstance());
+                    GameLogic.checkFireballHit(currentPane, fireball, (AttackGhost) enemy);
                 }
             }
         };

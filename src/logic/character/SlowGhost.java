@@ -43,7 +43,7 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
         Timeline cooldownEffect = new Timeline(new KeyFrame(Duration.seconds(4), event -> Punk.getInstance().setSpeed(Punk.getInstance().getSpeed() + 7.5)));
         cooldownEffect.play();
     }
-    public void runAnimation(AnchorPane currentPane){
+    public void runAnimation(AnchorPane currentPane, Enemy enemy){
         ArrayList<Integer> xPosDown = new ArrayList<>();
         AnimationTimer GhostAnimationTimer = new AnimationTimer() {
             private long startTime = System.nanoTime();
@@ -79,7 +79,7 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
 
                 if (currentTime - startTime > TimeUnit.SECONDS.toNanos((long) 1)) {
                     // Check ghost hit
-                    GameLogic.checkGhostHit(currentPane, getInstance(), slowGhostImageView);
+                    GameLogic.checkGhostHit(currentPane, enemy, slowGhostImageView);
                 }
             }
         };
