@@ -66,52 +66,16 @@ public class ForestMapPane extends AnchorPane {
 
         //Set enemies (ใช้เทสอยู่)
         enemies = new ArrayList<>();
-//        for (int i = 0; i < 3; i++){
-//            Random random = new Random();
-//            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-//            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-//            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-//            enemies.add(new Minion(randomX, randomY));
-//            setTopAnchor(enemies.get(i).getImageView(), 50.0);
-//            enemies.get(i).runAnimation(this);
-//            getChildren().add(enemies.get(i).getImageView());
-//        }
-//        for (int i = 3; i < 6; i++){
-//            Random random = new Random();
-//            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-//            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-//            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-//            enemies.add(new AttackGhost(randomX, randomY));
-//            setTopAnchor(enemies.get(i).getImageView(), 50.0);
-//            enemies.get(i).runAnimation(this);
-//            getChildren().add(enemies.get(i).getImageView());
-//            if (enemies.get(i) instanceof AttackGhost){
-//                getChildren().add(((AttackGhost) enemies.get(i)).getFireBall());
-//            }
-//        }
-//        for (int i = 3; i < 6; i++){
-//            Random random = new Random();
-//            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-//            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-//            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-//            enemies.add(new MindGhost(randomX, randomY));
-//            setTopAnchor(enemies.get(i).getImageView(), 50.0);
-//            enemies.get(i).runAnimation(this);
-//            getChildren().add(enemies.get(i).getImageView());
-//            if (enemies.get(i) instanceof PoisonGhost){
-//                getChildren().add(((PoisonGhost) enemies.get(i)).getPoison());
-//            }
-//        }
-//        for (int i = 3; i < 7; i++) {
-//            Random random = new Random();
-//            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-//            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-//            System.out.println("RanX : "+ randomX +", RandY: "+randomY);
-//            enemies.add(new MindGhost(randomX, randomY));
-//            setTopAnchor(enemies.get(i).getImageView(), 50.0);
-//            enemies.get(i).runAnimation(this);
-//            getChildren().add(enemies.get(i).getImageView());
-//        }
+        for (int i = 0; i < 3; i++){
+            Random random = new Random();
+            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
+            enemies.add(new Minion(randomX, randomY));
+            setTopAnchor(enemies.get(i).getImageView(), 50.0);
+            enemies.get(i).runAnimation(this, enemies.get(i));
+            getChildren().add(enemies.get(i).getImageView());
+        }
 
         //Set skills
         skill = new ImageView();

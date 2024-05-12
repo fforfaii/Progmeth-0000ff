@@ -531,13 +531,13 @@ public class GameLogic {
 
         if (ghostBounds.intersects(mainCharBounds) && enemyimageview.isVisible()) {
             System.out.println("Ghost hit detected");
-            PlaySound.ghostAndFireballHit.play();
             if (enemy instanceof Hitable) {
                 if (enemy instanceof Minion) {
                     if (Punk.getInstance().isImmortalDelay()){
                         System.out.println("Immortal Delay");
                         return;
                     }
+                    PlaySound.ghostAndFireballHit.play();
                     ((Minion) enemy).hitDamage(currentPane);
                     deleteHeart(currentPane);
                     Punk.getInstance().setImmortalDelay(true);
@@ -550,6 +550,7 @@ public class GameLogic {
                         System.out.println("MindGhost delay");
                         return;
                     }
+                    PlaySound.ghostAndFireballHit.play();
                     ((MindGhost) enemy).hitDamage(currentPane);
                     Punk.getInstance().setMindGhostDelay(true);
                     Timeline mindGhostDelay = new Timeline(new KeyFrame(Duration.seconds(4.5), e -> Punk.getInstance().setMindGhostDelay(false)));
@@ -561,6 +562,7 @@ public class GameLogic {
                         System.out.println("SlowGhost delay");
                         return;
                     }
+                    PlaySound.ghostAndFireballHit.play();
                     ((SlowGhost) enemy).hitDamage(currentPane);
                     Punk.getInstance().setSlowGhostDelay(true);
                     Timeline slowGhostDelay = new Timeline(new KeyFrame(Duration.seconds(4.5), e -> Punk.getInstance().setSlowGhostDelay(false)));
