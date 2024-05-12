@@ -75,12 +75,19 @@ public class CaveMapPane extends AnchorPane {
             setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
             GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
             getChildren().add(GameLogic.getEnemies().get(i).getImageView());
+        }
+        for (int i = 3; i < 6; i++){
+            Random random = new Random();
+            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
+            GameLogic.getEnemies().add(new AttackGhost(randomX, randomY));
+            setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
+            GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
+            getChildren().add(GameLogic.getEnemies().get(i).getImageView());
 
             if (GameLogic.getEnemies().get(i) instanceof AttackGhost){
                 getChildren().add(((AttackGhost) GameLogic.getEnemies().get(i)).getFireball());
-            }
-            if (GameLogic.getEnemies().get(i) instanceof PoisonGhost){
-                getChildren().add(((PoisonGhost) GameLogic.getEnemies().get(i)).getPoison());
             }
         }
 
