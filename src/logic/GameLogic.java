@@ -536,25 +536,25 @@ public class GameLogic {
         if (! Punk.getInstance().isCanHit()) {
             return;
         }
-//        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
-//        playerRect.setFill(Color.TRANSPARENT);
-//        playerRect.setStroke(Color.BLUE);
-//        playerRect.setStrokeWidth(2);
-//        currentPane.getChildren().add(playerRect);
-//
-//        Rectangle ghostRect = new Rectangle(ghostBounds.getMinX(), ghostBounds.getMinY(), ghostBounds.getWidth(), ghostBounds.getHeight());
-//        ghostRect.setFill(Color.TRANSPARENT);
-//        ghostRect.setStroke(Color.RED);
-//        ghostRect.setStrokeWidth(2);
-//        currentPane.getChildren().add(ghostRect);
-//
-//        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
-//            currentPane.getChildren().remove(playerRect);
-//            currentPane.getChildren().remove(ghostRect);
-//        }));
-//        rectLast.play();
+        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
+        playerRect.setFill(Color.TRANSPARENT);
+        playerRect.setStroke(Color.BLUE);
+        playerRect.setStrokeWidth(2);
+        currentPane.getChildren().add(playerRect);
+
+        Rectangle ghostRect = new Rectangle(ghostBounds.getMinX(), ghostBounds.getMinY(), ghostBounds.getWidth(), ghostBounds.getHeight());
+        ghostRect.setFill(Color.TRANSPARENT);
+        ghostRect.setStroke(Color.RED);
+        ghostRect.setStrokeWidth(2);
+        currentPane.getChildren().add(ghostRect);
+
+        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
+            currentPane.getChildren().remove(playerRect);
+            currentPane.getChildren().remove(ghostRect);
+        }));
+        rectLast.play();
         System.out.println("Punk speed: "+Punk.getInstance().getSpeed());
-        if (ghostBounds.intersects(mainCharBounds) && enemyimageview.isVisible()) {
+        if (ghostBounds.intersects(mainCharBounds) && currentPane.getChildren().contains(enemy.getImageView())) {
             System.out.println("Ghost hit detected");
             if (enemy instanceof Hitable) {
                 if (enemy instanceof Minion) {
