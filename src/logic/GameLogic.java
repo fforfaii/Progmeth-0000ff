@@ -239,7 +239,7 @@ public class GameLogic {
                     lastUpdate = currentTime;
                     randomIndex = randomIndex();
                     randSkill = GameLogic.randomSkill();
-//                    randSkill = "Shield";
+//                    randSkill = "Heal";
                     setSkillImage(skillImageView, randSkill);
                 }
                 checkSkillHit(this.toString(), skillImageView, randSkill, currentPane);
@@ -450,7 +450,8 @@ public class GameLogic {
 
     //for PoisonGhost
     public static void checkPoisonHit(AnchorPane currentPane, ImageView poison, PoisonGhost poisonGhost) {
-        if (!Punk.getInstance().isCanHit() || ! currentPane.getChildren().contains(poisonGhost)) {
+        if (! Punk.getInstance().isCanHit() ) {
+            System.out.println(! currentPane.getChildren().contains(poisonGhost.getImageView()));
             return;
         }
         Bounds fireballBounds = poison.getBoundsInParent();
@@ -461,23 +462,23 @@ public class GameLogic {
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() / 2
         );
 
-//        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
-//        playerRect.setFill(Color.TRANSPARENT);
-//        playerRect.setStroke(Color.BLUE);
-//        playerRect.setStrokeWidth(2);
-//        currentPane.getChildren().add(playerRect);
-//
-//        Rectangle ghostRect = new Rectangle(fireballBounds.getMinX(), fireballBounds.getMinY(), fireballBounds.getWidth(), fireballBounds.getHeight());
-//        ghostRect.setFill(Color.TRANSPARENT);
-//        ghostRect.setStroke(Color.RED);
-//        ghostRect.setStrokeWidth(2);
-//        currentPane.getChildren().add(ghostRect);
-//
-//        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
-//            currentPane.getChildren().remove(playerRect);
-//            currentPane.getChildren().remove(ghostRect);
-//        }));
-//        rectLast.play();
+        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
+        playerRect.setFill(Color.TRANSPARENT);
+        playerRect.setStroke(Color.BLUE);
+        playerRect.setStrokeWidth(2);
+        currentPane.getChildren().add(playerRect);
+
+        Rectangle ghostRect = new Rectangle(fireballBounds.getMinX(), fireballBounds.getMinY(), fireballBounds.getWidth(), fireballBounds.getHeight());
+        ghostRect.setFill(Color.TRANSPARENT);
+        ghostRect.setStroke(Color.RED);
+        ghostRect.setStrokeWidth(2);
+        currentPane.getChildren().add(ghostRect);
+
+        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
+            currentPane.getChildren().remove(playerRect);
+            currentPane.getChildren().remove(ghostRect);
+        }));
+        rectLast.play();
 
         if (fireballBounds.intersects(mainCharBounds) && poison.isVisible()) {
             System.out.println("Poison hit detected");
@@ -498,11 +499,11 @@ public class GameLogic {
     }
 
     //for every type of enemy
-    public static void checkGhostHit(AnchorPane currentPane, Enemy enemy, ImageView enemyimageview) {
+    public static void checkGhostHit(AnchorPane currentPane, Enemy enemy, ImageView enemyImageView) {
         Bounds ghostBounds = new BoundingBox(
-                enemyimageview.getBoundsInParent().getMinX(),
-                enemyimageview.getBoundsInParent().getMinY(),
-                enemyimageview.getBoundsInParent().getWidth(),
+                enemyImageView.getBoundsInParent().getMinX(),
+                enemyImageView.getBoundsInParent().getMinY(),
+                enemyImageView.getBoundsInParent().getWidth(),
                 80
         );
         Bounds mainCharBounds = new BoundingBox(
@@ -532,7 +533,7 @@ public class GameLogic {
 //        }));
 //        rectLast.play();
 
-        if (ghostBounds.intersects(mainCharBounds) && enemyimageview.isVisible()) {
+        if (ghostBounds.intersects(mainCharBounds) && enemyImageView.isVisible()) {
             System.out.println("Ghost hit detected");
             PlaySound.ghostAndFireballHit.play();
             if (enemy instanceof Hitable) {
@@ -606,8 +607,8 @@ public class GameLogic {
     public static void addHeart() {
         if (HpBoard.getInstance().getChildren().size() < 3){
             ImageView hp = new ImageView(new Image(ClassLoader.getSystemResource("heart.png").toString()));
-            hp.setFitHeight(20);
-            hp.setFitWidth(25);
+            hp.setFitHeight(32);
+            hp.setFitWidth(40);
             HpBoard.getInstance().getChildren().add(hp);
         }
     }
