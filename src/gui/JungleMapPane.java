@@ -63,7 +63,14 @@ public class JungleMapPane extends AnchorPane {
         getChildren().addAll(hpBoard, scoreBoard);
 
         //Event Handler for KeyPressed
+        GameLogic.reversePlayerInput(this);
+        GameLogic.getReverseContinuousMovement().stop();
         GameLogic.getPlayerInput(this);
+//        Timeline check = new Timeline(new KeyFrame(Duration.seconds(4), e -> {
+//            GameLogic.getContinuousMovement().stop();
+//            GameLogic.getReverseContinuousMovement().play();
+//        }));
+//        check.play();
 
         //Set enemies
         GameLogic.getEnemies().clear();

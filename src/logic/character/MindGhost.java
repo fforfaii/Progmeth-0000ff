@@ -125,7 +125,7 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
             return;
         }
         GameLogic.getContinuousMovement().stop();
-        GameLogic.reversePlayerInput(currentPane);
+        GameLogic.getReverseContinuousMovement().play();
         Timeline effectDuration = new Timeline(new KeyFrame(Duration.seconds(4), event -> {
             GameLogic.getReverseContinuousMovement().stop();
             GameLogic.getContinuousMovement().play();

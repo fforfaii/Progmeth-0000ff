@@ -47,7 +47,6 @@ public class GameLogic {
     public static void updateGame(AnchorPane currentPane){
         System.out.println("updateGame()");
         if (isGameOver){
-            System.out.println("Enemies size in updateGame: "+enemies.size());
             for (Enemy enemy : enemies) {
                 enemy.getAnimationTimer().stop();
             }
@@ -63,8 +62,6 @@ public class GameLogic {
     }
 
     public static void updateGhost(AnchorPane currentPane){
-        System.out.println("Enemies Size: "+enemies.size());
-        System.out.println("ChildrenSize: "+currentPane.getChildren().size());
         ArrayList<String> addEnemyType = new ArrayList<>(Arrays.asList("Minion", "AttackGhost", "PoisonGhost"));
         int boundRandomIndex = 2;
         int minGhostInMap = 5;
@@ -137,6 +134,9 @@ public class GameLogic {
     public static void getPlayerInput(AnchorPane currentPane) {
 
         continuousMovement = new Timeline(new KeyFrame(Duration.millis(50), e -> {
+            if (isGameOver){
+                continuousMovement.stop();
+            }
             if (isLeftKeyPressed && isSpaceKeyPressed) {
                 // Move left and shoot
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
@@ -203,6 +203,9 @@ public class GameLogic {
     public static void reversePlayerInput(AnchorPane currentPane) {
 
         reverseContinuousMovement = new Timeline(new KeyFrame(Duration.millis(50), event -> {
+            if (isGameOver){
+                reverseContinuousMovement.stop();
+            }
             if (isRightKeyPressed && isSpaceKeyPressed) {
                 // Move left and shoot
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
@@ -451,7 +454,8 @@ public class GameLogic {
             @Override
             public void handle(long currentTime) {
                 System.out.println("checkPunkShotHitTimer Running");
-                updateGhost(currentPane);
+                System.out.println("Punk Speed: "+Punk.getInstance().getSpeed());
+//                updateGhost(currentPane);
                 Iterator<Enemy> iterator = enemies.iterator();
                 while (iterator.hasNext()) {
                     Enemy eachEnemy = iterator.next();
@@ -629,7 +633,7 @@ public class GameLogic {
                     PlaySound.ghostAndFireballHit.play();
                     ((MindGhost) enemy).hitDamage(currentPane);
                     Punk.getInstance().setMindGhostDelay(true);
-                    Timeline mindGhostDelay = new Timeline(new KeyFrame(Duration.seconds(4.5), e -> Punk.getInstance().setMindGhostDelay(false)));
+                    Timeline mindGhostDelay = new Timeline(new KeyFrame(Duration.seconds(5.0), e -> Punk.getInstance().setMindGhostDelay(false)));
                     mindGhostDelay.play();
                 }
                 if (enemy instanceof SlowGhost) {

@@ -64,6 +64,8 @@ public class FactoryMapPane extends AnchorPane {
         getChildren().addAll(hpBoard, scoreBoard);
 
         //Event Handler for KeyPressed
+        GameLogic.reversePlayerInput(this);
+        GameLogic.getReverseContinuousMovement().stop();
         GameLogic.getPlayerInput(this);
 
         //Set enemies
