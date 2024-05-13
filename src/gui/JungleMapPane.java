@@ -145,7 +145,7 @@ public class JungleMapPane extends AnchorPane {
         fadeOut.setOnFinished(event -> {
             try {
                 System.out.println("Exit !");
-                PlaySound.stopAllmapBG();
+                PlaySound.stopAllMapBG();
                 Punk.getInstance().setDead(true);
                 GameLogic.setIsGameOver(true);
                 GameLogic.updateGame(this);

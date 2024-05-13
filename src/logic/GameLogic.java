@@ -67,15 +67,11 @@ public class GameLogic {
         int minGhostInMap = 5;
         switch (currentPane.toString()){
             case ("CaveMap"):
-                boundRandomIndex = 2;
-                minGhostInMap = 5;
                 break;
             case("ForestMap"):
-                boundRandomIndex = 2;
                 minGhostInMap = 7;
                 break;
             case("FactoryMap"):
-                boundRandomIndex = 2;
                 minGhostInMap = 9;
                 break;
             case("JungleMap"):
@@ -125,7 +121,6 @@ public class GameLogic {
                     currentPane.getChildren().addAll(enemies.get(enemies.size() - 1).getImageView(), ((PoisonGhost) GameLogic.getEnemies().get(enemies.size() - 1)).getPoison());
                     enemies.add(new Minion(10.0, 10.0));
                     enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
-                    currentPane.getChildren().addAll(enemies.get(enemies.size() - 1).getImageView(), ((PoisonGhost) GameLogic.getEnemies().get(enemies.size() - 1)).getPoison());
                     break;
             }
         }
@@ -400,23 +395,6 @@ public class GameLogic {
                 20,
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() - 5
         );
-//        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
-//        playerRect.setFill(Color.TRANSPARENT);
-//        playerRect.setStroke(Color.BLUE);
-//        playerRect.setStrokeWidth(2);
-//        currentPane.getChildren().add(playerRect);
-//
-//        Rectangle ghostRect = new Rectangle(coinBounds.getMinX(), coinBounds.getMinY(), coinBounds.getWidth(), coinBounds.getHeight());
-//        ghostRect.setFill(Color.TRANSPARENT);
-//        ghostRect.setStroke(Color.RED);
-//        ghostRect.setStrokeWidth(2);
-//        currentPane.getChildren().add(ghostRect);
-//
-//        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
-//            currentPane.getChildren().remove(playerRect);
-//            currentPane.getChildren().remove(ghostRect);
-//        }));
-//        rectLast.play();
 
         // If player can get skill
         if (coinBounds.intersects(mainCharBounds) && skillImage.isVisible() && skillImage.getTranslateY() >= Punk.getInstance().getYPos() - 30){
@@ -454,8 +432,8 @@ public class GameLogic {
             @Override
             public void handle(long currentTime) {
                 System.out.println("checkPunkShotHitTimer Running");
-                System.out.println("Punk Speed: "+Punk.getInstance().getSpeed());
-//                updateGhost(currentPane);
+//                System.out.println("Punk Speed: "+Punk.getInstance().getSpeed());
+                updateGhost(currentPane);
                 Iterator<Enemy> iterator = enemies.iterator();
                 while (iterator.hasNext()) {
                     Enemy eachEnemy = iterator.next();
@@ -574,12 +552,12 @@ public class GameLogic {
     }
 
     //for every type of enemy
-    public static void checkGhostHit(AnchorPane currentPane, Enemy enemy, ImageView enemyimageview) {
+    public static void checkGhostHit(AnchorPane currentPane, Enemy enemy, ImageView enemyImageView) {
         System.out.println("CheckGhostHit running");
         Bounds ghostBounds = new BoundingBox(
-                enemyimageview.getBoundsInParent().getMinX(),
-                enemyimageview.getBoundsInParent().getMinY(),
-                enemyimageview.getBoundsInParent().getWidth(),
+                enemyImageView.getBoundsInParent().getMinX(),
+                enemyImageView.getBoundsInParent().getMinY(),
+                enemyImageView.getBoundsInParent().getWidth(),
                 80
         );
         Bounds mainCharBounds = new BoundingBox(
@@ -591,24 +569,6 @@ public class GameLogic {
         if (! Punk.getInstance().isCanHit()) {
             return;
         }
-//        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
-//        playerRect.setFill(Color.TRANSPARENT);
-//        playerRect.setStroke(Color.BLUE);
-//        playerRect.setStrokeWidth(2);
-//        currentPane.getChildren().add(playerRect);
-//
-//        Rectangle ghostRect = new Rectangle(ghostBounds.getMinX(), ghostBounds.getMinY(), ghostBounds.getWidth(), ghostBounds.getHeight());
-//        ghostRect.setFill(Color.TRANSPARENT);
-//        ghostRect.setStroke(Color.RED);
-//        ghostRect.setStrokeWidth(2);
-//        currentPane.getChildren().add(ghostRect);
-//
-//        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
-//            currentPane.getChildren().remove(playerRect);
-//            currentPane.getChildren().remove(ghostRect);
-//        }));
-//        rectLast.play();
-
         if (ghostBounds.intersects(mainCharBounds) && currentPane.getChildren().contains(enemy.getImageView())) {
             System.out.println("Ghost hit detected");
             if (enemy instanceof Hitable) {
@@ -660,7 +620,7 @@ public class GameLogic {
             return;
         }
         if (Punk.getInstance().getHp() == 0) {
-            PlaySound.stopAllmapBG();
+            PlaySound.stopAllMapBG();
             PlaySound.death.play();
             Punk.getInstance().setDead(true);
             setIsGameOver(true);

@@ -53,7 +53,7 @@ public class PlaySound {
         ghostAndFireballHit = new AudioClip(ClassLoader.getSystemResource("ghostandfireballhit.mp4").toString());
     }
 
-    public static void stopAllmapBG() {
+    public static void stopAllMapBG() {
         caveMapBG.stop();
         factoryMapBG.stop();
         forestMapBG.stop();

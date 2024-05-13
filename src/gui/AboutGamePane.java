@@ -18,23 +18,23 @@ import java.io.IOException;
 
 public class AboutGamePane extends AnchorPane {
     private static AboutGamePane instance;
-    private VBox contentVBox;
-    private Button gotoMap;
+    private final VBox CONTENT_BOX;
+    private final Button GO_TO_MAP;
     public AboutGamePane() {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setPrefHeight(648);
         scrollPane.setFitToWidth(true);
 
-        contentVBox = new VBox();
+        CONTENT_BOX = new VBox();
         for (int i = 1; i < 6; i++) {
             ImageView eachContent = new ImageView(new Image(ClassLoader.getSystemResource("howto" + i + ".png").toString()));
-            contentVBox.getChildren().add(eachContent);
+            CONTENT_BOX.getChildren().add(eachContent);
         }
-        scrollPane.setContent(contentVBox);
+        scrollPane.setContent(CONTENT_BOX);
 
-        gotoMap = new Button("Back");
-        gotoMap.setFont(Font.font("Monospace", FontWeight.BOLD, 15));
-        gotoMap.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        GO_TO_MAP = new Button("Back");
+        GO_TO_MAP.setFont(Font.font("Monospace", FontWeight.BOLD, 15));
+        GO_TO_MAP.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
@@ -46,7 +46,7 @@ public class AboutGamePane extends AnchorPane {
         });
 
         HBox buttonBox = new HBox();
-        buttonBox.getChildren().add(gotoMap);
+        buttonBox.getChildren().add(GO_TO_MAP);
         buttonBox.setStyle("-fx-padding: 10; -fx-alignment: top-left;");
 
         AnchorPane.setTopAnchor(buttonBox, 0.0);

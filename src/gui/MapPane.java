@@ -19,7 +19,7 @@ import sound.PlaySound;
 import java.io.IOException;
 
 public class MapPane extends VBox {
-    private Text welcome;
+    private final Text WELCOME;
     private Button MapBTN1;
     private Button MapBTN2;
     private Button MapBTN3;
@@ -32,9 +32,9 @@ public class MapPane extends VBox {
         setSpacing(25);
 
         // Set welcome text (head)
-        welcome = new Text("Welcome " + LoginPane.getPlayerName() + " !");
-        welcome.setFont(Font.font("Monospace", FontWeight.BOLD,35));
-        welcome.setFill(Color.WHITE);
+        WELCOME = new Text("Welcome " + LoginPane.getPlayerName() + " !");
+        WELCOME.setFont(Font.font("Monospace", FontWeight.BOLD,35));
+        WELCOME.setFill(Color.WHITE);
 
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER);
@@ -109,7 +109,7 @@ public class MapPane extends VBox {
             }
         });
 
-        getChildren().addAll(welcome,hBox,aboutGame);
+        getChildren().addAll(WELCOME,hBox,aboutGame);
     }
 
     public VBox setMap(String mapImage,String mapName) {
