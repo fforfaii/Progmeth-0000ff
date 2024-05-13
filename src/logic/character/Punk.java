@@ -38,12 +38,12 @@ public class Punk {
         // always start at (0.0,453.0)
         setXPos(0); // ระยะห่างจากขอบซ้ายของ window
         setYPos(453.0); // ระยะห่างจากขอบบนของ window
-        this.atk = 1;
+        this.atk = 3;
         setDead(false);
         setScore(0);
         setHp(3);
         setSpeed(15.0);
-        setDelayShoot(2.5);
+        setDelayShoot(1.6);
         setScorePerCoin(1);
         setImmortalDelay(false);
         setCanHit(true);

@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -44,10 +45,11 @@ public class GameLogic {
     private static ArrayList<Enemy> enemies =  new ArrayList<>();
 
     public static void updateGame(AnchorPane currentPane){
-        System.out.println("Score : "+Punk.getInstance().getScore());
+        System.out.println("Score : " + Punk.getInstance().getScore());
         if (isGameOver){
-            for (int i = 0; i < enemies.size(); i++){
-                enemies.get(i).getAnimationTimer().stop();
+            System.out.println("Enemies size in updateGame: "+enemies.size());
+            for (Enemy enemy : enemies) {
+                enemy.getAnimationTimer().stop();
             }
             coinFallAnimation.stop();
             skillFallAnimation.stop();
@@ -56,7 +58,7 @@ public class GameLogic {
             checkPunkShotHitAnimation.stop();
             return;
         }
-        checkPunkShotHit(currentPane, enemies);
+        checkPunkShotHit(currentPane);
         ScoreBoard.getInstance().setScoreboard();
         HpBoard.updateHpBoard();
     }
@@ -69,7 +71,6 @@ public class GameLogic {
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
                 Punk.getInstance().runLeft();
                 if (Punk.getInstance().isCanShoot()){
-                    PlaySound.playerShoot.play();
                     Punk.getInstance().shoot();
                     Punk.getInstance().setCanShoot(false);
                     Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), event -> Punk.getInstance().setCanShoot(true)));
@@ -80,7 +81,6 @@ public class GameLogic {
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
                 Punk.getInstance().runRight();
                 if (Punk.getInstance().isCanShoot()){
-                    PlaySound.playerShoot.play();
                     Punk.getInstance().shoot();
                     Punk.getInstance().setCanShoot(false);
                     Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), event -> Punk.getInstance().setCanShoot(true)));
@@ -197,7 +197,7 @@ public class GameLogic {
         reverseContinuousMovement.play();
     }
     public static String randomSkill() {
-        ArrayList<String> Skills = Constant.getInstance().getSkillsname();
+        ArrayList<String> Skills = Constant.getInstance().getSkillsName();
         Random random = new Random();
         int randomIndex = random.nextInt(Skills.size());
         return Skills.get(randomIndex);
@@ -205,6 +205,11 @@ public class GameLogic {
     public static void setSkillImage(ImageView skillImageView, String skillName) {
         // Set icon that fall down
         switch (skillName) {
+            case "FasterAttack":
+                skillImageView.setImage(new Image(ClassLoader.getSystemResource("fasterattack.png").toString()));
+                skillImageView.setFitHeight(65);
+                skillImageView.setFitWidth(65);
+                break;
             case "ExtraScore":
                 skillImageView.setImage(new Image(ClassLoader.getSystemResource("extrascore.png").toString()));
                 skillImageView.setFitHeight(35);
@@ -233,7 +238,7 @@ public class GameLogic {
         }
     }
     public static void skillFall(ImageView skillImageView, AnchorPane currentPane) {
-        // Set falldown movement
+        // Set fallDown movement
         Random random = new Random();
         ArrayList<Double> durations = new ArrayList<>();
         durations.add(3.0);
@@ -259,7 +264,7 @@ public class GameLogic {
                     lastUpdate = currentTime;
                     randomIndex = randomIndex();
                     randSkill = GameLogic.randomSkill();
-//                    randSkill = "Shield";
+//                    randSkill = "FasterAttack";
                     setSkillImage(skillImageView, randSkill);
                 }
                 checkSkillHit(this.toString(), skillImageView, randSkill, currentPane);
@@ -370,12 +375,14 @@ public class GameLogic {
             }
         }
     }
-    public static void checkPunkShotHit(AnchorPane currentPane, ArrayList<Enemy> enemies) {
+    public static void checkPunkShotHit(AnchorPane currentPane) {
         checkPunkShotHitAnimation = new AnimationTimer() {
             @Override
             public void handle(long currentTime) {
                 System.out.println("checkPunkShotHitTimer Running");
-                for (Enemy eachEnemy: enemies){
+                Iterator<Enemy> iterator = enemies.iterator();
+                while (iterator.hasNext()) {
+                    Enemy eachEnemy = iterator.next();
                     if (splashDelay){
                         return;
                     }
@@ -401,6 +408,7 @@ public class GameLogic {
                             ((MindGhost) eachEnemy).noDecreaseHP(); // UnDecrease MindGhost HP (immortal)
                         }
                         if (eachEnemy.getHp() == 0) {
+                            iterator.remove(); // Remove the current enemy using the iterator
                             currentPane.getChildren().remove(eachEnemy.getImageView());
                             if (eachEnemy instanceof AttackGhost){
                                 // Get AttackGhost's Fireball out !
@@ -438,25 +446,6 @@ public class GameLogic {
                 20,
                 Punk.getInstance().getPunkImageView().getBoundsInParent().getHeight() / 2
         );
-
-//        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
-//        playerRect.setFill(Color.TRANSPARENT);
-//        playerRect.setStroke(Color.BLUE);
-//        playerRect.setStrokeWidth(2);
-//        currentPane.getChildren().add(playerRect);
-//
-//        Rectangle ghostRect = new Rectangle(fireballBounds.getMinX(), fireballBounds.getMinY(), fireballBounds.getWidth(), fireballBounds.getHeight());
-//        ghostRect.setFill(Color.TRANSPARENT);
-//        ghostRect.setStroke(Color.RED);
-//        ghostRect.setStrokeWidth(2);
-//        currentPane.getChildren().add(ghostRect);
-//
-//        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
-//            currentPane.getChildren().remove(playerRect);
-//            currentPane.getChildren().remove(ghostRect);
-//        }));
-//        rectLast.play();
-
         if (fireballBounds.intersects(mainCharBounds) && fireball.isVisible() && currentPane.getChildren().contains(attackGhost.getImageView())) {
             System.out.println("FireBall hit detected");
             PlaySound.ghostAndFireballHit.play();
@@ -509,6 +498,72 @@ public class GameLogic {
 
     //for every type of enemy
     public static void checkGhostHit(AnchorPane currentPane, Enemy enemy, ImageView enemyimageview) {
+        System.out.println("CheckGhostHit running");
+        System.out.println("Enemies Size: "+enemies.size());
+        System.out.println("ChildrenSize: "+currentPane.getChildren().size());
+        ArrayList<String> addEnemyType = new ArrayList<>(Arrays.asList("Minion", "AttackGhost", "PoisonGhost"));
+        int boundRandomIndex = 2;
+        int minGhostInMap = 5;
+        switch (currentPane.toString()){
+//            case ("CaveMap"):
+//                break;
+            case("ForestMap"):
+                minGhostInMap = 9;
+                break;
+            case("FactoryMap"):
+                minGhostInMap = 13;
+                break;
+            case("JungleMap"):
+                minGhostInMap = 16;
+                boundRandomIndex = 3;
+                break;
+        }
+        if (enemies.size() < minGhostInMap){
+            Random random = new Random();
+            int index = random.nextInt(boundRandomIndex); //0-bound-1
+            switch (addEnemyType.get(index)){
+                case ("Minion"):
+                    enemies.add(new Minion(10.0, 10.0));
+                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
+                    enemies.add(new Minion(10.0, 10.0));
+                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
+                    break;
+                case ("AttackGhost"):
+                    enemies.add(new AttackGhost(10.0, 10.0));
+                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+                    currentPane.getChildren().addAll(enemies.get(enemies.size() - 1).getImageView(), ((AttackGhost) GameLogic.getEnemies().get(enemies.size() - 1)).getFireball());
+                    enemies.add(new AttackGhost(10.0, 10.0));
+                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+                    currentPane.getChildren().addAll(enemies.get(enemies.size() - 1).getImageView(), ((AttackGhost) GameLogic.getEnemies().get(enemies.size() - 1)).getFireball());
+                    break;
+//                case ("MindGhost"):
+//                    enemies.add(new MindGhost(10.0, 10.0));
+//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
+//                    enemies.add(new MindGhost(10.0, 10.0));
+//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
+//                    break;
+//                case ("SlowGhost"):
+//                    enemies.add(new SlowGhost(10.0, 10.0));
+//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
+//                    enemies.add(new SlowGhost(10.0, 10.0));
+//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
+//                    break;
+                case ("PoisonGhost"):
+                    enemies.add(new PoisonGhost(10.0, 10.0));
+                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+                    currentPane.getChildren().addAll(enemies.get(enemies.size() - 1).getImageView(), ((PoisonGhost) GameLogic.getEnemies().get(enemies.size() - 1)).getPoison());
+                    enemies.add(new PoisonGhost(10.0, 10.0));
+                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+                    currentPane.getChildren().addAll(enemies.get(enemies.size() - 1).getImageView(), ((PoisonGhost) GameLogic.getEnemies().get(enemies.size() - 1)).getPoison());
+                    break;
+            }
+        }
         Bounds ghostBounds = new BoundingBox(
                 enemyimageview.getBoundsInParent().getMinX(),
                 enemyimageview.getBoundsInParent().getMinY(),
@@ -541,7 +596,7 @@ public class GameLogic {
             currentPane.getChildren().remove(ghostRect);
         }));
         rectLast.play();
-        System.out.println("Punk speed : "+Punk.getInstance().getSpeed());
+
         if (ghostBounds.intersects(mainCharBounds) && currentPane.getChildren().contains(enemy.getImageView())) {
             System.out.println("Ghost hit detected");
             if (enemy instanceof Hitable) {

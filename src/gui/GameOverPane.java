@@ -25,7 +25,7 @@ import java.io.IOException;
 public class GameOverPane extends StackPane {
     private static GameOverPane instance;
     Punk player;
-    VBox allElements;
+    private VBox allElements;
     public GameOverPane() {
         PlaySound.gameOverBG.play();
         player = Punk.getInstance();
@@ -40,7 +40,6 @@ public class GameOverPane extends StackPane {
         gameOver.setFitHeight(400);
         gameOver.setViewport(new Rectangle2D(0, 50, gameOver.getFitWidth(), gameOver.getFitHeight()-100));
         VBox.setMargin(gameOver, new Insets(0, 70, 0, 0));
-        System.out.println("Player Object ID : "+player);
         Text scoreText = new Text("Your Score is " + player.getScore() + " !");
         scoreText.setFont(Font.font("Monospace", FontWeight.EXTRA_BOLD, 40));
         scoreText.setFill(Color.rgb(255, 252, 245));

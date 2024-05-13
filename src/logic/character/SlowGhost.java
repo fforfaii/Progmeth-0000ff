@@ -165,6 +165,6 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
 
     @Override
     public AnimationTimer getAnimationTimer() {
-        return null;
+        return ghostAnimationTimer;
     }
 }

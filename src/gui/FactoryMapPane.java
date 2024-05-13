@@ -68,7 +68,7 @@ public class FactoryMapPane extends AnchorPane {
 
         //Set enemies
         GameLogic.getEnemies().clear();
-        for (int i = 0; i < 3; i++){
+        for (int i = 0; i < 2; i++){
             Random random = new Random();
             double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
             double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
@@ -77,14 +77,41 @@ public class FactoryMapPane extends AnchorPane {
             setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
             GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
             getChildren().add(GameLogic.getEnemies().get(i).getImageView());
+        }
+        for (int i = 2; i < 4; i++){
+            Random random = new Random();
+            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
+            GameLogic.getEnemies().add(new AttackGhost(randomX, randomY));
+            setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
+            GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
+            getChildren().add(GameLogic.getEnemies().get(i).getImageView());
 
             if (GameLogic.getEnemies().get(i) instanceof AttackGhost){
                 getChildren().add(((AttackGhost) GameLogic.getEnemies().get(i)).getFireball());
             }
-            if (GameLogic.getEnemies().get(i) instanceof PoisonGhost){
-                getChildren().add(((PoisonGhost) GameLogic.getEnemies().get(i)).getPoison());
-            }
         }
+        for (int i = 4; i < 6; i++){
+            Random random = new Random();
+            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
+            GameLogic.getEnemies().add(new MindGhost(randomX, randomY));
+            setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
+            GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
+            getChildren().add(GameLogic.getEnemies().get(i).getImageView());
+        }
+//        for (int i = 6; i < 8; i++){
+//            Random random = new Random();
+//            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+//            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+//            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
+//            GameLogic.getEnemies().add(new SlowGhost(randomX, randomY));
+//            setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
+//            GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
+//            getChildren().add(GameLogic.getEnemies().get(i).getImageView());
+//        }
 
         // Set skills
         skill = new ImageView();
@@ -130,7 +157,6 @@ public class FactoryMapPane extends AnchorPane {
             try {
                 System.out.println("Exit !");
                 PlaySound.stopAllmapBG();
-//                PlaySound.death.play();
                 Punk.getInstance().setDead(true);
                 GameLogic.setIsGameOver(true);
                 GameLogic.updateGame(this);
@@ -141,75 +167,7 @@ public class FactoryMapPane extends AnchorPane {
         });
         fadeOut.play();
     }
-//    public void setSkillImage(ImageView skillImageView, String skillname) {
-//        // Set icon that fall down
-////        ImageView skillimageview = new ImageView();
-//        switch (skillname) {
-//            case "Shield":
-//                skillImageView.setImage(new Image(ClassLoader.getSystemResource("shield.png").toString()));
-//                skillImageView.setFitHeight(30);
-//                skillImageView.setFitWidth(30);
-//                break;
-//            case "ExtraScore":
-//                skillImageView.setImage(new Image(ClassLoader.getSystemResource("extrascore.png").toString()));
-//                skillImageView.setFitHeight(35);
-//                skillImageView.setFitWidth(35);
-//                break;
-//            case "ExtraDamage":
-//                skillImageView.setImage(new Image(ClassLoader.getSystemResource("extradamage.png").toString()));
-//                skillImageView.setFitHeight(50);
-//                skillImageView.setFitWidth(50);
-//                break;
-//            case "Heal":
-//                skillImageView.setImage(new Image(ClassLoader.getSystemResource("heal.png").toString()));
-//                skillImageView.setFitHeight(50);
-//                skillImageView.setFitWidth(50);
-//                break;
-//            case "MoveFaster":
-//                skillImageView.setImage(new Image(ClassLoader.getSystemResource("movefaster.png").toString()));
-//                skillImageView.setFitHeight(50);
-//                skillImageView.setFitWidth(50);
-//                break;
-//            case "Disappear":
-//                skillImageView.setImage(new Image(ClassLoader.getSystemResource("disappear.png").toString()));
-//                skillImageView.setFitHeight(65);
-//                skillImageView.setFitWidth(65);
-//                break;
-//        }
-//    }
-//    public void skillFall(ImageView skillImageView) {
-//        // Set falldown movement
-//        Random random = new Random();
-//        ArrayList<Double> durations = new ArrayList<>();
-//        durations.add(3.0);
-//        durations.add(3.5);
-//        durations.add(4.0);
-//        durations.add(4.5);
-//        durations.add(2.0);
-//        durations.add(2.5);
-//        randomIndex = randomIndex(); // for getting duration
-//        AnimationTimer FallDown = new AnimationTimer() {
-//            private long lastUpdate = 0;
-//            private String randSkill = GameLogic.randomSkill();
-//            @Override
-//            public void handle(long currentTime) {
-//                double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
-//                if (elapsedTimeSeconds >= durations.get(randomIndex)) {
-//                    skillImageView.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
-//                    skillImageView.setTranslateY(0.0);
-//                    skillImageView.setFitWidth(40);
-//                    skillImageView.setFitHeight(40);
-//                    GameLogic.slideYPos(skillImageView, 2.0, 525);
-//                    lastUpdate = currentTime;
-//                    randomIndex = randomIndex();
-//                    randSkill = GameLogic.randomSkill();
-//                    setSkillImage(skillImageView, randSkill);
-//                }
-//                GameLogic.checkSkillHit(this.toString(), skillImageView, randSkill);
-//            }
-//        };
-//        FallDown.start();
-//    }
+
     @Override
     public String toString() {
         return "FactoryMap";

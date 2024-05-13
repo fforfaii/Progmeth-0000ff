@@ -37,7 +37,6 @@ public class PoisonGhost extends Enemy { //if punk get poison: cannot attack for
 
         // Set Poison
         poison = new ImageView(new Image(ClassLoader.getSystemResource("poison.png").toString()));
-            // set position at the same x,y of poisonGhost
 
         poison.setLayoutY(getYPos());
         poison.setTranslateY(poisonGhostImageView.getTranslateY());

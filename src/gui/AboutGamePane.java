@@ -20,7 +20,6 @@ public class AboutGamePane extends AnchorPane {
     private static AboutGamePane instance;
     private VBox contentVBox;
     private Button gotoMap;
-    private VBox contents;
     public AboutGamePane() {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setPrefHeight(648);
@@ -32,7 +31,6 @@ public class AboutGamePane extends AnchorPane {
             contentVBox.getChildren().add(eachContent);
         }
         scrollPane.setContent(contentVBox);
-        scrollPane.setFitToWidth(true); // Ensure scrollpane fits width
 
         gotoMap = new Button("Back");
         gotoMap.setFont(Font.font("Monospace", FontWeight.BOLD, 15));

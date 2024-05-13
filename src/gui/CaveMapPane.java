@@ -40,7 +40,6 @@ public class CaveMapPane extends AnchorPane {
         setTopAnchor(punk.getPunkImageView(),453.0);
         punk.setCanShoot(true);
         getChildren().addAll(groundImageView, punk.getPunkImageView(), punk.getPunkShot());
-        GameLogic.setIsGameOver(false);
 
         // Set Coin
         coin = new ImageView(new Image(ClassLoader.getSystemResource("coin.png").toString()));
@@ -67,28 +66,17 @@ public class CaveMapPane extends AnchorPane {
         //Set enemies
         GameLogic.getEnemies().clear();
         for (int i = 0; i < 3; i++){
-            Random random = new Random();
-            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
             GameLogic.getEnemies().add(new Minion(10.0, 10.0));
             setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
             GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
             getChildren().add(GameLogic.getEnemies().get(i).getImageView());
         }
         for (int i = 3; i < 6; i++){
-            Random random = new Random();
-            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            GameLogic.getEnemies().add(new AttackGhost(randomX, randomY));
+            GameLogic.getEnemies().add(new AttackGhost(10.0, 10.0));
             setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
             GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
             getChildren().add(GameLogic.getEnemies().get(i).getImageView());
-
-            if (GameLogic.getEnemies().get(i) instanceof AttackGhost){
-                getChildren().add(((AttackGhost) GameLogic.getEnemies().get(i)).getFireball());
-            }
+            getChildren().add(((AttackGhost) GameLogic.getEnemies().get(i)).getFireball());
         }
 
         //Set skills
@@ -133,7 +121,6 @@ public class CaveMapPane extends AnchorPane {
             try {
                 System.out.println("Exit !");
                 PlaySound.stopAllmapBG();
-//                PlaySound.death.play();
                 Punk.getInstance().setDead(true);
                 GameLogic.setIsGameOver(true);
                 GameLogic.updateGame(this);
