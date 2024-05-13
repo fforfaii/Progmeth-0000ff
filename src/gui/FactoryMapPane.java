@@ -102,16 +102,16 @@ public class FactoryMapPane extends AnchorPane {
             GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
             getChildren().add(GameLogic.getEnemies().get(i).getImageView());
         }
-        for (int i = 6; i < 8; i++){
-            Random random = new Random();
-            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            GameLogic.getEnemies().add(new SlowGhost(randomX, randomY));
-            setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
-            GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
-            getChildren().add(GameLogic.getEnemies().get(i).getImageView());
-        }
+//        for (int i = 6; i < 8; i++){
+//            Random random = new Random();
+//            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
+//            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
+//            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
+//            GameLogic.getEnemies().add(new SlowGhost(randomX, randomY));
+//            setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
+//            GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
+//            getChildren().add(GameLogic.getEnemies().get(i).getImageView());
+//        }
 
         // Set skills
         skill = new ImageView();
