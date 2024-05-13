@@ -31,7 +31,6 @@ public class AboutGamePane extends AnchorPane {
             contentVBox.getChildren().add(eachContent);
         }
         scrollPane.setContent(contentVBox);
-        scrollPane.setFitToWidth(true); // Ensure scrollpane fits width
 
         gotoMap = new Button("Back");
         gotoMap.setFont(Font.font("Monospace", FontWeight.BOLD, 15));
