@@ -40,7 +40,6 @@ public class CaveMapPane extends AnchorPane {
         setTopAnchor(punk.getPunkImageView(),453.0);
         punk.setCanShoot(true);
         getChildren().addAll(groundImageView, punk.getPunkImageView(), punk.getPunkShot());
-        GameLogic.setIsGameOver(false);
 
         // Set Coin
         coin = new ImageView(new Image(ClassLoader.getSystemResource("coin.png").toString()));
