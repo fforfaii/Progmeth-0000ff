@@ -69,7 +69,6 @@ public class GameLogic {
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
                 Punk.getInstance().runLeft();
                 if (Punk.getInstance().isCanShoot()){
-                    PlaySound.playerShoot.play();
                     Punk.getInstance().shoot();
                     Punk.getInstance().setCanShoot(false);
                     Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), event -> Punk.getInstance().setCanShoot(true)));
@@ -80,7 +79,6 @@ public class GameLogic {
                 Punk.getInstance().setXPos(Punk.getInstance().getPunkImageView().getLayoutX());
                 Punk.getInstance().runRight();
                 if (Punk.getInstance().isCanShoot()){
-                    PlaySound.playerShoot.play();
                     Punk.getInstance().shoot();
                     Punk.getInstance().setCanShoot(false);
                     Timeline delayShoot = new Timeline(new KeyFrame(Duration.seconds(Punk.getInstance().getDelayShoot()), event -> Punk.getInstance().setCanShoot(true)));
