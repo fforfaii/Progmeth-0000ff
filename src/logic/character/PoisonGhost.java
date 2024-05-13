@@ -66,6 +66,7 @@ public class PoisonGhost extends Enemy { //if punk get poison: cannot attack for
 
             @Override
             public void handle(long currentTime) {
+                if (GameLogic.isGameOver()) stop();
                 // Slide X axis
                 System.out.println("PoisonGhostTimer Running");
                 if (currentTime - lastMove >= 5_000_000_000L) {

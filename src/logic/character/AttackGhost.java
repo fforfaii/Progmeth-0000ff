@@ -61,6 +61,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
             @Override
             public void handle(long currentTime) {
                 // Slide X axis
+                if (GameLogic.isGameOver()) stop();
                 System.out.println("AttackGhostTimer Running");
                 if (currentTime - lastMove >= 5_000_000_000L) {
                     GameLogic.slideXPos(attackGhostImageView.getTranslateX(), attackGhostImageView, 3, GameLogic.randXPos() / 1.2);

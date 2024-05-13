@@ -44,6 +44,7 @@ public class MindGhost extends Enemy implements Hitable, GoDownable, Imperishabl
             private long lastDown = 0;
             @Override
             public void handle(long currentTime) {
+                if (GameLogic.isGameOver()) stop();
                 // Slide X axis
                 System.out.println("MindGhostTimer Running");
                 if (currentTime - lastSlide >= 7_000_000_000L) {

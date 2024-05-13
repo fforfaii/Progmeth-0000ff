@@ -127,7 +127,7 @@ public class FactoryMapPane extends AnchorPane {
         //update game
         GameLogic.setIsGameOver(false);
         GameLogic.updateGame(this);
-
+        GameLogic.checkPunkShotHit(this);
     }
 
     private void fadeExitPage() {

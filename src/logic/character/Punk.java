@@ -38,7 +38,7 @@ public class Punk {
         // always start at (0.0,453.0)
         setXPos(0); // ระยะห่างจากขอบซ้ายของ window
         setYPos(453.0); // ระยะห่างจากขอบบนของ window
-        this.atk = 3;
+        this.atk = 1;
         setDead(false);
         setScore(0);
         setHp(3);

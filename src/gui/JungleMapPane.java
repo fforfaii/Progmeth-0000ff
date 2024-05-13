@@ -86,6 +86,12 @@ public class JungleMapPane extends AnchorPane {
             GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
             getChildren().add(GameLogic.getEnemies().get(i).getImageView());
         }
+        for (int i = 8; i < 10; i++){
+            GameLogic.getEnemies().add(new SlowGhost(10.0, 10.0));
+            setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
+            GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
+            getChildren().add(GameLogic.getEnemies().get(i).getImageView());
+        }
         for (int i = 10; i < 12; i++){
             GameLogic.getEnemies().add(new PoisonGhost(10.0, 10.0));
             setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
@@ -127,6 +133,7 @@ public class JungleMapPane extends AnchorPane {
         //update game
         GameLogic.setIsGameOver(false);
         GameLogic.updateGame(this);
+        GameLogic.checkPunkShotHit(this);
     }
 
     private void fadeExitPage() {

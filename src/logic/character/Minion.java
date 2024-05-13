@@ -46,6 +46,7 @@ public class Minion extends Enemy implements Hitable, GoDownable { //can do noth
             private long lastDown = 0;
             @Override
             public void handle(long currentTime) {
+                if (GameLogic.isGameOver()) stop();
                 // Slide X axis
                 System.out.println("MinionTimer Running");
                 if (currentTime - lastSlide >= 7_000_000_000L) {

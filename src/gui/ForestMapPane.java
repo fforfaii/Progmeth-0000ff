@@ -120,6 +120,7 @@ public class ForestMapPane extends AnchorPane {
         //update game
         GameLogic.setIsGameOver(false);
         GameLogic.updateGame(this);
+        GameLogic.checkPunkShotHit(this);
     }
     private void fadeExitPage() {
         FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), this);

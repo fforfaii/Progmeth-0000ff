@@ -52,6 +52,7 @@ public class SlowGhost extends Enemy implements Imperishable, GoDownable, Hitabl
             private long lastDown = 0;
             @Override
             public void handle(long currentTime) {
+                if (GameLogic.isGameOver()) stop();
                 // Slide X axis
                 System.out.println("SlowGhostTimer Running");
                 if (currentTime - lastSlide >= 6_000_000_000L) {

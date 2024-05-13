@@ -45,7 +45,7 @@ public class GameLogic {
     private static ArrayList<Enemy> enemies =  new ArrayList<>();
 
     public static void updateGame(AnchorPane currentPane){
-        System.out.println("Score : " + Punk.getInstance().getScore());
+        System.out.println("updateGame()");
         if (isGameOver){
             System.out.println("Enemies size in updateGame: "+enemies.size());
             for (Enemy enemy : enemies) {
@@ -58,9 +58,80 @@ public class GameLogic {
             checkPunkShotHitAnimation.stop();
             return;
         }
-        checkPunkShotHit(currentPane);
         ScoreBoard.getInstance().setScoreboard();
         HpBoard.updateHpBoard();
+    }
+
+    public static void updateGhost(AnchorPane currentPane){
+        System.out.println("Enemies Size: "+enemies.size());
+        System.out.println("ChildrenSize: "+currentPane.getChildren().size());
+        ArrayList<String> addEnemyType = new ArrayList<>(Arrays.asList("Minion", "AttackGhost", "PoisonGhost"));
+        int boundRandomIndex = 2;
+        int minGhostInMap = 5;
+        switch (currentPane.toString()){
+            case ("CaveMap"):
+                boundRandomIndex = 2;
+                minGhostInMap = 5;
+                break;
+            case("ForestMap"):
+                boundRandomIndex = 2;
+                minGhostInMap = 7;
+                break;
+            case("FactoryMap"):
+                boundRandomIndex = 2;
+                minGhostInMap = 9;
+                break;
+            case("JungleMap"):
+                minGhostInMap = 11;
+                boundRandomIndex = 3;
+                break;
+        }
+        if (enemies.size() < minGhostInMap){
+            Random random = new Random();
+            int index = random.nextInt(boundRandomIndex); //0-bound-1
+            switch (addEnemyType.get(index)){
+                case ("Minion"):
+                    enemies.add(new Minion(10.0, 10.0));
+                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
+                    enemies.add(new Minion(10.0, 10.0));
+                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
+                    break;
+                case ("AttackGhost"):
+                    enemies.add(new AttackGhost(10.0, 10.0));
+                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+                    currentPane.getChildren().addAll(enemies.get(enemies.size() - 1).getImageView(), ((AttackGhost) GameLogic.getEnemies().get(enemies.size() - 1)).getFireball());
+                    enemies.add(new AttackGhost(10.0, 10.0));
+                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+                    currentPane.getChildren().addAll(enemies.get(enemies.size() - 1).getImageView(), ((AttackGhost) GameLogic.getEnemies().get(enemies.size() - 1)).getFireball());
+                    break;
+//                case ("MindGhost"):
+//                    enemies.add(new MindGhost(10.0, 10.0));
+//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
+//                    enemies.add(new MindGhost(10.0, 10.0));
+//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
+//                    break;
+//                case ("SlowGhost"):
+//                    enemies.add(new SlowGhost(10.0, 10.0));
+//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
+//                    enemies.add(new SlowGhost(10.0, 10.0));
+//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
+//                    break;
+                case ("PoisonGhost"):
+                    enemies.add(new PoisonGhost(10.0, 10.0));
+                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+                    currentPane.getChildren().addAll(enemies.get(enemies.size() - 1).getImageView(), ((PoisonGhost) GameLogic.getEnemies().get(enemies.size() - 1)).getPoison());
+                    enemies.add(new Minion(10.0, 10.0));
+                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
+                    currentPane.getChildren().addAll(enemies.get(enemies.size() - 1).getImageView(), ((PoisonGhost) GameLogic.getEnemies().get(enemies.size() - 1)).getPoison());
+                    break;
+            }
+        }
     }
 
     public static void getPlayerInput(AnchorPane currentPane) {
@@ -380,6 +451,7 @@ public class GameLogic {
             @Override
             public void handle(long currentTime) {
                 System.out.println("checkPunkShotHitTimer Running");
+                updateGhost(currentPane);
                 Iterator<Enemy> iterator = enemies.iterator();
                 while (iterator.hasNext()) {
                     Enemy eachEnemy = iterator.next();
@@ -410,6 +482,7 @@ public class GameLogic {
                         if (eachEnemy.getHp() == 0) {
                             iterator.remove(); // Remove the current enemy using the iterator
                             currentPane.getChildren().remove(eachEnemy.getImageView());
+                            eachEnemy.getAnimationTimer().stop();
                             if (eachEnemy instanceof AttackGhost){
                                 // Get AttackGhost's Fireball out !
                                 ((AttackGhost) eachEnemy).getFireball().setVisible(false);
@@ -499,71 +572,6 @@ public class GameLogic {
     //for every type of enemy
     public static void checkGhostHit(AnchorPane currentPane, Enemy enemy, ImageView enemyimageview) {
         System.out.println("CheckGhostHit running");
-        System.out.println("Enemies Size: "+enemies.size());
-        System.out.println("ChildrenSize: "+currentPane.getChildren().size());
-        ArrayList<String> addEnemyType = new ArrayList<>(Arrays.asList("Minion", "AttackGhost", "PoisonGhost"));
-        int boundRandomIndex = 2;
-        int minGhostInMap = 5;
-        switch (currentPane.toString()){
-//            case ("CaveMap"):
-//                break;
-            case("ForestMap"):
-                minGhostInMap = 7;
-                break;
-            case("FactoryMap"):
-                minGhostInMap = 9;
-                break;
-            case("JungleMap"):
-                minGhostInMap = 11;
-                boundRandomIndex = 3;
-                break;
-        }
-        if (enemies.size() < minGhostInMap){
-            Random random = new Random();
-            int index = random.nextInt(boundRandomIndex); //0-bound-1
-            switch (addEnemyType.get(index)){
-                case ("Minion"):
-                    enemies.add(new Minion(10.0, 10.0));
-                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
-                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
-                    enemies.add(new Minion(10.0, 10.0));
-                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
-                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
-                    break;
-                case ("AttackGhost"):
-                    enemies.add(new AttackGhost(10.0, 10.0));
-                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
-                    currentPane.getChildren().addAll(enemies.get(enemies.size() - 1).getImageView(), ((AttackGhost) GameLogic.getEnemies().get(enemies.size() - 1)).getFireball());
-                    enemies.add(new AttackGhost(10.0, 10.0));
-                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
-                    currentPane.getChildren().addAll(enemies.get(enemies.size() - 1).getImageView(), ((AttackGhost) GameLogic.getEnemies().get(enemies.size() - 1)).getFireball());
-                    break;
-//                case ("MindGhost"):
-//                    enemies.add(new MindGhost(10.0, 10.0));
-//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
-//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
-//                    enemies.add(new MindGhost(10.0, 10.0));
-//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
-//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
-//                    break;
-//                case ("SlowGhost"):
-//                    enemies.add(new SlowGhost(10.0, 10.0));
-//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
-//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
-//                    enemies.add(new SlowGhost(10.0, 10.0));
-//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
-//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
-//                    break;
-                case ("PoisonGhost"):
-                    enemies.add(new PoisonGhost(10.0, 10.0));
-                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
-                    currentPane.getChildren().addAll(enemies.get(enemies.size() - 1).getImageView(), ((PoisonGhost) GameLogic.getEnemies().get(enemies.size() - 1)).getPoison());
-                    enemies.add(new PoisonGhost(10.0, 10.0));
-                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
-                    currentPane.getChildren().addAll(enemies.get(enemies.size() - 1).getImageView(), ((PoisonGhost) GameLogic.getEnemies().get(enemies.size() - 1)).getPoison());
-                    break;
-            }
-        }
         Bounds ghostBounds = new BoundingBox(
                 enemyimageview.getBoundsInParent().getMinX(),
                 enemyimageview.getBoundsInParent().getMinY(),
@@ -579,23 +587,23 @@ public class GameLogic {
         if (! Punk.getInstance().isCanHit()) {
             return;
         }
-        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
-        playerRect.setFill(Color.TRANSPARENT);
-        playerRect.setStroke(Color.BLUE);
-        playerRect.setStrokeWidth(2);
-        currentPane.getChildren().add(playerRect);
-
-        Rectangle ghostRect = new Rectangle(ghostBounds.getMinX(), ghostBounds.getMinY(), ghostBounds.getWidth(), ghostBounds.getHeight());
-        ghostRect.setFill(Color.TRANSPARENT);
-        ghostRect.setStroke(Color.RED);
-        ghostRect.setStrokeWidth(2);
-        currentPane.getChildren().add(ghostRect);
-
-        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
-            currentPane.getChildren().remove(playerRect);
-            currentPane.getChildren().remove(ghostRect);
-        }));
-        rectLast.play();
+//        Rectangle playerRect = new Rectangle(mainCharBounds.getMinX(), mainCharBounds.getMinY(), mainCharBounds.getWidth(), mainCharBounds.getHeight());
+//        playerRect.setFill(Color.TRANSPARENT);
+//        playerRect.setStroke(Color.BLUE);
+//        playerRect.setStrokeWidth(2);
+//        currentPane.getChildren().add(playerRect);
+//
+//        Rectangle ghostRect = new Rectangle(ghostBounds.getMinX(), ghostBounds.getMinY(), ghostBounds.getWidth(), ghostBounds.getHeight());
+//        ghostRect.setFill(Color.TRANSPARENT);
+//        ghostRect.setStroke(Color.RED);
+//        ghostRect.setStrokeWidth(2);
+//        currentPane.getChildren().add(ghostRect);
+//
+//        Timeline rectLast = new Timeline(new KeyFrame(Duration.seconds(0.03), e -> {
+//            currentPane.getChildren().remove(playerRect);
+//            currentPane.getChildren().remove(ghostRect);
+//        }));
+//        rectLast.play();
 
         if (ghostBounds.intersects(mainCharBounds) && currentPane.getChildren().contains(enemy.getImageView())) {
             System.out.println("Ghost hit detected");
