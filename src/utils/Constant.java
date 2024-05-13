@@ -1,13 +1,10 @@
 package utils;
 
-import gui.*;
-import javafx.scene.Node;
-
 import java.util.ArrayList;
 
 public class Constant {
     private static Constant instance;
-    ArrayList<String> skillsname;
+    private ArrayList<String> skillsname;
 
     public Constant() {
         // Set skillsname ArrayList
@@ -44,18 +41,4 @@ public class Constant {
             default: return -1;
         }
     }
-
-//    public static Node getinstanceMap(String mapname) {
-//        switch (mapname) {
-//            case "CaveMap":
-//                return CaveMapPane.getInstance();
-//            case "ForestMap":
-//                return ForestMapPane.getInstance();
-//            case "FactoryMap":
-//                return FactoryMapPane.getInstance();
-//            case "JungleMap":
-//                return JungleMapPane.getInstance();
-//            default: return LoginPane.getInstance();
-//        }
-//    }
 }

@@ -3,7 +3,7 @@ package sound;
 import javafx.scene.media.AudioClip;
 
 public class PlaySound {
-    private static final PlaySound instance = new PlaySound();
+    private static final PlaySound INSTANCE = new PlaySound();
     public static AudioClip defaultBG;
     public static AudioClip caveMapBG;
     public static AudioClip forestMapBG;
@@ -61,6 +61,6 @@ public class PlaySound {
     }
 
     public static PlaySound getInstance() {
-        return instance;
+        return INSTANCE;
     }
 }
