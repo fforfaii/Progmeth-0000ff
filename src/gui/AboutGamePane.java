@@ -20,7 +20,6 @@ public class AboutGamePane extends AnchorPane {
     private static AboutGamePane instance;
     private VBox contentVBox;
     private Button gotoMap;
-    private VBox contents;
     public AboutGamePane() {
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setPrefHeight(648);
