@@ -508,13 +508,13 @@ public class GameLogic {
 //            case ("CaveMap"):
 //                break;
             case("ForestMap"):
-                minGhostInMap = 9;
+                minGhostInMap = 7;
                 break;
             case("FactoryMap"):
-                minGhostInMap = 13;
+                minGhostInMap = 9;
                 break;
             case("JungleMap"):
-                minGhostInMap = 16;
+                minGhostInMap = 11;
                 boundRandomIndex = 3;
                 break;
         }

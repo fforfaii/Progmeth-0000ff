@@ -67,63 +67,31 @@ public class JungleMapPane extends AnchorPane {
 
         //Set enemies
         GameLogic.getEnemies().clear();
-        for (int i = 0; i < 2; i++){
-            Random random = new Random();
-            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            GameLogic.getEnemies().add(new AttackGhost(randomX, randomY));
-            setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
-            GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
-            getChildren().add(GameLogic.getEnemies().get(i).getImageView());
-
-            if (GameLogic.getEnemies().get(i) instanceof AttackGhost){
-                getChildren().add(((AttackGhost) GameLogic.getEnemies().get(i)).getFireball());
-            }
-        }
-        for (int i = 2; i < 4; i++){
-            Random random = new Random();
-            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            GameLogic.getEnemies().add(new PoisonGhost(randomX, randomY));
-            setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
-            GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
-            getChildren().add(GameLogic.getEnemies().get(i).getImageView());
-
-            if (GameLogic.getEnemies().get(i) instanceof PoisonGhost){
-                getChildren().add(((PoisonGhost) GameLogic.getEnemies().get(i)).getPoison());
-            }
-        }
-        for (int i = 4; i < 6; i++){
-            Random random = new Random();
-            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            GameLogic.getEnemies().add(new Minion(randomX, randomY));
+        for (int i = 0; i < 3; i++){
+            GameLogic.getEnemies().add(new Minion(10.0, 10.0));
             setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
             GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
             getChildren().add(GameLogic.getEnemies().get(i).getImageView());
         }
-        for (int i = 6; i < 7; i++){
-            Random random = new Random();
-            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            GameLogic.getEnemies().add(new MindGhost(randomX, randomY));
+        for (int i = 3; i < 6; i++){
+            GameLogic.getEnemies().add(new AttackGhost(10.0, 10.0));
+            setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
+            GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
+            getChildren().add(GameLogic.getEnemies().get(i).getImageView());
+            getChildren().add(((AttackGhost) GameLogic.getEnemies().get(i)).getFireball());
+        }
+        for (int i = 6; i < 8; i++){
+            GameLogic.getEnemies().add(new MindGhost(10.0, 10.0));
             setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
             GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
             getChildren().add(GameLogic.getEnemies().get(i).getImageView());
         }
-        for (int i = 7; i < 8; i++){
-            Random random = new Random();
-            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            GameLogic.getEnemies().add(new SlowGhost(randomX, randomY));
+        for (int i = 10; i < 12; i++){
+            GameLogic.getEnemies().add(new PoisonGhost(10.0, 10.0));
             setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
             GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
             getChildren().add(GameLogic.getEnemies().get(i).getImageView());
+            getChildren().add(((PoisonGhost) GameLogic.getEnemies().get(i)).getPoison());
         }
 
         // Set skills

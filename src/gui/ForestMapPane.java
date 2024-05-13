@@ -67,36 +67,21 @@ public class ForestMapPane extends AnchorPane {
 
         //Set enemies
         GameLogic.getEnemies().clear();
-        for (int i = 0; i < 2; i++){
-            Random random = new Random();
-            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            GameLogic.getEnemies().add(new AttackGhost(randomX, randomY));
+        for (int i = 0; i < 3; i++){
+            GameLogic.getEnemies().add(new Minion(10.0, 10.0));
             setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
             GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
             getChildren().add(GameLogic.getEnemies().get(i).getImageView());
-
-            if (GameLogic.getEnemies().get(i) instanceof AttackGhost){
-                getChildren().add(((AttackGhost) GameLogic.getEnemies().get(i)).getFireball());
-            }
         }
-        for (int i = 2; i < 6; i++){
-            Random random = new Random();
-            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            GameLogic.getEnemies().add(new Minion(randomX, randomY));
+        for (int i = 3; i < 6; i++){
+            GameLogic.getEnemies().add(new AttackGhost(10.0, 10.0));
             setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
             GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
             getChildren().add(GameLogic.getEnemies().get(i).getImageView());
+            getChildren().add(((AttackGhost) GameLogic.getEnemies().get(i)).getFireball());
         }
         for (int i = 6; i < 8; i++){
-            Random random = new Random();
-            double randomX = 5.0 + (1080.0 - 5.0)*random.nextDouble();
-            double randomY = 10.0 + (70.0 - 10.0)*random.nextDouble();
-            System.out.println(i + "-" + "RanX : " + randomX + ", RandY: " + randomY);
-            GameLogic.getEnemies().add(new MindGhost(randomX, randomY));
+            GameLogic.getEnemies().add(new MindGhost(10.0, 10.0));
             setTopAnchor(GameLogic.getEnemies().get(i).getImageView(), 50.0);
             GameLogic.getEnemies().get(i).runAnimation(this, GameLogic.getEnemies().get(i));
             getChildren().add(GameLogic.getEnemies().get(i).getImageView());
