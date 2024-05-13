@@ -25,7 +25,7 @@ import java.io.IOException;
 public class GameOverPane extends StackPane {
     private static GameOverPane instance;
     Punk player;
-    VBox allElements;
+    private VBox allElements;
     public GameOverPane() {
         PlaySound.gameOverBG.play();
         player = Punk.getInstance();

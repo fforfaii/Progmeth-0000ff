@@ -157,7 +157,6 @@ public class FactoryMapPane extends AnchorPane {
             try {
                 System.out.println("Exit !");
                 PlaySound.stopAllmapBG();
-//                PlaySound.death.play();
                 Punk.getInstance().setDead(true);
                 GameLogic.setIsGameOver(true);
                 GameLogic.updateGame(this);
