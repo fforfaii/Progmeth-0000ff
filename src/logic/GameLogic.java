@@ -197,7 +197,7 @@ public class GameLogic {
         reverseContinuousMovement.play();
     }
     public static String randomSkill() {
-        ArrayList<String> Skills = Constant.getInstance().getSkillsname();
+        ArrayList<String> Skills = Constant.getInstance().getSkillsName();
         Random random = new Random();
         int randomIndex = random.nextInt(Skills.size());
         return Skills.get(randomIndex);
@@ -205,6 +205,11 @@ public class GameLogic {
     public static void setSkillImage(ImageView skillImageView, String skillName) {
         // Set icon that fall down
         switch (skillName) {
+            case "FasterAttack":
+                skillImageView.setImage(new Image(ClassLoader.getSystemResource("fasterattack.png").toString()));
+                skillImageView.setFitHeight(65);
+                skillImageView.setFitWidth(65);
+                break;
             case "ExtraScore":
                 skillImageView.setImage(new Image(ClassLoader.getSystemResource("extrascore.png").toString()));
                 skillImageView.setFitHeight(35);
@@ -259,7 +264,7 @@ public class GameLogic {
                     lastUpdate = currentTime;
                     randomIndex = randomIndex();
                     randSkill = GameLogic.randomSkill();
-//                    randSkill = "Shield";
+//                    randSkill = "Disappear";
                     setSkillImage(skillImageView, randSkill);
                 }
                 checkSkillHit(this.toString(), skillImageView, randSkill, currentPane);

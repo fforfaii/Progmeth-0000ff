@@ -4,17 +4,17 @@ import java.util.ArrayList;
 
 public class Constant {
     private static Constant instance;
-    private ArrayList<String> skillsname;
+    private final ArrayList<String> skillsName;
 
     public Constant() {
-        // Set skillsname ArrayList
-        skillsname = new ArrayList<>();
-        skillsname.add("ExtraScore");
-        skillsname.add("ExtraDamage");
-        skillsname.add("Heal");
-        skillsname.add("MoveFaster");
-        skillsname.add("Disappear");
-        skillsname.add("FasterAttack");
+        // Set skillsName ArrayList
+        skillsName = new ArrayList<>();
+        skillsName.add("ExtraScore");
+        skillsName.add("ExtraDamage");
+        skillsName.add("Heal");
+        skillsName.add("MoveFaster");
+        skillsName.add("Disappear");
+        skillsName.add("FasterAttack");
     }
 
     public static Constant getInstance() {
@@ -24,12 +24,12 @@ public class Constant {
         return instance;
     }
 
-    public ArrayList<String> getSkillsname() {
-        return skillsname;
+    public ArrayList<String> getSkillsName() {
+        return skillsName;
     }
 
-    public static int getIndexMap(String mapname) {
-        switch (mapname) {
+    public static int getIndexMap(String mapName) {
+        switch (mapName) {
             case "CaveMap":
                 return 0;
             case "ForestMap":
