@@ -168,75 +168,7 @@ public class FactoryMapPane extends AnchorPane {
         });
         fadeOut.play();
     }
-//    public void setSkillImage(ImageView skillImageView, String skillname) {
-//        // Set icon that fall down
-////        ImageView skillimageview = new ImageView();
-//        switch (skillname) {
-//            case "Shield":
-//                skillImageView.setImage(new Image(ClassLoader.getSystemResource("shield.png").toString()));
-//                skillImageView.setFitHeight(30);
-//                skillImageView.setFitWidth(30);
-//                break;
-//            case "ExtraScore":
-//                skillImageView.setImage(new Image(ClassLoader.getSystemResource("extrascore.png").toString()));
-//                skillImageView.setFitHeight(35);
-//                skillImageView.setFitWidth(35);
-//                break;
-//            case "ExtraDamage":
-//                skillImageView.setImage(new Image(ClassLoader.getSystemResource("extradamage.png").toString()));
-//                skillImageView.setFitHeight(50);
-//                skillImageView.setFitWidth(50);
-//                break;
-//            case "Heal":
-//                skillImageView.setImage(new Image(ClassLoader.getSystemResource("heal.png").toString()));
-//                skillImageView.setFitHeight(50);
-//                skillImageView.setFitWidth(50);
-//                break;
-//            case "MoveFaster":
-//                skillImageView.setImage(new Image(ClassLoader.getSystemResource("movefaster.png").toString()));
-//                skillImageView.setFitHeight(50);
-//                skillImageView.setFitWidth(50);
-//                break;
-//            case "Disappear":
-//                skillImageView.setImage(new Image(ClassLoader.getSystemResource("disappear.png").toString()));
-//                skillImageView.setFitHeight(65);
-//                skillImageView.setFitWidth(65);
-//                break;
-//        }
-//    }
-//    public void skillFall(ImageView skillImageView) {
-//        // Set falldown movement
-//        Random random = new Random();
-//        ArrayList<Double> durations = new ArrayList<>();
-//        durations.add(3.0);
-//        durations.add(3.5);
-//        durations.add(4.0);
-//        durations.add(4.5);
-//        durations.add(2.0);
-//        durations.add(2.5);
-//        randomIndex = randomIndex(); // for getting duration
-//        AnimationTimer FallDown = new AnimationTimer() {
-//            private long lastUpdate = 0;
-//            private String randSkill = GameLogic.randomSkill();
-//            @Override
-//            public void handle(long currentTime) {
-//                double elapsedTimeSeconds = (currentTime - lastUpdate) / 1_000_000_000.0;
-//                if (elapsedTimeSeconds >= durations.get(randomIndex)) {
-//                    skillImageView.setLayoutX(10.0 + (random.nextDouble() * (1060.0 - 10.0)));
-//                    skillImageView.setTranslateY(0.0);
-//                    skillImageView.setFitWidth(40);
-//                    skillImageView.setFitHeight(40);
-//                    GameLogic.slideYPos(skillImageView, 2.0, 525);
-//                    lastUpdate = currentTime;
-//                    randomIndex = randomIndex();
-//                    randSkill = GameLogic.randomSkill();
-//                    setSkillImage(skillImageView, randSkill);
-//                }
-//                GameLogic.checkSkillHit(this.toString(), skillImageView, randSkill);
-//            }
-//        };
-//        FallDown.start();
-//    }
+
     @Override
     public String toString() {
         return "FactoryMap";
