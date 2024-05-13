@@ -238,7 +238,7 @@ public class GameLogic {
         }
     }
     public static void skillFall(ImageView skillImageView, AnchorPane currentPane) {
-        // Set falldown movement
+        // Set fallDown movement
         Random random = new Random();
         ArrayList<Double> durations = new ArrayList<>();
         durations.add(3.0);
@@ -264,7 +264,7 @@ public class GameLogic {
                     lastUpdate = currentTime;
                     randomIndex = randomIndex();
                     randSkill = GameLogic.randomSkill();
-//                    randSkill = "Disappear";
+//                    randSkill = "FasterAttack";
                     setSkillImage(skillImageView, randSkill);
                 }
                 checkSkillHit(this.toString(), skillImageView, randSkill, currentPane);
