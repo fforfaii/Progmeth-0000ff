@@ -15,8 +15,6 @@ import sound.PlaySound;
 import utils.Constant;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
 
 public class ForestMapPane extends AnchorPane {
     private static ForestMapPane instance;

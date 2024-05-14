@@ -99,22 +99,6 @@ public class GameLogic {
                     enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
                     currentPane.getChildren().addAll(enemies.get(enemies.size() - 1).getImageView(), ((AttackGhost) GameLogic.getEnemies().get(enemies.size() - 1)).getFireball());
                     break;
-//                case ("MindGhost"):
-//                    enemies.add(new MindGhost(10.0, 10.0));
-//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
-//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
-//                    enemies.add(new MindGhost(10.0, 10.0));
-//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
-//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
-//                    break;
-//                case ("SlowGhost"):
-//                    enemies.add(new SlowGhost(10.0, 10.0));
-//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
-//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
-//                    enemies.add(new SlowGhost(10.0, 10.0));
-//                    enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
-//                    currentPane.getChildren().add(enemies.get(enemies.size() - 1).getImageView());
-//                    break;
                 case ("PoisonGhost"):
                     enemies.add(new PoisonGhost(10.0, 10.0));
                     enemies.get(enemies.size() - 1).runAnimation(currentPane, enemies.get(enemies.size() - 1));
@@ -319,7 +303,6 @@ public class GameLogic {
         randomIndex = randomIndex(); // for getting duration
         skillFallAnimation = new AnimationTimer() {
             private long lastUpdate = 0;
-//            private String randSkill = randomSkill();
             private String randSkill;
             @Override
             public void handle(long currentTime) {
@@ -333,7 +316,6 @@ public class GameLogic {
                     lastUpdate = currentTime;
                     randomIndex = randomIndex();
                     randSkill = GameLogic.randomSkill();
-//                    randSkill = "FasterAttack";
                     setSkillImage(skillImageView, randSkill);
                 }
                 checkSkillHit(this.toString(), skillImageView, randSkill, currentPane);
@@ -432,7 +414,6 @@ public class GameLogic {
             @Override
             public void handle(long currentTime) {
                 System.out.println("checkPunkShotHitTimer Running");
-//                System.out.println("Punk Speed: "+Punk.getInstance().getSpeed());
                 updateGhost(currentPane);
                 Iterator<Enemy> iterator = enemies.iterator();
                 while (iterator.hasNext()) {

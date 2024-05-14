@@ -16,8 +16,6 @@ import sound.PlaySound;
 import utils.Constant;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
 
 public class FactoryMapPane extends AnchorPane {
     private static FactoryMapPane instance;

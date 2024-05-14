@@ -8,7 +8,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import logic.GameLogic;
-import logic.ability.GoDownable;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -32,8 +31,6 @@ public class PoisonGhost extends Enemy { //if punk get poison: cannot attack for
         poisonGhostImageView.setFitWidth(80);
         poisonGhostImageView.setFitHeight(80);
         poisonGhostImageView.setTranslateX(GameLogic.randXPos());
-//        poisonGhostImageView.setTranslateY(randYPos() / 1.8);
-//        poisonGhostAnimation.play();
 
         // Set Poison
         poison = new ImageView(new Image(ClassLoader.getSystemResource("poison.png").toString()));

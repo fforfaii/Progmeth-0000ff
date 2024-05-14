@@ -26,7 +26,7 @@ public class Main extends Application {
 
     public void changeSceneJava(Parent parent) throws IOException {
         stage.getScene().setRoot(parent);
-        parent.requestFocus(); // very important if not include KeyEvent will not be listened !!!!
+        parent.requestFocus();
     }
 
     public static Main getInstance() {
