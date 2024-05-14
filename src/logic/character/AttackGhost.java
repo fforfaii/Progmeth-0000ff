@@ -19,7 +19,7 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
     private double xPos;
     private double yPos;
     private ImageView attackGhostImageView;
-    private Animation attackghostAnimation;
+    private Animation attackGhostAnimation;
     private ImageView fireball;
     private AnimationTimer ghostAnimationTimer;
     public AttackGhost(double x, double y){
@@ -27,13 +27,13 @@ public class AttackGhost extends Enemy { //normal ghost that can attack punk. no
         setXPos(x);
         setYPos(y);
         attackGhostImageView = new ImageView(new Image(ClassLoader.getSystemResource("attackghost.png").toString()));
-        attackghostAnimation = new SpriteAnimation(attackGhostImageView, Duration.millis(1000), 6, 6, 0, 0, 48, 48);
-        attackghostAnimation.setCycleCount(Animation.INDEFINITE);
+        attackGhostAnimation = new SpriteAnimation(attackGhostImageView, Duration.millis(1000), 6, 6, 0, 0, 48, 48);
+        attackGhostAnimation.setCycleCount(Animation.INDEFINITE);
         attackGhostImageView.setTranslateX(GameLogic.randXPos());
         attackGhostImageView.setTranslateY(randYPos() / 1.8);
         attackGhostImageView.setFitWidth(80);
         attackGhostImageView.setFitHeight(80);
-        attackghostAnimation.play();
+        attackGhostAnimation.play();
 
         // Set FireBall
         fireball = new ImageView(new Image(ClassLoader.getSystemResource("fireball.gif").toString()));
