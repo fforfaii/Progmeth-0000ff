@@ -55,7 +55,6 @@ public class PoisonGhost extends Enemy { //if punk get poison: cannot attack for
         durations.add(3.5);
         durations.add(2.5);
         durations.add(4.0);
-//        int randomIndex = GameLogic.randomIndex();
         ghostAnimationTimer = new AnimationTimer() {
             private long startTime = System.nanoTime();
             private long lastShoot = 0;
