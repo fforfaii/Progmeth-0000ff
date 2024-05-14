@@ -1,0 +1,478 @@
+@startuml
+interface logic.ability.Hitable {
+~ void hitDamage(AnchorPane)
+}
+class sound.PlaySound {
+- {static} PlaySound INSTANCE
++ {static} AudioClip defaultBG
++ {static} AudioClip caveMapBG
++ {static} AudioClip forestMapBG
++ {static} AudioClip factoryMapBG
++ {static} AudioClip jungleMapBG
++ {static} AudioClip skillHit
++ {static} AudioClip exit
++ {static} AudioClip getCoin
++ {static} AudioClip death
++ {static} AudioClip gameOverBG
++ {static} AudioClip poisonHit
++ {static} AudioClip playerShoot
++ {static} AudioClip ghostAndFireballHit
++ {static} void loadResource()
++ {static} void stopAllMapBG()
++ {static} PlaySound getInstance()
+}
+class gui.SpriteAnimation {
+- {static} SpriteAnimation instance
+- ImageView imageView
+- int count
+- int columns
+- int offsetX
+- int offsetY
+- int width
+- int height
+- int lastIndex
++ <<Create>> SpriteAnimation(ImageView,Duration,int,int,int,int,int,int)
++ void setCount(int)
++ void setColumns(int)
++ void setWidth(int)
++ void setHeight(int)
+# void interpolate(double)
++ {static} SpriteAnimation getInstance()
+}
+class gui.ScoreBoard {
+- {static} ScoreBoard instance
++ <<Create>> ScoreBoard()
++ void setScoreboard()
++ void setTextScoreBoard(Text)
++ {static} ScoreBoard getInstance()
+}
+class gui.JungleMapPane {
+- {static} JungleMapPane instance
+- ImageView coin
+- ImageView skill
+- ImageView exit
+- HpBoard hpBoard
+- ScoreBoard scoreBoard
+~ Punk punk
++ <<Create>> JungleMapPane()
+- void fadeExitPage()
++ String toString()
++ {static} JungleMapPane getInstance()
+}
+class gui.CaveMapPane {
+- {static} CaveMapPane instance
+- ImageView coin
+- ImageView exit
+- HpBoard hpBoard
+- ScoreBoard scoreBoard
+- ImageView skill
+~ Punk punk
++ <<Create>> CaveMapPane()
+- void fadeExitPage()
++ String toString()
++ {static} CaveMapPane getInstance()
+}
+interface logic.ability.GoDownable {
+~ void goDown(ImageView)
+~ Animation getAnimation()
+}
+class logic.skills.Disappear {
+- {static} Timeline timeline
++ {static} void effect()
++ {static} Timeline getTimeline()
+}
+class logic.character.Minion {
+- {static} Minion instance
+- int hp
+- double xPos
+- double yPos
+- ImageView minionImageView
+- Animation minionAnimation
+- AnimationTimer ghostAnimationTimer
++ <<Create>> Minion(double,double)
++ void runAnimation(AnchorPane,Enemy)
++ void hitDamage(AnchorPane)
++ void goDown(ImageView)
++ ImageView getImageView()
++ Animation getAnimation()
++ int getHp()
++ void setHp(int)
++ double getXPos()
++ void setXPos(double)
++ double getYPos()
++ void setYPos(double)
++ AnimationTimer getAnimationTimer()
++ {static} Minion getInstance()
+}
+class logic.character.SlowGhost {
+- {static} SlowGhost instance
+- int hp
+- double xPos
+- double yPos
+- AnchorPane currentPane
+- ImageView slowGhostImageView
+- Animation slowGhostAnimation
+- AnimationTimer ghostAnimationTimer
++ <<Create>> SlowGhost(double,double)
++ void hitDamage(AnchorPane)
++ void runAnimation(AnchorPane,Enemy)
++ ImageView getImageView()
++ Animation getAnimation()
++ int getHp()
++ void setHp(int)
++ double getXPos()
++ void setXPos(double)
++ double getYPos()
++ void setYPos(double)
++ void noDecreaseHP()
++ {static} SlowGhost getInstance()
++ void goDown(ImageView)
++ AnchorPane getCurrentPane()
++ void setCurrentPane(AnchorPane)
++ AnimationTimer getAnimationTimer()
+}
+class gui.ForestMapPane {
+- {static} ForestMapPane instance
+- ImageView coin
+- ImageView exit
+- HpBoard hpBoard
+- ScoreBoard scoreBoard
+- ImageView skill
+~ Punk punk
++ <<Create>> ForestMapPane()
+- void fadeExitPage()
++ String toString()
++ {static} ForestMapPane getInstance()
+}
+class logic.skills.MoveFaster {
++ {static} void effect()
+}
+abstract class logic.character.Enemy {
+- int hp
+- double xPos
+- double yPos
++ {abstract}void runAnimation(AnchorPane,Enemy)
++ {abstract}AnimationTimer getAnimationTimer()
++ {abstract}ImageView getImageView()
++ {static} double randYPos()
++ void setHp(int)
++ int getHp()
++ double getXPos()
++ void setXPos(double)
++ double getYPos()
++ void setYPos(double)
+}
+class logic.skills.FasterAttack {
++ {static} void effect()
+}
+class logic.skills.ExtraDamage {
++ {static} void effect()
+}
+class logic.character.Punk {
+- double xPos
+- double yPos
+- {static} Punk instance
+- int hp
+- int score
+- int atk
+- double speed
+- double delayShoot
+- double punkShotXPos
+- double punkShotYPos
+- boolean isDead
+- boolean canHit
+- boolean canShoot
+- ImageView punkImageView
+- Animation punkAnimation
+- Image runLeft
+- Image runRight
+- Image punkGun
+- Image punkIdle
+- ImageView punkShot
+- int scorePerCoin
+- boolean immortalDelay
+- boolean mindGhostDelay
+- boolean slowGhostDelay
+- boolean poisonDelay
++ <<Create>> Punk()
++ ImageView getShotImageView()
++ void setShotImageView(String)
++ void initPunkAnimation()
++ void setPunkAnimation(Image,int,int,int,int)
++ void runLeft()
++ void runRight()
++ void shoot()
++ {static} Punk getInstance()
++ double getXPos()
++ void setXPos(double)
++ double getYPos()
++ void setYPos(double)
++ int getHp()
++ void setHp(int)
++ int getScore()
++ void setScore(int)
++ int getAtk()
++ void setAtk(int)
++ double getSpeed()
++ void setSpeed(double)
++ double getDelayShoot()
++ void setDelayShoot(double)
++ double getPunkShotXPos()
++ void setPunkShotXPos(double)
++ double getPunkShotYPos()
++ void setPunkShotYPos(double)
++ boolean isDead()
++ void setDead(boolean)
++ ImageView getPunkImageView()
++ void setPunkImageView(ImageView)
++ Animation getPunkAnimation()
++ void setPunkAnimation(Animation)
++ Image getPunkGun()
++ void setPunkGun(Image)
++ Image getPunkIdle()
++ void setPunkIdle(Image)
++ ImageView getPunkShot()
++ void setPunkShot(ImageView)
++ int getScorePerCoin()
++ void setScorePerCoin(int)
++ boolean isImmortalDelay()
++ void setImmortalDelay(boolean)
++ boolean isCanHit()
++ void setCanHit(boolean)
++ boolean isCanShoot()
++ void setCanShoot(boolean)
++ boolean isMindGhostDelay()
++ void setMindGhostDelay(boolean)
++ boolean isSlowGhostDelay()
++ void setSlowGhostDelay(boolean)
++ boolean isPoisonDelay()
++ void setPoisonDelay(boolean)
+}
+class logic.skills.Heal {
++ {static} void effect()
+}
+class gui.LoginPane {
+- {static} LoginPane instance
++ {static} String playerName
+- <<Create>> LoginPane()
++ void setBGImage()
++ {static} String getPlayerName()
++ {static} void setPlayerName(String)
++ {static} LoginPane getInstance()
+}
+class gui.GameOverPane {
+- {static} GameOverPane instance
+~ Punk player
+- VBox allElements
++ <<Create>> GameOverPane()
++ {static} GameOverPane getInstance()
+}
+class logic.character.AttackGhost {
+- {static} AttackGhost instance
+- int hp
+- double xPos
+- double yPos
+- ImageView attackGhostImageView
+- Animation attackGhostAnimation
+- ImageView fireball
+- AnimationTimer ghostAnimationTimer
++ <<Create>> AttackGhost(double,double)
++ void hitDamage()
++ void runAnimation(AnchorPane,Enemy)
++ ImageView getImageView()
++ int getHp()
++ void setHp(int)
++ double getXPos()
++ void setXPos(double)
++ double getYPos()
++ void setYPos(double)
++ ImageView getFireball()
++ AnimationTimer getAnimationTimer()
++ {static} AttackGhost getInstance()
+}
+class utils.Constant {
+- {static} Constant instance
+- ArrayList<String> SKILLS_NAME
++ <<Create>> Constant()
++ {static} Constant getInstance()
++ ArrayList<String> getSkillsName()
++ {static} int getIndexMap(String)
+}
+class logic.character.PoisonGhost {
+- {static} PoisonGhost instance
+- int hp
+- double xPos
+- double yPos
+- ImageView poisonGhostImageView
+- Animation poisonGhostAnimation
+- ImageView poison
+- AnimationTimer ghostAnimationTimer
++ <<Create>> PoisonGhost(double,double)
++ void hitDamage(AnchorPane)
++ void runAnimation(AnchorPane,Enemy)
++ ImageView getImageView()
++ int getHp()
++ void setHp(int)
++ double getXPos()
++ void setXPos(double)
++ double getYPos()
++ void setYPos(double)
++ ImageView getPoison()
++ AnimationTimer getAnimationTimer()
++ {static} PoisonGhost getInstance()
+}
+class gui.HpBoard {
+- {static} HpBoard instance
++ <<Create>> HpBoard()
++ {static} void updateHpBoard()
++ {static} HpBoard getInstance()
+}
+interface logic.ability.Imperishable {
+~ void noDecreaseHP()
+}
+class logic.skills.ExtraScore {
++ {static} void effect(String)
+}
+class gui.MapPane {
+- Text WELCOME
+- Button MapBTN1
+- Button MapBTN2
+- Button MapBTN3
+- Button MapBTN4
+- {static} MapPane instance
++ <<Create>> MapPane()
++ VBox setMap(String,String)
++ void setBGImage()
++ {static} MapPane getInstance()
+}
+class logic.GameLogic {
+- {static} ArrayList<Integer> HIGHSCORE
+- {static} String currentMap
+- {static} int randomIndex
+- {static} boolean splashDelay
+- {static} boolean isGameOver
+- {static} boolean isLeftKeyPressed
+- {static} boolean isRightKeyPressed
+- {static} boolean isSpaceKeyPressed
+- {static} Timeline continuousMovement
+- {static} Timeline reverseContinuousMovement
+- {static} AnimationTimer skillFallAnimation
+- {static} AnimationTimer coinFallAnimation
+- {static} AnimationTimer checkPunkShotHitAnimation
+- {static} ArrayList<Enemy> enemies
++ {static} void updateGame(AnchorPane)
++ {static} void updateGhost(AnchorPane)
++ {static} void getPlayerInput(AnchorPane)
++ {static} void reversePlayerInput(AnchorPane)
++ {static} String randomSkill()
++ {static} void setSkillImage(ImageView,String)
++ {static} void skillFall(ImageView,AnchorPane)
++ {static} void coinFall(ImageView)
++ {static} void checkCoinHit(ImageView)
++ {static} void checkSkillHit(String,ImageView,String,AnchorPane)
++ {static} void checkPunkShotHit(AnchorPane)
++ {static} void checkFireballHit(AnchorPane,ImageView,AttackGhost)
++ {static} void checkPoisonHit(AnchorPane,ImageView,PoisonGhost)
++ {static} void checkGhostHit(AnchorPane,Enemy,ImageView)
++ {static} void deleteHeart(AnchorPane)
++ {static} void addHeart()
++ {static} void slideYPos(ImageView,double,double,double)
++ {static} double slideXPos(double,ImageView,int,double)
++ {static} double randXPos()
++ {static} int randomIndex()
++ {static} BackgroundImage getBGImage(String)
++ {static} ImageView getGroundImage(String)
++ {static} boolean isGameOver()
++ {static} void setIsGameOver(boolean)
++ {static} Timeline getContinuousMovement()
++ {static} Timeline getReverseContinuousMovement()
++ {static} String getCurrentMap()
++ {static} void setCurrentMap(String)
++ {static} void setHighScoreEachMap(int,int)
++ {static} int getHighScoreEachMap(String)
++ {static} ArrayList<Enemy> getEnemies()
+}
+class main.Main {
+- {static} Main instance
+~ Parent root
+~ Stage stage
++ void start(Stage)
++ void changeSceneJava(Parent)
++ {static} Main getInstance()
++ {static} void main(String[])
+}
+class logic.character.MindGhost {
+- {static} MindGhost instance
+- int hp
+- double xPos
+- double yPos
+- ImageView mindGhostImageView
+- Animation mindGhostAnimation
+- AnchorPane currentPane
+- AnimationTimer ghostAnimationTimer
++ <<Create>> MindGhost(double,double)
++ void runAnimation(AnchorPane,Enemy)
++ ImageView getImageView()
++ Animation getAnimation()
++ {static} MindGhost getInstance()
++ void goDown(ImageView)
++ void hitDamage(AnchorPane)
++ int getHp()
++ void setHp(int)
++ double getXPos()
++ void setXPos(double)
++ double getYPos()
++ void setYPos(double)
++ AnchorPane getCurrentPane()
++ void setCurrentPane(AnchorPane)
++ AnimationTimer getAnimationTimer()
++ void noDecreaseHP()
+}
+class gui.AboutGamePane {
+- {static} AboutGamePane instance
+- VBox CONTENT_BOX
+- Button GO_TO_MAP
++ <<Create>> AboutGamePane()
++ {static} AboutGamePane getInstance()
+}
+class gui.FactoryMapPane {
+- {static} FactoryMapPane instance
+- ImageView exit
+- ImageView coin
+- ImageView skill
+- HpBoard hpBoard
+- ScoreBoard scoreBoard
+~ Punk punk
++ <<Create>> FactoryMapPane()
+- void fadeExitPage()
++ String toString()
++ {static} FactoryMapPane getInstance()
+}
+
+
+javafx.animation.Transition <|-- gui.SpriteAnimation
+javafx.scene.layout.HBox <|-- gui.ScoreBoard
+javafx.scene.layout.AnchorPane <|-- gui.JungleMapPane
+gui.AnchorPane <|-- gui.CaveMapPane
+logic.ability.Hitable <|.. logic.character.Minion
+logic.ability.GoDownable <|.. logic.character.Minion
+logic.character.Enemy <|-- logic.character.Minion
+logic.ability.Imperishable <|.. logic.character.SlowGhost
+logic.ability.GoDownable <|.. logic.character.SlowGhost
+logic.ability.Hitable <|.. logic.character.SlowGhost
+logic.character.Enemy <|-- logic.character.SlowGhost
+gui.AnchorPane <|-- gui.ForestMapPane
+gui.GridPane <|-- gui.LoginPane
+gui.StackPane <|-- gui.GameOverPane
+logic.character.Enemy <|-- logic.character.AttackGhost
+logic.character.Enemy <|-- logic.character.PoisonGhost
+javafx.scene.layout.HBox <|-- gui.HpBoard
+gui.VBox <|-- gui.MapPane
+javafx.application.Application <|-- main.Main
+logic.ability.Hitable <|.. logic.character.MindGhost
+logic.ability.GoDownable <|.. logic.character.MindGhost
+logic.ability.Imperishable <|.. logic.character.MindGhost
+logic.character.Enemy <|-- logic.character.MindGhost
+javafx.scene.layout.AnchorPane <|-- gui.AboutGamePane
+javafx.scene.layout.AnchorPane <|-- gui.FactoryMapPane
+@enduml
